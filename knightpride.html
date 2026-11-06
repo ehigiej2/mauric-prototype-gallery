@@ -251,7 +251,7 @@ $('#research-read').addEventListener('click',()=>{
 const status=$('#research-status');
 if(!lastResearchAnswer){status.textContent='Ask a question first.';return}
 if(!window.speechSynthesis||!window.SpeechSynthesisUtterance){status.textContent='Voice output is unavailable. The answer is shown above.';return}
-stopTour();const speech=new SpeechSynthesisUtterance(lastResearchAnswer);speech.lang='en-US';speech.onerror=()=>{status.textContent='Voice output is unavailable. The answer is shown above.'};window.speechSynthesis.speak(speech);
+stopTour();const synth=window.speechSynthesis;const speech=new SpeechSynthesisUtterance(lastResearchAnswer);speech.lang='en-NG';speech.rate=0.91;const voices=synth.getVoices();const preferred=voices.find(v=>v.lang.toLowerCase()==='en-ng')||voices.find(v=>v.lang.toLowerCase().startsWith('en-'));if(preferred)speech.voice=preferred;status.textContent=preferred?'Playing device voice ('+preferred.name+'). This is not the custom Osayi voice.':'Trying device speech; no Nigerian voice installed. This is not the custom Osayi voice.';speech.onend=()=>{status.textContent='Playback finished.'};speech.onerror=()=>{status.textContent='Voice playback failed on this device. The answer remains visible above.'};synth.cancel();synth.speak(speech);
 });
 $('#research-mic').addEventListener('click',()=>{
 const status=$('#research-status'), Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;
