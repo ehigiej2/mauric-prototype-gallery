@@ -382,7 +382,19 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
  <div class="launchpad-footer"><span>🛡 No live bank or payment access</span><span>✅ Owner approval required</span><span>💾 Local demonstration records</span></div>
 </section>
 
-<section class="panel" id="mariusLiveGuide" style="border:2px solid #b8dbd2;background:linear-gradient(130deg,#fff,#effaf7)"><div class="eyebrow">MARIUS · YOUR PERSONAL BUSINESS NAVIGATOR</div><h2>👨🏽‍💼 Robert, I will show you around your business</h2><p class="muted">No need to sign in. Follow these five simple sample tasks. You stay in charge.</p><p id="mariusTrack" class="pill" role="status" aria-live="polite">Step 1 of 5</p><h3 id="mariusHeading">Welcome to your Mhekwa business</h3><p id="mariusInstructions">Tap the green button. We will start with a sample buyer in Waka.</p><div style="display:flex;flex-wrap:wrap;gap:10px"><button class="btn green" type="button" onclick="mariusNext()">➡ Marius, guide me</button><button class="btn secondary" type="button" onclick="mariusBack()">⬅ Previous</button><button class="btn secondary" type="button" onclick="mariusReset()">↻ Start over</button></div><p class="muted">Marius provides simple written guidance. Osayi's original African Sovereign recording is available separately; it is not live narration of each step.</p></section><section class="panel" id="ecosystemTour">
+<section class="panel" id="mariusLiveGuide" style="border:2px solid #b8dbd2;background:linear-gradient(130deg,#fff,#effaf7)"><div class="eyebrow">MARIUS · YOUR PERSONAL BUSINESS NAVIGATOR</div><h2>👨🏽‍💼 Robert, I will show you around your business</h2><p class="muted">No need to sign in. Follow these five simple sample tasks. You stay in charge.</p><p id="mariusTrack" class="pill" role="status" aria-live="polite">Step 1 of 5</p><h3 id="mariusHeading">Welcome to your Mhekwa business</h3><p id="mariusInstructions">Tap the green button. We will start with a sample buyer in Waka.</p><div style="display:flex;flex-wrap:wrap;gap:10px"><button class="btn green" type="button" onclick="mariusNext()">➡ Marius, guide me</button><button class="btn secondary" type="button" onclick="mariusBack()">⬅ Previous</button><button class="btn secondary" type="button" onclick="mariusReset()">↻ Start over</button></div><p class="muted">Marius provides simple written guidance. Osayi's original African Sovereign recording is available separately; it is not live narration of each step.</p></section>
+<section class="panel" id="mariusOperationsDesk" style="border:2px solid #1a8268;background:linear-gradient(145deg,#f3fff9,#fff 65%,#fff8e9)">
+ <div class="eyebrow">MARIUS · ROBERT'S OPERATIONS COORDINATOR</div>
+ <h2>🧭 Let me organise the next jobs for you, Robert.</h2>
+ <p class="muted">I check the records in this workspace, arrange the work in a sensible order and take you straight to the next screen. You do not need to hunt through the menus. I prepare; you decide.</p>
+ <div class="trust-grid"><div><small>Open work items</small><div class="metric" id="mariusOpenCount">0</div></div><div><small>Business records</small><div class="metric" id="mariusRecordCount">0</div></div><div><small>Owner decisions due</small><div class="metric" id="mariusDecisionCount">0</div></div></div>
+ <div class="notice" id="mariusDailyBrief" role="status" aria-live="polite">Marius is checking the workspace…</div>
+ <div class="store-actions" style="margin:12px 0"><button class="btn green" type="button" onclick="mariusRunNextJob()">▶ Marius, do the next job</button><button class="btn" type="button" onclick="mariusRefreshDesk()">↻ Reorganise my day</button><button class="btn secondary" type="button" onclick="document.getElementById('osayi-voice-truth').scrollIntoView({behavior:'smooth'})">🎙️ Hear Osayi</button></div>
+ <h3>Robert's work queue</h3><p class="muted">Jobs are ordered by dependency: products and suppliers first, then customer demand, order fulfilment and financial review.</p>
+ <div id="mariusWorkQueue" class="tasks"></div>
+ <div class="notice"><b>What Marius can do now:</b> organise this prototype, prepare checklists, draft records, calculate planning figures and show you the next decision. <b>What still needs a real integration:</b> sending messages, publishing listings, confirming stock, placing supplier orders, booking riders, moving money, bank feeds and synchronising across devices.</div>
+</section>
+<section class="panel" id="ecosystemTour">
  <div class="eyebrow">ROBERT'S COMPLETE BUSINESS WALKTHROUGH</div>
  <h2>🌍 One business. Three connected MONARCH workspaces.</h2>
  <p class="muted">Follow a real-world example: a customer needs tyres, Robert's shop has stock, and a courier delivers the order. All actions are simulated and stay in this browser.</p>
@@ -1236,5 +1248,43 @@ function mariusRender(){const d=mariusSteps[mariusIndex];document.getElementById
 function mariusNext(){mariusIndex=Math.min(mariusSteps.length-1,mariusIndex+1);mariusRender();}
 function mariusBack(){mariusIndex=Math.max(0,mariusIndex-1);mariusRender();}
 function mariusReset(){mariusIndex=0;if(typeof openTab==='function')openTab('home');mariusRender();}
+</script>
+
+<script>
+/* V25 Marius orchestration desk: task sequencing over local prototype records only. */
+const MARIUS_TASK_STATE='mhekwaMariusTaskStateV25';
+let mariusTaskState={};
+try{mariusTaskState=JSON.parse(localStorage.getItem(MARIUS_TASK_STATE)||'{}')||{}}catch(e){mariusTaskState={}}
+function mariusTaskRows(){
+ const rows=[];const order=typeof mhekwaCurrentOrder==='function'?mhekwaCurrentOrder():null;
+ const add=(id,title,why,tab,button,priority,owner='Robert')=>rows.push({id,title,why,tab,button,priority,owner,done:!!mariusTaskState[id]});
+ if(!products.length)add('product','Choose the first product or service','Mhekwa needs a real product, price and counted quantity before a customer offer can be prepared.','trade','Add product',1);
+ if(!suppliers.length)add('supplier','Build the supplier shortlist','Record at least one supplier, then verify registration, quality, price and delivery terms before buying.','suppliers','Add supplier',2);
+ if(products.length)add('stock','Review the stock quantities','Compare each saved quantity with a physical count. The prototype cannot verify the shelf for you.','stock','Review stock',3);
+ if(!leads.length)add('lead','Identify the first customer opportunity','Record one real prospect and market. Confirm permission before contacting anyone.','market','Add opportunity',4);
+ if(order&&order.status!=='REVIEW COMPLETE — DEMO ONLY')add('order','Continue order '+order.id,'Next control: '+(mhekwaOrderStages[order.stage]?.name||'Review order')+'. Marius can prepare the screen; Robert must verify evidence and approve.','finance','Review order',0);
+ if(!staff.length)add('people','Map essential roles and payroll assumptions','List roles and planned gross pay only after confirming the actual operating model. No payroll is run.','people','Plan roles',5);
+ add('cash','Review contribution and cash assumptions','Replace illustrative numbers with supplier quotes, delivery costs, selling prices and overheads.','finance','Review cash',6);
+ add('feedback','Capture Robert’s product feedback','Record what saves time, what is confusing and what should change before any live rollout.','feedback','Give feedback',7);
+ return rows.sort((a,b)=>a.priority-b.priority);
+}
+function mariusRefreshDesk(){
+ const rows=mariusTaskRows(),open=rows.filter(x=>!x.done),order=typeof mhekwaCurrentOrder==='function'?mhekwaCurrentOrder():null;
+ const records=products.length+suppliers.length+staff.length+leads.length+(order?1:0);
+ const decisions=order&&order.stage<mhekwaOrderStages.length?1:0;
+ document.getElementById('mariusOpenCount').textContent=open.length;
+ document.getElementById('mariusRecordCount').textContent=records;
+ document.getElementById('mariusDecisionCount').textContent=decisions;
+ document.getElementById('mariusDailyBrief').textContent=open.length?'Morning, Robert. I have '+open.length+' jobs to organise. First priority: '+open[0].title+'. I will open the right workspace and show you what is needed. Nothing will be sent or purchased automatically.':'Your current review list is clear. Refresh after adding records or capture feedback before the next operating cycle.';
+ document.getElementById('mariusWorkQueue').innerHTML=rows.map((t,i)=>'<div style="display:flex;gap:10px;align-items:flex-start;padding:12px;margin:8px 0;border:1px solid #dbe8e2;border-radius:14px;background:'+(t.done?'#eef8f0':i===0?'#fff8e8':'#fff')+'"><div style="font-size:22px">'+(t.done?'✅':i===0?'🟢':'🟡')+'</div><div style="flex:1;min-width:0"><b>'+esc(t.title)+'</b><p class="muted" style="margin:5px 0">'+esc(t.why)+'</p><small>'+esc(t.owner)+' · '+(t.done?'REVIEW MARKED COMPLETE LOCALLY':'ACTION REQUIRED')+'</small></div><button class="btn '+(i===0?'green':'secondary')+'" type="button" onclick="mariusOpenJob(this.dataset.job)" data-job="'+t.id+'">'+(t.done?'Reopen':esc(t.button))+'</button>'+(t.id!=='order'&&!t.done?'<button class="btn secondary" type="button" onclick="mariusMarkJobReviewed(this.dataset.job)" data-job="'+t.id+'">Reviewed</button>':'')+'</div>').join('');
+}
+function mariusOpenJob(id){const t=mariusTaskRows().find(x=>x.id===id);if(!t)return;openTab(t.tab);const messages={product:'Robert, let us begin with one product you genuinely sell. Add its name, price and physical quantity. I will use that record to prepare the next steps.',supplier:'Add a supplier you already know. We will collect details first; verify them independently before any order.',stock:'Check the physical quantity against the quantity shown. Correct the draft only after you count it.',lead:'Add one genuine business prospect and market. Do not upload private customer information or contact anyone without permission.',order:'Your order is waiting at: '+(mhekwaOrderStages[mhekwaCurrentOrder()?.stage]?.name||'review')+'. Read the checklist, add an evidence note and make the decision yourself.',people:'Record the roles your business actually needs. These are staffing plans, not employee payroll records.',cash:'Use verified prices and costs. The cash model is a planning estimate, not a promise of earnings.',feedback:'Tell us what is useful, what is difficult and what Robert would change.'};const guide=document.getElementById('mariusInstructions');if(guide)guide.textContent=messages[id]||t.why;const title=document.getElementById('mariusHeading');if(title)title.textContent='Marius is organising: '+t.title;document.getElementById('mariusDailyBrief').textContent='I have opened '+t.tab+'. '+(messages[id]||t.why)+' I will wait for your input before marking anything complete.';}
+function mariusRunNextJob(){const t=mariusTaskRows().find(x=>!x.done);if(!t){document.getElementById('mariusDailyBrief').textContent='No outstanding setup job is detected. Review the business records and send feedback before moving to live integration planning.';return;}mariusOpenJob(t.id);}
+function mariusMarkJobReviewed(id){mariusTaskState[id]=true;try{localStorage.setItem(MARIUS_TASK_STATE,JSON.stringify(mariusTaskState))}catch(e){}mariusRefreshDesk();}
+function mariusResetReview(id){delete mariusTaskState[id];try{localStorage.setItem(MARIUS_TASK_STATE,JSON.stringify(mariusTaskState))}catch(e){}mariusRefreshDesk();}
+const mariusOldRender=render;
+render=function(){mariusOldRender();if(typeof mariusRefreshDesk==='function')mariusRefreshDesk()};
+if(typeof renderStore==='function'){const oldMariusStoreRender=renderStore;renderStore=function(){oldMariusStoreRender();mariusRefreshDesk()}}
+mariusRefreshDesk();
 </script>
 </body></html>
