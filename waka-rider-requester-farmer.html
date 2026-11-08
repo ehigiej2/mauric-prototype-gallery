@@ -132,7 +132,8 @@ function runDiscovery(){
  card.appendChild(action);container.appendChild(card);
  });
  el('oppIntro').textContent='Osayi: '+d.problem+'. Three hypothetical options ranked by modelled net benefit. This is not a live recommendation.';
- const policy=window.MONARCHOpportunityPolicy?window.MONARCHOpportunityPolicy.evaluate({numbers:{net:options[0].net},evidence:{buyer:false,product:false,logistics:false},exportMode:role==='diaspora'}):null;\n el('oppIntro').textContent+=' Governance: '+(policy?policy.decision:'POLICY MODULE UNAVAILABLE')+'. Live action authorised: NO.';
+ const policy=window.MONARCHOpportunityPolicy?window.MONARCHOpportunityPolicy.evaluate({numbers:{net:options[0].net},evidence:{buyer:false,product:false,logistics:false},exportMode:role==='diaspora'}):null;
+ el('oppIntro').textContent+=' Governance: '+(policy?policy.decision:'POLICY MODULE UNAVAILABLE')+'. Live action authorised: NO.';
  el('oppDecision').textContent='Choose one research path. Do not total the alternatives: they may represent the same business opportunity.';
  opportunityReport='MONARCH OPPORTUNITY DISCOVERY | RESEARCH ONLY\nRole: '+role+'\nProblem: '+d.problem+'\nModeled opportunity gap (NOT proven loss): '+oppMoney(baseline)+'\n'+options.map(o=>o.name+': '+oppMoney(o.net)+' net illustrative monthly; Evidence UNKNOWN: '+o.evidence).join('\n')+'\nNo verified cash value. CROWN HOLD.';
 }
