@@ -826,7 +826,19 @@ window.speakOsayi=recordedOsayi;window.speakWorkflowStep=recordedOsayi;window.v2
 player.addEventListener('error',()=>{status.textContent='Recording unavailable. Check the audio asset or internet connection.'});
 })();
 </script>
-</body></html>');w.document.close();w.focus();w.print();
+<script>
+const mariusSteps=[
+ ['Welcome to Mhekwa','Robert, welcome. We will follow one sample tyre enquiry from a customer to delivery. No real person is contacted.',null],
+ ['MONARCH Waka — Find a buyer','A customer discovers your sample listing in Waka and sends an enquiry. Check the item, buyer request and location. This is simulated.',0],
+ ['MONARCH Trade — Check stock','Open Trade and review product quantity and price. Add a sample product if you wish. Keep it as a draft until you approve it.',1],
+ ['Mhekwa Store — Show your products','Open your shop preview, explore the sample catalogue and add an item to the basket. This prepares an enquiry only; it does not place a live order.',2],
+ ['Delivery and owner decision','Review the sample delivery flow, then visit Feedback to tell us what works and what needs improving. Nothing is dispatched or paid for.',3]
+];let mariusIndex=0;
+function mariusRender(){const d=mariusSteps[mariusIndex];document.getElementById('mariusTrack').textContent='Step '+(mariusIndex+1)+' of '+mariusSteps.length;document.getElementById('mariusHeading').textContent=d[0];document.getElementById('mariusInstructions').textContent=d[1];if(d[2]!==null&&typeof ecoVisit==='function')ecoVisit(d[2]);if(mariusIndex===3&&typeof openTab==='function')openTab('storefront');if(mariusIndex===4&&typeof openTab==='function')openTab('feedback');document.getElementById('mariusLiveGuide').scrollIntoView({behavior:'smooth',block:'start'});}
+function mariusNext(){mariusIndex=Math.min(mariusSteps.length-1,mariusIndex+1);mariusRender();}
+function mariusBack(){mariusIndex=Math.max(0,mariusIndex-1);mariusRender();}
+function mariusReset(){mariusIndex=0;if(typeof openTab==='function')openTab('home');mariusRender();}
+</script></body></html>');w.document.close();w.focus();w.print();
 }
 const oldSelectScenario=selectScenario;
 selectScenario=function(i){oldSelectScenario(i);activeWorkflowSteps=scenarioData[i][4].split(' → ').map(x=>x.trim()).filter(Boolean);activeWorkflowIndex=0;completedWorkflowSteps=new Set();const led=workflowLedger[String(i)];if(led?.steps)Object.keys(led.steps).forEach(k=>{if(led.steps[k]?.decision==='Approved by Robert')completedWorkflowSteps.add(Number(k))});updateWorkflowProgress();renderEvidenceForStep()};
