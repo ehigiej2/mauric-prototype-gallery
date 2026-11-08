@@ -22,6 +22,7 @@
 <p class="muted">Session-only register. Possible duplicates are flagged. Changes create revision snapshots. Export JSON to preserve a portable copy; this browser does not store records between visits.</p>
 <div id="ledgerCount">0 records in this session.</div>
 <div id="ledgerRows"></div>
+<div id="agentPlan" class="box" aria-live="polite">No specialist handover plan prepared.</div>
 <button type="button" class="btn blue" id="ledgerExport">⬇️ Prepare portable ledger export</button>
 <textarea id="ledgerTransfer" rows="5" placeholder="Export appears here. To import, paste a previously exported ledger JSON here."></textarea>
 <button type="button" class="btn purple" id="ledgerImport">↻ Validate and import ledger</button>
@@ -33,6 +34,7 @@
 </section><section class="panel"><h2>📋 End-to-end outcome</h2><div id="summary" class="box"></div><button class="btn purple" id="copy">Copy fictional trip summary</button><p id="copyStatus" class="muted"></p><label for="feedback">Family testing feedback</label><input id="feedback" placeholder="Which step was difficult?"><button class="btn orange" id="feedbackBtn">Prepare feedback note</button><p id="feedbackResult" class="muted"></p></section><section class="panel"><h2>🎙️ Osayi</h2><p>Pidgin guidance dey inside every workflow. Original Osayi African Sovereign sample is available below if the existing audio file loads. This is not a new narration of these five trips.</p><audio controls preload="none" style="width:100%" src="./osayi-african-sovereign-v4.mp3"></audio></section><footer class="muted">OPTIMISE FIRST. BUY LAST.™ · No real payments, riders, customers, tracking or exports. Fictional demonstration only. CROWN HOLD.</footer></main><script src="./monarch-opportunity-policy.js"></script>
 <script src="./monarch-opportunity-record.js"></script>
 <script src="./monarch-opportunity-ledger.js"></script>
+<script src="./monarch-superagent-router.js"></script>
 <script>
 (function(){
 const trips=[{"id":"t1","name":"🏙️ Benin City errand","type":"passenger","from":"Ring Road, Benin City","to":"Ugbowo, Benin City","cargo":"One passenger","requester":"Ada","rider":"Rider A","fare":4500,"fuel":1400,"other":400,"platform":300,"notes":"Verify pickup, rider eligibility and passenger safety."},{"id":"t2","name":"🛍️ Market parcel","type":"delivery","from":"New Benin Market, Benin City","to":"GRA, Benin City","cargo":"Sealed dry-goods parcel","requester":"Mama Eki","rider":"Rider B","fare":3500,"fuel":900,"other":300,"platform":250,"notes":"Confirm parcel contents and proof of delivery."},{"id":"t3","name":"🏥 Hospital supplies","type":"delivery","from":"Benin City supplier","to":"Benin City hospital receiving desk","cargo":"Non-medical office supplies","requester":"Facility Admin","rider":"Rider C","fare":5500,"fuel":1700,"other":550,"platform":350,"notes":"No medicines, patient records or regulated clinical cargo."},{"id":"t4","name":"🌾 Okada → Lagos buyer","type":"farm","from":"Okada, Edo State","to":"Lagos wholesale buyer","cargo":"Sample packaged garri, 30 bags","requester":"Okada Farmer","rider":"Licensed Logistics Operator","fare":145000,"fuel":57000,"other":28000,"platform":6500,"notes":"Illustrative intercity goods shipment. Check weight, vehicle suitability, road risk, loading and verified buyer."},{"id":"t5","name":"🌍 Okada → export gateway","type":"export","from":"Okada, Edo State","to":"Lagos export logistics gateway","cargo":"Sample processed cassava product","requester":"Okada Farmer Cooperative","rider":"Licensed Freight Operator","fare":190000,"fuel":73000,"other":45000,"platform":9000,"notes":"Domestic transport to an export gateway only. Actual export requires buyer, HS classification, standards, phytosanitary and customs checks as applicable."}];
@@ -161,6 +163,7 @@ function renderOpportunityLedger(){
  if(!opportunityLedger)return;
  const rows=opportunityLedger.list();
  el('ledgerCount').textContent=rows.length+' unique record(s) in this session.';
+ const agentBox=el('agentPlan');if(rows.length&&window.MONARCHSuperagentRouter){const last=rows[rows.length-1];const plan=window.MONARCHSuperagentRouter.plan(last.record,last.id);agentBox.textContent=plan.ok?'Proposed route for '+last.id+': '+plan.tasks.map(t=>t.agent).join(' → ')+'. '+plan.unresolvedEvidence.length+' evidence gap(s). Research only; no agent execution or commercial authority.':'Routing unavailable: '+plan.error;}else agentBox.textContent='No specialist handover plan prepared.';
  const box=el('ledgerRows');box.replaceChildren();
  rows.forEach(row=>{const p=document.createElement('p');p.textContent=row.id+' · '+row.record.type+' · '+row.record.candidate+' · '+row.revisionCount+' revision(s) · '+row.record.decision;box.appendChild(p)});
 }
