@@ -809,7 +809,24 @@ function printJourney(){
  activeWorkflowSteps.forEach((name,i)=>{const e=ledger.steps?.[String(i)]||{};lines.push((i+1)+'. '+name+' — '+(completedWorkflowSteps.has(i)?'Marked complete in prototype':'Not marked complete'));if(e.note)lines.push('   Note: '+e.note);if(e.reference)lines.push('   Reference: '+e.reference);if(e.decision)lines.push('   Decision: '+e.decision)});
  lines.push('','No live external action or independent verification is implied.');
  const w=window.open('','_blank');if(!w){$('evidenceStatus').textContent='Pop-up blocked. Use Export journey record instead.';return}
- w.document.write('<!doctype html><html><head><title>Mhekwa journey summary</title><style>body{font:16px Arial;padding:32px;line-height:1.5;white-space:pre-wrap}</style></head><body>'+lines.join('\n').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))+'</body></html>');w.document.close();w.focus();w.print();
+ w.document.write('<!doctype html><html><head><title>Mhekwa journey summary</title><style>body{font:16px Arial;padding:32px;line-height:1.5;white-space:pre-wrap}</style></head><body>'+lines.join('\n').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))+'
+<section id="osayi-voice-truth" style="margin:18px auto;padding:16px;border:2px solid #1a8268;border-radius:18px;max-width:950px;background:#e8fff6;color:#103e34;font:16px system-ui"><strong>🎙️ OSAYI — African Sovereign recording</strong><p>Play the original engineered voice below. This is a pre-recorded demonstration, not live AI narration. The previous device-generated generic voice has been disabled throughout this prototype.</p><audio id="osayiSovereignPlayer" controls preload="none" style="width:100%"><source src="osayi-african-sovereign-v4.mp3" type="audio/mpeg"></audio><p id="osayiSovereignStatus" role="status">Tap Play to hear the approved-source recording. Your phone may require sound to be enabled.</p></section>
+<script>
+(function(){
+const player=document.getElementById('osayiSovereignPlayer');
+const status=document.getElementById('osayiSovereignStatus');
+function recordedOsayi(){
+ if(window.speechSynthesis) window.speechSynthesis.cancel();
+ status.textContent='Playing the African Sovereign pre-recorded demonstration. It does not read the current on-screen text.';
+ player.play().catch(()=>{status.textContent='Playback was blocked. Tap Play on the audio controls to start.';});
+ player.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function stopRecorded(){player.pause();player.currentTime=0;status.textContent='Recording stopped.';}
+window.speakOsayi=recordedOsayi;window.speakWorkflowStep=recordedOsayi;window.v20Speak=recordedOsayi;window.testOsayiVoice=recordedOsayi;window.ecoSpeak=recordedOsayi;window.hearJourney=recordedOsayi;window.stopOsayi=stopRecorded;
+player.addEventListener('error',()=>{status.textContent='Recording unavailable. Check the audio asset or internet connection.'});
+})();
+</script>
+</body></html>');w.document.close();w.focus();w.print();
 }
 const oldSelectScenario=selectScenario;
 selectScenario=function(i){oldSelectScenario(i);activeWorkflowSteps=scenarioData[i][4].split(' → ').map(x=>x.trim()).filter(Boolean);activeWorkflowIndex=0;completedWorkflowSteps=new Set();const led=workflowLedger[String(i)];if(led?.steps)Object.keys(led.steps).forEach(k=>{if(led.steps[k]?.decision==='Approved by Robert')completedWorkflowSteps.add(Number(k))});updateWorkflowProgress();renderEvidenceForStep()};
@@ -1135,4 +1152,21 @@ function storeWalkthrough(){
 const previousStoreRender=render;
 render=function(){previousStoreRender();renderStore()};
 renderStore();
-</script></body></html>
+</script>
+<section id="osayi-voice-truth" style="margin:18px auto;padding:16px;border:2px solid #1a8268;border-radius:18px;max-width:950px;background:#e8fff6;color:#103e34;font:16px system-ui"><strong>🎙️ OSAYI — African Sovereign recording</strong><p>Play the original engineered voice below. This is a pre-recorded demonstration, not live AI narration. The previous device-generated generic voice has been disabled throughout this prototype.</p><audio id="osayiSovereignPlayer" controls preload="none" style="width:100%"><source src="osayi-african-sovereign-v4.mp3" type="audio/mpeg"></audio><p id="osayiSovereignStatus" role="status">Tap Play to hear the approved-source recording. Your phone may require sound to be enabled.</p></section>
+<script>
+(function(){
+const player=document.getElementById('osayiSovereignPlayer');
+const status=document.getElementById('osayiSovereignStatus');
+function recordedOsayi(){
+ if(window.speechSynthesis) window.speechSynthesis.cancel();
+ status.textContent='Playing the African Sovereign pre-recorded demonstration. It does not read the current on-screen text.';
+ player.play().catch(()=>{status.textContent='Playback was blocked. Tap Play on the audio controls to start.';});
+ player.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function stopRecorded(){player.pause();player.currentTime=0;status.textContent='Recording stopped.';}
+window.speakOsayi=recordedOsayi;window.speakWorkflowStep=recordedOsayi;window.v20Speak=recordedOsayi;window.testOsayiVoice=recordedOsayi;window.ecoSpeak=recordedOsayi;window.hearJourney=recordedOsayi;window.stopOsayi=stopRecorded;
+player.addEventListener('error',()=>{status.textContent='Recording unavailable. Check the audio asset or internet connection.'});
+})();
+</script>
+</body></html>
