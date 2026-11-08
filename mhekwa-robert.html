@@ -1222,22 +1222,7 @@ const previousStoreRender=render;
 render=function(){previousStoreRender();renderStore()};
 renderStore();
 </script>
-<section id="osayi-voice-truth" style="margin:18px auto;padding:16px;border:2px solid #1a8268;border-radius:18px;max-width:950px;background:#e8fff6;color:#103e34;font:16px system-ui"><strong>🎙️ OSAYI — African Sovereign recording</strong><p>Play the original engineered voice below. This is a pre-recorded demonstration, not live AI narration. The previous device-generated generic voice has been disabled throughout this prototype.</p><audio id="osayiSovereignPlayer" controls preload="none" style="width:100%"><source src="osayi-african-sovereign-v4.mp3" type="audio/mpeg"></audio><p id="osayiSovereignStatus" role="status">Tap Play to hear the approved-source recording. Your phone may require sound to be enabled.</p></section>
-<script>
-(function(){
-const player=document.getElementById('osayiSovereignPlayer');
-const status=document.getElementById('osayiSovereignStatus');
-function recordedOsayi(){
- if(window.speechSynthesis) window.speechSynthesis.cancel();
- status.textContent='Playing the African Sovereign pre-recorded demonstration. It does not read the current on-screen text.';
- player.play().catch(()=>{status.textContent='Playback was blocked. Tap Play on the audio controls to start.';});
- player.scrollIntoView({behavior:'smooth',block:'center'});
-}
-function stopRecorded(){player.pause();player.currentTime=0;status.textContent='Recording stopped.';}
-window.speakOsayi=recordedOsayi;window.speakWorkflowStep=recordedOsayi;window.v20Speak=recordedOsayi;window.testOsayiVoice=recordedOsayi;window.ecoSpeak=recordedOsayi;window.hearJourney=recordedOsayi;window.stopOsayi=stopRecorded;
-player.addEventListener('error',()=>{status.textContent='Recording unavailable. Check the audio asset or internet connection.'});
-})();
-</script>
+<section id="osayi-voice-truth" style="margin:18px auto;padding:18px;border:2px solid #bca15e;border-radius:18px;max-width:950px;background:#e8fff6;color:#103e34;font:16px system-ui"><strong>🎙️ Osayi · Robert’s personal business guide</strong><p>The approved African Sovereign voice recording for Robert is being prepared. The hospital recording is not used here. Meanwhile, use the personalised written walkthrough and interactive business controls.</p><p role="status" id="osayiSovereignStatus">Business narration: pending verified recording. No generic voice substitution.</p></section><script>(function(){function pendingRobertVoice(){const st=document.getElementById('osayiSovereignStatus');if(st)st.textContent='Robert-specific African Sovereign narration is pending. Read the personalised walkthrough below.';document.getElementById('robert-osayi-guide')?.scrollIntoView({behavior:'smooth',block:'center'});}window.speakOsayi=pendingRobertVoice;window.speakWorkflowStep=pendingRobertVoice;window.v20Speak=pendingRobertVoice;window.testOsayiVoice=pendingRobertVoice;window.ecoSpeak=pendingRobertVoice;})();</script>
 
 <script>
 /* Robert's end-to-end operating rehearsal and transparent cash-value model. */
