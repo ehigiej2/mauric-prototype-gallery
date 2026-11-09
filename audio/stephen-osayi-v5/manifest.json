@@ -1,0 +1,92 @@
+{
+  "version": "osayi-stephen-v5",
+  "date": "2026-11-09",
+  "voice_name": "MONARCH — African Sovereign V2",
+  "voice_id": "D0uq55pjZpKu82kXzFOe",
+  "model": "eleven_v4",
+  "settings": {
+    "stability": 0.5,
+    "similarity_boost": 0.75
+  },
+  "status": "prerecorded_generated_audio",
+  "on_demand_synthesis_connected": false,
+  "crown_hold": true,
+  "chapters": [
+    {
+      "key": "intro",
+      "title": "Welcome, Stephen",
+      "task": "Listen first, then choose a familiar business example.",
+      "target": "benin",
+      "text": "Stephen, how far! Na Osayi, your MONARCH and MAURIC research guide. Welcome to your Benin business laboratory. Na you choose the idea, na you hold the steering. We go optimise wetin dey ground first, before we think of spending more money. Choose market trading, food, cold drinks, tailoring, Okada farm produce, or a family food basket. Change the figures and compare wetin remain after goods, transport, power and unsold stock. Money wey customer promise no be cash for your hand. Check the current numbers on screen. This voice guide uses recorded chapters; e no dey read every new amount aloud. Try one change at a time. Keep wetin work, question wetin no work, and spend nothing if evidence no support the idea. This na fictional research preview. No live order, payment or customer account dey here. CROWN HOLD still dey. Make we begin."
+    },
+    {
+      "key": "market",
+      "title": "Market trader",
+      "task": "Try a smaller batch or change unsold stock. Compare cash and contribution.",
+      "target": "benin",
+      "text": "Stephen, for this Benin market example, confirm whether the quote na bag, basket, crate or piece. Count transport and unsold goods. Try smaller batches or pre-orders. Check contribution and cash separately. These figures na simulation, no be today market quote."
+    },
+    {
+      "key": "kitchen",
+      "title": "Home kitchen & office lunch",
+      "task": "Change meals planned, packaging/material cost or unsold meals.",
+      "target": "benin",
+      "text": "For your home kitchen and office lunch example, count ingredients, packaging, transport and generator time. Ask how many meals customers confirm before you cook. Food wey remain fit chop your margin. Test smaller batches, then check the new result on screen."
+    },
+    {
+      "key": "cold",
+      "title": "Cold drinks & power",
+      "task": "Tap the fuel shock test and inspect the difference.",
+      "target": "benin",
+      "text": "Stephen, for this cold drinks example, power cost matters. Check generator hours against the value of drinks you expect to sell. Try the fuel increase test. No assume say light dey or tariff stay the same. Use your actual quote when you get am."
+    },
+    {
+      "key": "tailor",
+      "title": "Tailoring & customer balances",
+      "task": "Change unpaid sales to see why a busy shop may still face a cash gap.",
+      "target": "benin",
+      "text": "Stephen, for this tailoring example, fabric, transport, power and rework all matter. Customer balance wey never enter no fit buy material today. Agree collection timing and check the cash figure. A contribution on paper no mean cash don reach your hand."
+    },
+    {
+      "key": "farm",
+      "title": "Okada farm → Benin",
+      "task": "Test spoilage, transport and shared delivery.",
+      "target": "benin",
+      "text": "Stephen, for Okada produce coming into Benin, confirm crate size, handling and the buyer collection plan. Test spoilage and transport together. Shared delivery fit reduce cost, but verify the real quote and quality. This na fictional route example, no real dispatch dey happen."
+    },
+    {
+      "key": "family",
+      "title": "Family shopping basket",
+      "task": "Compare shared transport with the starting example.",
+      "target": "benin",
+      "text": "Stephen, for this family food basket, agree quantity, quality and everybody contribution before you arrange supply. Compare one shared delivery with separate trips. Record unpaid balances clearly. The saving on screen na modelled estimate, no be confirmed supplier discount."
+    },
+    {
+      "key": "vendors",
+      "title": "Find Nigerian suppliers",
+      "task": "Filter public leads, add a business URL and compare two dated quotes.",
+      "target": "vendorHub",
+      "text": "Stephen, you fit research Nigerian shops, Facebook sellers and TikTok vendors here. Start with location and product. Compare the same unit, dated quote, delivery cost and return terms. Public presence no mean seller don verify. No payment dey happen inside this prototype. Record the evidence before any decision."
+    },
+    {
+      "key": "review",
+      "title": "Review the evidence",
+      "task": "Ask Osayi to explain the current result. Export your decision brief.",
+      "target": "benin",
+      "text": "Stephen, make we review am. If costs pass sales, pause and adjust the plan. If cash below zero, check when money go enter before you restock. Transfer screenshot no be settlement evidence: confirm through your own bank records. Change one assumption, compare the outcome, and keep the evidence. Na you decide. CROWN HOLD still dey."
+    },
+    {
+      "key": "closing",
+      "title": "Stephen’s next step",
+      "task": "Choose one problem to test. Record what changed and what remains unknown.",
+      "target": "benin",
+      "text": "Stephen, well done for walking through your research prototype. Choose one business problem, record your starting figures, test one change, and review the evidence. You fit go back to any chapter, adjust the numbers and try again. Your judgement remains in charge. MONARCH and MAURIC help you explore; dem no promise profit. CROWN HOLD still dey."
+    }
+  ],
+  "response_scripts": {
+    "loss": "Stephen, this example dey show a loss before other overheads. Make we hold here. Compare supplier cost, transport and waste. Change one figure, then check the result again. No real spending dey happen.",
+    "cash": "Stephen, contribution fit look positive, but your cash today no cover the modelled outgoings. Unpaid customer balance no be cash. Check collection timing and the size of your next batch before you move.",
+    "positive": "Stephen, these inputs show positive contribution and no immediate cash gap. This no be verified profit. Check rent, wages, tax, actual demand and dated quotes before any real decision. Keep testing the assumptions."
+  },
+  "universal_script": "How far! Na Osayi, your MONARCH and MAURIC research guide. Choose your business, change the figures and compare costs, cash and risk. Check your current results on screen. Try one change at a time. This na simulation, no live payment. CROWN HOLD still dey."
+}
