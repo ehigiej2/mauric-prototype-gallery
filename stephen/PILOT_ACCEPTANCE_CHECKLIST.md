@@ -1,0 +1,14 @@
+# JOEYVETTE staging review — release preparation checklist
+- [ ] Source review branch `research/stephen-personal-journey-20261109` retained without merging
+- [ ] `stephen/joeyvette.html` exists and has no external form submission or payment hooks
+- [ ] All choice buttons, calculator, copy function and mobile layout tested
+- [ ] Every illustrative financial value labelled SIMULATED and not a binding quotation
+- [ ] Supplier listings labelled potential and uncontacted
+- [ ] Diaspora leads are community channels, not private member lists
+- [ ] Tax ID and certificate image absent from public source
+- [ ] No staff or customer personal information embedded
+- [ ] GitHub Pages deployment source and history inspected
+- [ ] Explicit founder approval obtained for publication of fictional research preview
+- [ ] Post-publication HTTPS URL verified HTTP 200 and rendered on Safari
+- [ ] Stephen reviews and approves business copy before use
+- [ ] No spend, account connection or external outreach
