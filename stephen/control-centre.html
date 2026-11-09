@@ -64,4 +64,4 @@ $("next").addEventListener("click",next);
 $("approval").addEventListener("click",()=>{if(!currentReport){$("message").textContent="Run a simulation first.";return}$("approvalState").textContent="SIMULATED REQUEST — NOT SENT";log("Approval request recorded locally as simulation; no one contacted")});
 $("copy").addEventListener("click",async()=>{if(!currentReport){$("message").textContent="Run a simulation first.";return}try{if(!navigator.clipboard)throw Error("Clipboard unavailable");await navigator.clipboard.writeText(currentReport);$("message").textContent="Research summary copied."}catch(e){$("message").textContent="Copy unavailable on this device; select the outcome text manually."}});
 switchPartner();
-</script></body></html>
+</script><script src="./osayi-voice-layer.js"></script></body></html>
