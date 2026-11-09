@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MONARCH | Partner Control Centre — Research</title>
+<style>
+:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#13283a;background:#edf4f6}*{box-sizing:border-box}body{margin:0}header{background:linear-gradient(125deg,#102b4a,#126b70);color:white;padding:24px 16px}main{max-width:1050px;margin:auto;padding:16px}.wrap{max-width:1050px;margin:auto}h1{font-size:clamp(24px,5vw,36px);margin:10px 0}h2{font-size:20px;margin:0 0 12px}.eyebrow{font-size:12px;letter-spacing:.09em;text-transform:uppercase;opacity:.9}.tag{display:inline-block;border-radius:99px;background:#f5e4ae;color:#573d00;padding:6px 10px;font-weight:800;font-size:12px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.card{background:white;border:1px solid #d5e3e9;border-radius:17px;padding:18px;margin-bottom:14px;box-shadow:0 3px 12px #1037470a}.muted{color:#536a78}.metric{font-size:28px;font-weight:800;margin:6px 0}button,select,input{font:inherit;min-height:48px;border-radius:12px;padding:10px 12px}button{border:0;background:#087d80;color:white;font-weight:750;cursor:pointer}button.secondary{background:#e4eff0;color:#154b58}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #ffbf47;outline-offset:2px}button:disabled{opacity:.5;cursor:not-allowed}.actions{display:flex;gap:9px;flex-wrap:wrap}.actions button{flex:1 1 160px}.field{display:block;font-weight:700;margin-bottom:5px}select,input{width:100%;border:1px solid #a5bcc8;background:white}.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.notice{background:#fff4d9;border-left:4px solid #d39c27;padding:12px;border-radius:8px;margin:12px 0}.success{background:#e8f5ee;border-left:4px solid #368b61;padding:12px;border-radius:8px}.steps{padding-left:22px;line-height:1.85}.steps li{padding-left:3px}.log{max-height:230px;overflow:auto;background:#f2f7f9;padding:10px;border-radius:10px;font-size:13px;white-space:pre-wrap}footer{text-align:center;padding:20px;color:#536a78}a{color:#006c75}#message{min-height:24px}@media(max-width:520px){.card{padding:15px}main{padding:11px}header{padding:20px 12px}}
+</style></head>
+<body><header><div class="wrap"><div class="eyebrow">MONARCH × Osayi × Marius</div><h1>Partner Control Centre</h1><p>One technology. Independent businesses. Simple decisions.</p><span class="tag">RESEARCH ONLY · CROWN HOLD</span></div></header>
+<main>
+<div class="notice" role="status">All people, quotes, job outcomes and financial examples here are <strong>fictional simulations</strong>. No customer data, payment, dispatch, external messages or subscriptions.</div>
+<section class="cards" aria-label="Overview">
+<div class="card"><div class="muted">Research workspaces</div><div class="metric" id="workspaceCount">3</div><small>Independent synthetic scenarios</small></div>
+<div class="card"><div class="muted">External actions</div><div class="metric">0</div><small>Blocked by CROWN HOLD</small></div>
+<div class="card"><div class="muted">Real transactions</div><div class="metric">0</div><small>No live connections</small></div>
+</section>
+<section class="card"><h2>1. Choose a business</h2><label class="field" for="partner">Research workspace</label><select id="partner">
+<option value="joeyvette">Stephen · JOEYVETTE home services</option>
+<option value="merchant">Fictional Benin supermarket</option>
+<option value="family">Fictional diaspora family support</option>
+</select><p id="summary" class="muted" aria-live="polite"></p>
+<div class="actions"><button id="openPlan">Prepare business plan</button><button class="secondary" id="reset">Reset this workspace</button></div></section>
+<section class="card"><h2>2. Choose a goal</h2>
+<div class="grid2"><div><label class="field" for="goal">What should MONARCH help with?</label><select id="goal">
+<option value="quotes">Prepare a quote</option><option value="procurement">Compare suppliers</option><option value="scheduling">Plan staff and jobs</option><option value="customers">Organise customer enquiries</option><option value="profit">Understand contribution</option>
+</select></div><div><label class="field" for="quantity">Scenario quantity (1–20)</label><input id="quantity" type="number" min="1" max="20" step="1" value="1"></div></div>
+<div class="actions" style="margin-top:12px"><button id="simulate">Run simulated workflow</button><button class="secondary" id="copy">Copy research summary</button></div>
+<p id="message" role="status" aria-live="polite"></p></section>
+<section class="card"><h2>3. Your outcome</h2><div id="outcome" class="notice" aria-live="polite">Choose a business and select “Run simulated workflow”.</div><ol class="steps" id="steps"></ol>
+<div class="actions"><button id="next">Advance simulated step</button><button class="secondary" id="approval">Request approval (simulation)</button></div></section>
+<section class="card"><h2>4. Evidence and safeguards</h2><p><strong>Approval state:</strong> <span id="approvalState">NOT REQUESTED</span></p><p><strong>Integration state:</strong> NOT CONNECTED</p><p><strong>Publishing:</strong> NOT AUTHORISED</p><p><strong>Tenant isolation:</strong> separate simulated workspace state; production enforcement NOT VERIFIED.</p><div class="log" id="log" aria-live="polite">Research cockpit loaded. No external actions.</div></section>
+<section class="card"><h2>Stephen's detailed research</h2><p>Explore JOEYVETTE's dedicated renovation, materials and diaspora workflow simulator.</p><a href="./joeyvette.html">Open JOEYVETTE detailed prototype</a></section>
+</main><footer>MONARCH Research · No live operations · No payment collection</footer>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const partners={
+joeyvette:{name:"JOEYVETTE home services",description:"Home renovation, materials, inspections and scheduling",unitRevenue:280000,unitCost:215000,currency:"NGN"},
+merchant:{name:"Benin supermarket (fictional)",description:"Stock sourcing, customer enquiries and stock planning",unitRevenue:160000,unitCost:125000,currency:"NGN"},
+family:{name:"Diaspora family support (fictional)",description:"Consent-first family enquiry; no commercial outcome assumed",unitRevenue:0,unitCost:0,currency:"NGN"}};
+const steps=["Record fictional enquiry","Check consent before personal data","Prepare illustrative scope","Compare options and direct costs","Request owner approval","Draft schedule (no dispatch)","Record simulated outcome and evidence"];
+const state={};let currentIndex=-1;let currentReport="";
+function selected(){return $("partner").value}
+function log(text){$("log").textContent=new Date().toLocaleTimeString()+" · "+text+"\n"+$("log").textContent}
+function resetView(){currentIndex=-1;currentReport="";$("outcome").textContent="No workflow run yet for this workspace.";$("steps").replaceChildren();$("approvalState").textContent="NOT REQUESTED";$("message").textContent=""}
+function switchPartner(){resetView();const p=partners[selected()];$("summary").textContent=p.description+" · Separate fictional workspace · No real customer records";log("Selected "+p.name)}
+function simulate(){
+const qty=Number($("quantity").value);
+if(!Number.isInteger(qty)||qty<1||qty>20){$("message").textContent="Enter a whole number from 1 to 20.";return}
+const p=partners[selected()],goal=$("goal").selectedOptions[0].textContent;
+const contribution=(p.unitRevenue-p.unitCost)*qty;
+const fmt=n=>new Intl.NumberFormat("en-NG",{style:"currency",currency:p.currency,maximumFractionDigits:0}).format(n);
+currentIndex=0;$("approvalState").textContent="NOT REQUESTED";
+currentReport="SIMULATED | "+p.name+" | "+goal+" | quantity "+qty+" | indicative revenue "+fmt(p.unitRevenue*qty)+" | indicative direct costs "+fmt(p.unitCost*qty)+" | indicative contribution "+fmt(contribution)+" | no external actions";
+$("outcome").textContent=currentReport+"\nIllustrative contribution excludes overheads and tax. Not a customer quote, actual savings or earnings.";
+$("steps").replaceChildren();steps.forEach((s,i)=>{const li=document.createElement("li");li.textContent=(i===0?"▶ ":"○ ")+s;$("steps").appendChild(li)});
+$("message").textContent="Synthetic workflow prepared. Advance each step to inspect the journey.";
+log("Simulated "+goal+" for "+p.name+"; no external actions");
+}
+function next(){if(currentIndex<0){$("message").textContent="Run a simulated workflow first.";return}if(currentIndex>=steps.length-1){$("message").textContent="Simulation complete. No real-world work performed.";return}currentIndex++;Array.from($("steps").children).forEach((li,i)=>li.textContent=(i<currentIndex?"✓ ":i===currentIndex?"▶ ":"○ ")+steps[i]);$("message").textContent="Step "+(currentIndex+1)+" of "+steps.length+": "+steps[currentIndex];log("Advanced simulated step "+(currentIndex+1))}
+$("partner").addEventListener("change",switchPartner);
+$("openPlan").addEventListener("click",()=>{switchPartner();$("goal").focus();$("message").textContent="Select a goal and run the simulation."});
+$("reset").addEventListener("click",()=>{resetView();$("quantity").value="1";log("Reset selected workspace")});
+$("simulate").addEventListener("click",simulate);
+$("next").addEventListener("click",next);
+$("approval").addEventListener("click",()=>{if(!currentReport){$("message").textContent="Run a simulation first.";return}$("approvalState").textContent="SIMULATED REQUEST — NOT SENT";log("Approval request recorded locally as simulation; no one contacted")});
+$("copy").addEventListener("click",async()=>{if(!currentReport){$("message").textContent="Run a simulation first.";return}try{if(!navigator.clipboard)throw Error("Clipboard unavailable");await navigator.clipboard.writeText(currentReport);$("message").textContent="Research summary copied."}catch(e){$("message").textContent="Copy unavailable on this device; select the outcome text manually."}});
+switchPartner();
+</script></body></html>
