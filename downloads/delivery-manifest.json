@@ -1,0 +1,21 @@
+{
+  "release": "delivery-20261109-01",
+  "created_at": "2026-11-09T10:38:15.805695+00:00",
+  "crown_hold": true,
+  "files": {
+    "stephen-offline.html": {
+      "bytes": 2081784,
+      "sha256": "6dbd1def53665d4fd8bb895fe21751c08dd48aaab4eea0f1c3f7878372d13e5e"
+    },
+    "nigeria-studio-offline.html": {
+      "bytes": 548528,
+      "sha256": "0a1916ed7d4c71fb22bd9d60b6eff3db02593305f7ac624e4e89ef028eb2cbfe"
+    }
+  },
+  "network_required_for_core": false,
+  "optional_network": [
+    "public deployment refresh",
+    "external source links"
+  ],
+  "device_validation": "Chrome only; other combinations unverified"
+}

@@ -1,0 +1,155 @@
+{
+  "version": "mauric-ecosystem-foundation-1",
+  "crown_hold": true,
+  "origin": "Benin City research ecosystem",
+  "execution_mode": "READ_ONLY_PLANNING_ONLY",
+  "external_connectors_connected": false,
+  "current_work": {
+    "stephen": "/mauric-prototype-gallery/stephen-preview.html#ecosystemTask",
+    "reusable_studio": "/mauric-prototype-gallery/nigeria-business-preview.html",
+    "delivery": "/mauric-prototype-gallery/delivery/",
+    "offline_package": "/mauric-prototype-gallery/downloads/mauric-apps-offline.zip"
+  },
+  "agents": [
+    {
+      "id": "osayi",
+      "role": "User-facing guide",
+      "state": "RECORDED_GUIDE_IN_PROTOTYPE",
+      "scope": [
+        "explain chapters",
+        "explain modelled outcomes"
+      ],
+      "live_inference": false
+    },
+    {
+      "id": "marius",
+      "role": "Workflow coordinator",
+      "state": "PLANNER_IMPLEMENTED_NOT_REGISTERED",
+      "scope": [
+        "route tasks",
+        "report capabilities",
+        "prepare evidence requirements"
+      ],
+      "external_execution": false
+    },
+    {
+      "id": "knowledge",
+      "role": "Source and evidence agent",
+      "state": "DECLARED_NOT_CONNECTED",
+      "scope": [
+        "authorised source retrieval",
+        "source dates",
+        "evidence lineage",
+        "unknowns"
+      ],
+      "constraints": [
+        "no invented facts",
+        "no secret or confidential data by default"
+      ]
+    },
+    {
+      "id": "sharepoint",
+      "role": "SharePoint knowledge and document agent",
+      "state": "CHATGPT_PROFILE_ACCESS_CONFIRMED_SCOPE_UNVERIFIED",
+      "scope": [
+        "approved sites and libraries",
+        "read/search first",
+        "bounded document changes only when authorised"
+      ],
+      "constraints": [
+        "preserve Microsoft access controls",
+        "no tenant-wide access assumption"
+      ]
+    },
+    {
+      "id": "systems",
+      "role": "Existing-system integration agent",
+      "state": "DECLARED_NOT_CONNECTED",
+      "scope": [
+        "capability discovery",
+        "adapter contracts",
+        "scoped compatibility checks"
+      ],
+      "constraints": [
+        "no universal compatibility claim",
+        "no arbitrary shell or browser execution in this foundation"
+      ]
+    },
+    {
+      "id": "banking",
+      "role": "Existing bank and payment evidence agent",
+      "state": "SIMULATION_ONLY",
+      "scope": [
+        "provider verification design",
+        "amount/currency/reference checks",
+        "duplicate-event handling"
+      ],
+      "constraints": [
+        "no funds held",
+        "no live charge or transfer",
+        "no credentials in public app"
+      ]
+    },
+    {
+      "id": "delivery",
+      "role": "Existing rider and carrier coordination agent",
+      "state": "SIMULATION_ONLY",
+      "scope": [
+        "quote planning",
+        "handover evidence",
+        "receipt rehearsal"
+      ],
+      "constraints": [
+        "no live booking or dispatch",
+        "regional coverage unverified"
+      ]
+    },
+    {
+      "id": "release",
+      "role": "URL, package and asset delivery agent",
+      "state": "PACKAGER_IMPLEMENTED",
+      "scope": [
+        "portable package",
+        "checksum manifest",
+        "HTTP and rendering evidence"
+      ],
+      "constraints": [
+        "no completion claim with broken URL or missing artifact"
+      ]
+    },
+    {
+      "id": "assurance",
+      "role": "Evidence and human review agent",
+      "state": "DECLARED_NOT_CONNECTED",
+      "scope": [
+        "separate simulation from live behaviour",
+        "review permissions and failure evidence",
+        "preserve CROWN HOLD"
+      ],
+      "constraints": [
+        "unknown remains unknown",
+        "no autonomous consequential decisions"
+      ]
+    }
+  ],
+  "connection_gates": [
+    "owner-authorised service connection",
+    "least required scope",
+    "read-only capability check",
+    "bounded sandbox test",
+    "duplicate and failure tests",
+    "human release decision"
+  ],
+  "systems": {
+    "SharePoint": "LOCAL_ADAPTER_BINDING_REQUIRED",
+    "banking": "NO_LIVE_CONNECTION",
+    "delivery": "NO_LIVE_CONNECTION",
+    "browser": "NO_ADAPTER_BOUND",
+    "knowledge": "NO_EXTERNAL_SOURCE_BOUND"
+  },
+  "sharepoint_connection": {
+    "chatgpt_profile_read": "PASS",
+    "site_library_access": "NOT_TESTED",
+    "local_mcp_adapter": "NOT_BOUND"
+  }
+}
