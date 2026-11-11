@@ -1,0 +1,16 @@
+name: Nigeria Social Commerce Ranking Acceptance
+on:
+  push:
+    branches: [main, 'research/**']
+  pull_request:
+  workflow_dispatch:
+jobs:
+  deterministic-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate scoring and unit economics
+        run: node tests/social-commerce-ranking.test.cjs
