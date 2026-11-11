@@ -54,7 +54,7 @@ jobs:
           for i in {1..18}; do
             P=$(curl -LsS --max-time 20 -o /tmp/v9.html -w '%{http_code}' "$BASE/osayi-construction-command-centre-v9.html" || true)
             E=$(curl -LsS --max-time 20 -o /tmp/engine.js -w '%{http_code}' "$BASE/engines/monarch-conversation-engine-v1.js" || true)
-            if [ "$P" = 200 ] && [ "$E" = 200 ] && grep -q 'osayi-v9-conversation-adapter' /tmp/v9.html && grep -q 'BLOCKED_NO' /tmp/engine.js; then echo 'PASS published V9 and engine'; exit 0; fi
+            if [ "$P" = 200 ] && [ "$E" = 200 ] && grep -q 'osayi-v9-conversation-adapter' /tmp/v9.html && grep -q 'No approved on-demand synthesis backend' /tmp/engine.js; then echo 'PASS published V9 and engine'; exit 0; fi
             sleep 10
           done
           exit 1
