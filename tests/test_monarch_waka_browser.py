@@ -13,11 +13,17 @@ def main():
         browser = p.chromium.launch(headless=True)
         for width, height in [(320,568),(375,667),(390,844)]:
             page = browser.new_page(viewport={"width":width,"height":height})
-            page.goto(URL)
             outbound=[]
+            errors=[]
+            page.on("pageerror", lambda error: errors.append(str(error)))
             page.on("request",lambda req: outbound.append(req.url) if req.url.startswith(("https://","http://")) else None)
+            page.goto(URL)
             assert page.get_by_role("heading",name="Watein you wan do?").is_visible()
             assert page.locator(".tile").count()==6
+            for tile in page.locator(".tile").all():
+                box=tile.bounding_box()
+                assert tile.is_visible() and box is not None
+                assert box["x"] >= 0 and box["y"] >= 0 and box["x"]+box["width"] <= width and box["y"]+box["height"] <= height, f"Button outside viewport at {width}x{height}: {box}"
             assert page.evaluate("document.documentElement.scrollWidth <= innerWidth"), f"Horizontal overflow at {width}"
             for mode in ["sell","send","stock","money","team","osayi"]:
                 page.locator(f'.tile[data-mode="{mode}"]').click()
@@ -72,6 +78,7 @@ def main():
             assert page.locator("#osayiIntro").get_attribute("src").endswith("intro.mp3")
             page.keyboard.press("Escape")
             assert page.locator("#workspace").is_hidden()
+            assert not errors, f"Browser script errors: {errors}"
             assert not outbound, f"Unexpected external requests: {outbound}"
             page.close()
         browser.close()
