@@ -1,0 +1,25 @@
+name: Benin UAT public link verification
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'osayi-benin-uat.html'
+      - '.github/workflows/benin-uat-public.yml'
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check actual public UAT page
+        run: |
+          URL="https://ehigiej2.github.io/mauric-prototype-gallery/osayi-benin-uat.html"
+          for i in {1..12}; do
+            CODE=$(curl -L --max-time 25 -sS -o /tmp/uat.html -w '%{http_code}' "$URL" || true)
+            echo "Attempt $i HTTP $CODE"
+            if [ "$CODE" = "200" ] && grep -q "Osayi Benin User Acceptance" /tmp/uat.html && grep -q "independent" /tmp/uat.html; then
+              echo "PASS: actual public UAT page available"
+              exit 0
+            fi
+            sleep 15
+          done
+          exit 1
