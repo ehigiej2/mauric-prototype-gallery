@@ -24,7 +24,10 @@ jobs:
             const page=await browser.newPage({...devices['iPhone 13'],browserName:undefined});
             const errors=[];page.on('pageerror',e=>errors.push(e.message));
             await page.goto('file://'+process.cwd()+'/mama-put-ebo-pepper-rice-osayi.html');
-            await page.locator('#brand').selectOption('eno');
+            await page.locator('#brand').evaluate(el=>{el.value='eno';el.dispatchEvent(new Event('change',{bubbles:true}))});
+            const visibleButtons=await page.locator('#home .big:visible').count();
+            if(visibleButtons!==6)throw Error('HOME SCREEN FAILURE: expected six visible buttons, got '+visibleButtons);
+            if(!await page.locator('#home').isVisible())throw Error('HOME SCREEN FAILURE: home not visible');
             if(!await page.locator('#brandIntro').textContent().then(s=>s.includes('Mama Ebo')||s.includes('Pepper rice')))throw Error('Mama Ebo selection failed');
             for(const action of ['menu','price','order','kitchen','delivery','grow']){
               await page.locator('[data-action="'+action+'"]').click();
