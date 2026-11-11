@@ -49,8 +49,13 @@ jobs:
             if(!(await page.locator('#mamaChatLog').innerText()).includes('Thank you Mama'))throw Error('Buyer reply missing');
             await page.locator('#mamaChatRead').click();
             await page.locator('#mamaMessagesClose').click();
+            await page.locator('#osayiGuideStart').click();
+            if(!(await page.locator('#osayiAdoptionGuide').isVisible()))throw Error('Osayi guide not open');
+            for(let i=0;i<5;i++)await page.locator('#osayiGuideNext').click();
+            if(!(await page.locator('#osayiGuideWords').innerText()).includes('Well done Mama'))throw Error('Guide not complete');
+            await page.locator('#osayiGuideClose').click();
             if(errors.length)throw Error('JS errors: '+errors.join('; '));
-            console.log('PASS: 6 buttons, five-stage order, buyer/seller replies, message audio control, no page errors');
+            console.log('PASS: 6 buttons, five-stage order, buyer/seller replies, six-step Osayi guide, message audio control, no page errors');
             await browser.close();
           })().catch(e=>{console.error(e);process.exit(1)});
           EOF
