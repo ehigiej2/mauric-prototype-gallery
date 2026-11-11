@@ -1,0 +1,26 @@
+name: Verify public Mama Akara access
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for GitHub Pages publication and test public URL
+        shell: bash
+        run: |
+          set -uo pipefail
+          URL="https://ehigiej2.github.io/mauric-prototype-gallery/mama-akara-osayi-benin.html"
+          for i in {1..12}; do
+            echo "Attempt $i: $URL"
+            STATUS=$(curl -L --connect-timeout 10 --max-time 25 -sS -o /tmp/mama.html -w '%{http_code}' "$URL" || true)
+            echo "HTTP status: $STATUS"
+            if [ "$STATUS" = "200" ] && grep -q 'Mama Akara' /tmp/mama.html && grep -q 'osayiTalk' /tmp/mama.html; then
+              echo "PASS: public HTML, app title and Osayi control present"
+              exit 0
+            fi
+            sleep 20
+          done
+          echo "FAIL: public URL could not be verified"
+          exit 1
