@@ -1,0 +1,7 @@
+supplier_id,submission_status,submission_id,sent_at,response_received,quote_expiry,next_action
+CN01,NOT SENT,UNKNOWN,UNKNOWN,NO,UNKNOWN,Confirm authorised sender then authenticate and submit tailored RFQ
+CN02,NOT SENT,UNKNOWN,UNKNOWN,NO,UNKNOWN,Confirm authorised sender then authenticate and submit tailored RFQ
+CN03,NOT SENT,UNKNOWN,UNKNOWN,NO,UNKNOWN,Confirm authorised sender then authenticate and submit tailored RFQ
+CN04,NOT SENT,UNKNOWN,UNKNOWN,NO,UNKNOWN,Confirm authorised sender then authenticate and submit tailored RFQ
+CN05,NOT SENT,UNKNOWN,UNKNOWN,NO,UNKNOWN,Confirm authorised sender then authenticate and submit tailored RFQ
+CN06,NOT SENT,UNKNOWN,UNKNOWN,NO,UNKNOWN,Confirm authorised sender then authenticate and submit tailored RFQ

@@ -1,0 +1,22 @@
+PASS all cost components / accepted units
+PASS missing goods stays UNKNOWN
+PASS missing china_transport stays UNKNOWN
+PASS missing handling stays UNKNOWN
+PASS missing inspection stays UNKNOWN
+PASS missing freight stays UNKNOWN
+PASS missing insurance stays UNKNOWN
+PASS missing duty stays UNKNOWN
+PASS missing vat stays UNKNOWN
+PASS missing levies stays UNKNOWN
+PASS missing clearance stays UNKNOWN
+PASS missing nigeria_delivery stays UNKNOWN
+PASS missing payment_fx stays UNKNOWN
+PASS missing returns_defects stays UNKNOWN
+PASS missing accepted_units stays UNKNOWN
+PASS zero units rejected
+PASS fraction units rejected
+PASS negative rejected
+PASS nonfinite rejected
+PASS no currency blocked
+PASS no evidence blocked
+21 tests passed; arithmetic only, no commercial or browser certification.

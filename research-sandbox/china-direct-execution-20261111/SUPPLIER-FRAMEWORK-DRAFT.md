@@ -1,0 +1,13 @@
+# Non-exclusive supplier framework — discussion draft
+DRAFT ONLY. No binding effect intended, including confidentiality or exclusivity. Not transmitted. All parties, terms and legal enforceability require founder and legal review; no signature block or registration number invented.
+
+1. Parties: verified supplier legal entity and authorised buyer/importer to be inserted. MAURIC role is disclosed adviser only unless a later written mandate changes this. Every order requires separately approved purchase document; no authority to bind clients.
+2. No minimum volume/spend, speculative stock purchase, security deposit, exclusivity or obligation to reserve paid stock. Supplier retains inventory pending a separately approved order; title/risk transfer and Incoterm2020 named place must be explicit per order.
+3. Product schedule: exact SKU, fabric/material, measured size/model compatibility, colour, label, safety standard, approved sample and packaging. No counterfeit goods, unauthorised logos or substitutions.
+4. Stock updates with timestamps; order acknowledgement and dispatch SLA to be quoted, not assumed. Prices for1/10/50 units, currency, tax/fee inclusions and expiry in writing. No retrospective price changes after approved order acceptance.
+5. Buyer may appoint independent inspector before shipment. Agree test plan, acceptance criteria, failed inspection remedy, reinspection costs and no restriction of statutory rights. Brand electronics require traceable authorisation and serial/warranty validation.
+6. Supplier quotes individual-order pick-pack and dispatch to nominated independent warehouse; carton weights/dimensions, tracking and dispatch proof. No client contact or marketing without consent.
+7. State defect notification window, evidence, replacement/refund deadline and who pays return freight. Cross-border return cost may exceed product value; propose evidence-based local remedy where lawfully agreed. Never promise a refund outside documented authority.
+8. Protected marketplace order/payment terms preferred, checked per actual order; buyer pays verified beneficiary through existing licensed systems. No MONARCH custody, credit exposure, hidden commission or double charging.
+9. Lawful export/origin records; product-specific current certification and inspection access; truthful customs values. Data minimum, owner consent, tenant isolation, lawful retention, accessibility and protected appeal routes.
+10. Performance review, cure period, nonexclusive termination and protection for already approved in-flight orders. Governing law, venue/arbitration, liability limits, mandatory consumer rights and bilingual controlling text: counsel to determine. Any binding agreement needs separate founder approval and authorised execution.
