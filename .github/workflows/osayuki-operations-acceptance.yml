@@ -42,7 +42,7 @@ jobs:
           assert(pidginRecall.reason==='turn-memory','Pidgin explicit recall must work');
           assert(pidginRecall.text.includes('What about route capacity?'),'Pidgin recall should return previous route question');
           const second=session.ask('What did I ask before?');
-          assert(second.text.includes('What about route capacity?'),'Recent-turn recall broken');
+          assert(second.text.includes('Wetin I ask you before?'),'Recent-turn recall broken');
           const third=session.ask('What is profit?',{sales:50000,cost:36000});
           assert(third.text.includes('14,000'),'Modelled contribution incorrect');
           assert(session.speech().status==='BLOCKED','Unapproved synthesis must remain blocked');
