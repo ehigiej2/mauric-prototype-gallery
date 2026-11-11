@@ -1,0 +1,38 @@
+name: Osayi V7 direct response acceptance
+on:
+  push:
+    branches: [main]
+    paths: ['osayi-construction-command-centre-v7.html','.github/workflows/osayi-construction-v7.yml']
+  workflow_dispatch:
+jobs:
+  mobile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install chromium
+      - run: |
+          cat >/tmp/test.cjs <<'JS'
+          const {chromium,devices}=require(process.cwd()+'/node_modules/playwright');
+          (async()=>{const b=await chromium.launch();const p=await b.newPage({...devices['iPhone 13']});const errors=[];p.on('pageerror',e=>errors.push(e.message));await p.goto('file://'+process.cwd()+'/osayi-construction-command-centre-v7.html');
+          await p.locator('#v7Question').fill('How much profit?');await p.locator('#v7Ask').click();if(!(await p.locator('#v7Answer').textContent()).includes('No saved quote'))throw Error('No direct answer');
+          await p.locator('#v7Speak').click();if(!(await p.locator('#v7AudioStatus').textContent()).length)throw Error('No voice status');
+          for(const k of ['request','materials','worker','quote','safety','handover']){await p.locator('[data-step="'+k+'"]').click();if(k==='safety')await p.locator('#human').selectOption('practice');await p.locator('#save').click();await p.locator('#back').click()}
+          await p.locator('#v7Question').fill('Explain profit');await p.locator('#v7Ask').click();const t=await p.locator('#v7Answer').textContent();if(!t.includes('₦47,000')||!t.includes('10%'))throw Error('Wrong contextual calculation '+t);
+          if(errors.length)throw Error(errors.join(';'));console.log('PASS visible answer, math, voice status, six steps');await b.close()})().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node /tmp/test.cjs
+  public:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - run: |
+          URL=https://ehigiej2.github.io/mauric-prototype-gallery/osayi-construction-command-centre-v7.html
+          for i in {1..18}; do
+            CODE=$(curl -LsS --max-time 20 -o /tmp/v7.html -w '%{http_code}' "$URL" || true)
+            if [ "$CODE" = 200 ] && grep -q 'osayi-v7-direct-response' /tmp/v7.html; then echo 'PASS'; exit 0; fi
+            sleep 10
+          done
+          exit 1
