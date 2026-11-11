@@ -1,0 +1,46 @@
+name: Osayi timber construction interactive acceptance
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'osayi-timber-construction-supply-v1.html'
+      - '.github/workflows/osayi-timber-acceptance.yml'
+  workflow_dispatch:
+jobs:
+  mobile:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Check six sectors, calculations, Osayi and navigation
+        run: |
+          cat > /tmp/timber.cjs <<'JS'
+          const {chromium,devices}=require(process.cwd()+'/node_modules/playwright');
+          (async()=>{
+            const browser=await chromium.launch();
+            const page=await browser.newPage({...devices['iPhone 13']});
+            const errors=[];page.on('pageerror',e=>errors.push(e.message));
+            await page.goto('file://'+process.cwd()+'/osayi-timber-construction-supply-v1.html');
+            if(await page.locator('#home .tile:visible').count()!==6)throw Error('Six tiles missing');
+            for(const k of ['forest','sawmill','carpenter','builder','materials','supply']){
+              await page.locator('[data-sector="'+k+'"]').click();
+              if(!await page.locator('#panel').isVisible())throw Error(k+' panel not visible');
+              await page.locator('#run').click();
+              if(!(await page.locator('#result').textContent()).includes('₦'))throw Error(k+' calculation failed');
+              await page.locator('#osayiToggle').click();
+              if(!await page.locator('#assistant').isVisible())throw Error(k+' Osayi not visible');
+              await page.locator('#question').fill('Help me with '+k);
+              await page.locator('#ask').click();
+              if((await page.locator('#answer').textContent()).length<30)throw Error(k+' Osayi answer missing');
+              await page.locator('#close').click();
+              await page.locator('#back').click();
+              if(!await page.locator('#home').isVisible())throw Error(k+' back failed');
+            }
+            if(errors.length)throw Error('JS errors: '+errors.join(';'));
+            console.log('PASS: 6 sectors, 6 calculations, persistent Osayi in each, back navigation');
+            await browser.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node /tmp/timber.cjs
