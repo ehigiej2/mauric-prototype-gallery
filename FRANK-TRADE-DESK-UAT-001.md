@@ -17,7 +17,7 @@ Status: **DESIGNED / NOT EXECUTED WITH FRANK**. CROWN HOLD. No real bookings, or
 | ID | Job | Labour | Materials | Travel charge | Other costs | Expected draft quote | Expected contribution* |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | F01 | Paint a room | 8h × £32 | £85 | £20 | £35 | £361 | £221 |
-| F02 | Mount a TV | 2h × £40 | £18 | £12 | £10 | £110 | £80 |
+| F02 | Mount a TV | 2h × £40 | £18 | £12 | £10 | £110 | £70 |
 | F03 | Replace a tap | 3h × £38 | £65 | £15 | £20 | £194 | £94 |
 | F04 | Assemble furniture | 4h × £30 | £0 (customer supplied) | £10 | £12 | £130 | £108 |
 | F05 | Small building repair | 12h × £35 | £180 | £35 | £55 | £635 | £365 |
