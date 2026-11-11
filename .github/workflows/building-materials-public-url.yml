@@ -1,0 +1,26 @@
+name: Verify public Building Materials app
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  public-url:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Verify exact deployed building materials URL
+        shell: bash
+        run: |
+          set -uo pipefail
+          URL="https://ehigiej2.github.io/mauric-prototype-gallery/building-materials-osayi-nigeria.html"
+          for i in {1..12}; do
+            CODE=$(curl --location --connect-timeout 10 --max-time 25 -sS -o /tmp/materials.html -w '%{http_code}' "$URL" || true)
+            echo "Attempt $i HTTP $CODE"
+            if [ "$CODE" = "200" ] && grep -q 'Building Materials' /tmp/materials.html && grep -q 'startGuide' /tmp/materials.html; then
+              echo "PASS: exact public URL and app markers"
+              exit 0
+            fi
+            head -c 150 /tmp/materials.html || true
+            sleep 15
+          done
+          echo "FAIL: deployed Building Materials page not available"
+          exit 1
