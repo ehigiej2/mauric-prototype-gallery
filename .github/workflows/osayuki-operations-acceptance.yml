@@ -42,5 +42,13 @@ jobs:
           const third=session.ask('What is profit?',{sales:50000,cost:36000});
           assert(third.text.includes('14,000'),'Modelled contribution incorrect');
           assert(session.speech().status==='BLOCKED','Unapproved synthesis must remain blocked');
+          const history=session.getHistory();
+          assert(history.length===3,'Three conversational turns must be recorded');
+          assert(history[1].reason==='turn-memory','Follow-up must use session memory');
+          const cancellation=session.cancel();
+          assert(cancellation!==undefined,'Cancel turn handler must return a result');
+          assert(html.includes("$('stop').onclick"),'Cancel button must be wired');
+          assert(html.includes("$('ask').onclick"),'Ask Osayi button must be wired');
+          assert(html.includes("$('language').value==='english'"),'Language selector must be wired');
           console.log('PASS: six buttons, guards, shared Osayi, memory, arithmetic, voice hold');
           JS
