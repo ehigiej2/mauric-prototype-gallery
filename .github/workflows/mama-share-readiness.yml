@@ -1,0 +1,33 @@
+name: Mama Akara share-readiness checks
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  static-readiness:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Confirm lightweight static, private demonstration
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from html.parser import HTMLParser
+          import re
+          p=Path('mama-akara-osayi-benin.html')
+          s=p.read_text()
+          class Audit(HTMLParser):
+              def __init__(self): super().__init__(); self.external=[]
+              def handle_starttag(self, tag, attrs):
+                  for k,v in attrs:
+                      if k in ('src','href') and v and v.startswith(('http://','https://')): self.external.append(v)
+          a=Audit();a.feed(s)
+          assert len(s.encode())<150_000, 'Page exceeded lightweight size gate'
+          assert not a.external, 'Unexpected remote asset dependency: '+str(a.external)
+          assert not re.search(r'\bfetch\s*\(|\bXMLHttpRequest\b|\bWebSocket\s*\(',s), 'Unexpected live network API'
+          for control in ['osayiGuideStart','mamaMessageBtn','mamaChatSend','incomingAccept','incomingReject']:
+              assert f'id="{control}"' in s, f'Missing control: {control}'
+          print(f'PASS: {len(s.encode())} bytes, zero external assets, no live API dependency, key controls present')
+          print('NOTE: This is NOT a concurrent-user load test or real-device voice verification')
+          PY
