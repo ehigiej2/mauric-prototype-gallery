@@ -68,5 +68,10 @@
     "id": "independent_review",
     "criterion": "Independent reviewer evidence check",
     "evidence_required": "Named reviewer independent of test execution assesses original artifacts"
+  },
+  {
+    "id": "complete_kit",
+    "criterion": "Complete packaged receiver and handover",
+    "evidence_required": "Fit/protection/stand/power/connectivity/start-card/ownership/support evidence, actual alert and missed-order tests; all-in funded cost"
   }
 ]

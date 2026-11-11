@@ -1,0 +1,13 @@
+PASS no online order received while offline
+PASS duplicate does not reset accepted
+PASS offline accept remains pending
+PASS pending cannot sync offline
+PASS cancel wins over pending
+PASS expired request cannot accept
+PASS wrong order cannot be accepted
+PASS missed event records no contact
+PASS online reply explicitly simulated
+PASS offline decline pending then simulated sync
+PASS new event cannot overwrite unanswered order
+PASS missing ID rejected
+12 scripted state tests; not live transport or physical receiver evidence.

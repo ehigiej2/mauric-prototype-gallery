@@ -4,7 +4,7 @@ from datetime import datetime,timezone
 from pathlib import Path
 import json
 CRITERIA=[c['id'] for c in json.loads((Path(__file__).with_name('criteria.json')).read_text())]
-COSTS=['landed_device','accessories_power','setup_training','integration','monthly_connectivity','monthly_energy','monthly_consumables','monthly_support_licences','repair_replacement','downtime','return_exit','residual_value']
+COSTS=['landed_device','accessories_power','packaging_assembly','provisioning','setup_training','integration','monthly_connectivity','monthly_energy','monthly_consumables','monthly_support_licences','repair_replacement','downtime','return_exit','residual_value']
 def gate(records,now):
     issues=[]; seen=set(); current=datetime.fromisoformat(now.replace('Z','+00:00'))
     for r in records:

@@ -1,7 +1,10 @@
 # Trader hardware — evidence-led founder review
 11 November 2026 | CROWN HOLD | Research branch only
 
-## Decision
+## Latest packaging and order-receiver direction
+Founder selected the complete trader kit and proposed a supplied order-receiving device for traders who do not want a personal-phone download. Read ORDER-RECEIVER-KIT.md first for this segment. No device, platform or funding is approved. Packaging/assembly and provisioning now explicit in cost model; complete-kit criterion added. Earlier56-row validation below is historical; current register has60 UNKNOWN rows.
+
+## Initial assessment
 Clothing/product resale work is paused as the sourcing priority. Assess business equipment for traders, beginning with their existing phones. No equipment distribution, funding promise, sample order or partner relationship has been established. No hardware procurement approval requested now.
 
 | Route | Intended user | Assessment | Purchase position |

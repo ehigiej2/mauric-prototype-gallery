@@ -1,0 +1,14 @@
+component,provision,quantity_per_receiver,unit_cost_ngn,evidence,gate
+Receiver,Supported OEM device,1,UNKNOWN,NO WRITTEN QUOTE,NOT APPROVED
+Stand,Stock stable stand,1,UNKNOWN,NO WRITTEN QUOTE,NOT APPROVED
+Charger/cable,Correct safe rated OEM/qualified,1,UNKNOWN,NO WRITTEN QUOTE,NOT APPROVED
+Backup power,Only if measured need,CONDITIONAL,UNKNOWN,NO WRITTEN QUOTE,NOT APPROVED
+SIM/connectivity,Trader-approved route,1,UNKNOWN,NO WRITTEN QUOTE,NOT APPROVED
+Protective inner,Keep adequate OEM insert,CONDITIONAL,UNKNOWN,NO WRITTEN QUOTE,NOT APPROVED
+Shipping outer,Stock correct strength/size,CONDITIONAL,UNKNOWN,NO WRITTEN QUOTE,NOT APPROVED
+Band/label,Low-volume single design,1,UNKNOWN,NO WRITTEN QUOTE,NOT APPROVED
+Start/support card,Pictorial Pidgin/English,1,UNKNOWN,NO WRITTEN QUOTE,NOT APPROVED
+Assembly and QA,Check contents/serial/pack,1,UNKNOWN,NO WRITTEN QUOTE,NOT APPROVED
+Provisioning and handover,Authorised scoped setup,1,UNKNOWN,NO WRITTEN QUOTE,NOT APPROVED
+Monthly data and support,Disclosed funded model,MONTHLY,UNKNOWN,NO WRITTEN QUOTE,NOT APPROVED
+Optional printer,Only proven need,CONDITIONAL,UNKNOWN,NO WRITTEN QUOTE,NOT APPROVED

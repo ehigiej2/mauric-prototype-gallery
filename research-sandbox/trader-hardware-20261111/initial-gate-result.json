@@ -14,7 +14,8 @@
     "missing:support",
     "missing:ownership",
     "missing:tco",
-    "missing:independent_review"
+    "missing:independent_review",
+    "missing:complete_kit"
   ],
   "crown_hold": true,
   "purchase_authorised": false,
