@@ -1,0 +1,26 @@
+name: Osayi V3 exact public URL gate
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'osayi-construction-command-centre-v3.html'
+      - '.github/workflows/osayi-construction-v3-public.yml'
+  workflow_dispatch:
+jobs:
+  public:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check exact published URL and six workflow buttons
+        shell: bash
+        run: |
+          URL=https://ehigiej2.github.io/mauric-prototype-gallery/osayi-construction-command-centre-v3.html
+          for i in {1..15}; do
+            CODE=$(curl -L -sS --max-time 25 -o /tmp/osayi-v3.html -w '%{http_code}' "$URL" || true)
+            echo "Attempt $i HTTP $CODE"
+            if [ "$CODE" = "200" ] && grep -q 'osayi-v3-engine' /tmp/osayi-v3.html && grep -q 'data-step="handover"' /tmp/osayi-v3.html && grep -q 'v3Recovery' /tmp/osayi-v3.html; then
+              echo 'PASS V3 exact public URL and expected content'
+              exit 0
+            fi
+            sleep 12
+          done
+          echo 'FAIL V3 public URL'; exit 1
