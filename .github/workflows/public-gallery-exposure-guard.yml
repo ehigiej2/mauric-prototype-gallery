@@ -1,0 +1,16 @@
+name: Public Gallery Exposure Guard
+on:
+  push:
+    branches: [main, 'research/**']
+  pull_request:
+  workflow_dispatch:
+jobs:
+  static-exposure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Scan repository without printing secret values
+        run: python3 tests/public_exposure_guard.py
