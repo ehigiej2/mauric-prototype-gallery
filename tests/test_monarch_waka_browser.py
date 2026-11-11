@@ -22,9 +22,11 @@ def main():
             for mode in ["sell","send","stock","money","team","osayi"]:
                 page.locator(f'.tile[data-mode="{mode}"]').click()
                 assert page.locator("#workspace").is_visible(),mode
+                assert page.locator("#homeActions").get_attribute("inert") is not None, mode
                 assert page.locator("#workspace").evaluate("(e)=>getComputedStyle(e).position")=="fixed"
                 page.locator("#back").click()
                 assert page.locator("#workspace").is_hidden(),mode
+                assert page.locator("#homeActions").get_attribute("inert") is None, mode
             samples={"sell":{"item":"Akara","amount":"250","quantity":"2"},"send":{"item":"Farm produce","destination":"Fictional Ekekhuan Road"},"stock":{"item":"Rice bag","amount":"55000"},"money":{"item":"Claimed receipt","amount":"1000"},"team":{"item":"Fictional worker"}}
             for sample_mode,fields in samples.items():
                 page.locator(f'.tile[data-mode="{sample_mode}"]').click()
@@ -46,6 +48,9 @@ def main():
             page.locator('[name="item"]').fill("What did I ask previously?")
             page.locator('#journey button[type="submit"]').click()
             assert "How can I send stock?" in page.locator("#messages").inner_text()
+            page.locator("#back").click()
+            page.locator('.tile[data-mode="osayi"]').click()
+            assert "How can I send stock?" in page.locator("#messages").inner_text(), "Conversation lost on reopen"
             page.locator('[name="item"]').fill("Cancel me")
             page.locator("#cancelTurn").click()
             assert page.locator('[name="item"]').input_value()==""
@@ -54,6 +59,7 @@ def main():
             page.locator("#back").click()
             page.locator('.tile[data-mode="osayi"]').click()
             assert page.locator("#messages").is_visible()
+            assert "How can I send stock?" not in page.locator("#messages").inner_text(), "Clear did not erase session history"
             page.locator("#back").click()
             page.locator('.tile[data-mode="osayi"]').click()
             assert page.locator("#playIntro").is_visible()
