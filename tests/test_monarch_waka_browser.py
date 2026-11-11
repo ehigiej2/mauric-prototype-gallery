@@ -34,6 +34,8 @@ def main():
                     page.locator(f'[name="{name}"]').fill(value)
                 page.locator('#journey button[type="submit"]').click()
                 assert "SIM-" in page.locator("#result").inner_text(),sample_mode
+                assert page.locator('#journey button[type="submit"]').is_disabled(), "Duplicate-submit guard missing"
+                assert page.evaluate("(mode)=>window.state ? window.state[mode].length : true",sample_mode) is not False
                 page.locator("#back").click()
             page.locator('.tile[data-mode="sell"]').click()
             page.locator('[name="item"]').fill("Fictional akara")
