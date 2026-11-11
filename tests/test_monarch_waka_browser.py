@@ -88,6 +88,64 @@ def main():
             assert page.locator("#osayiIntro").evaluate("(a) => a.paused && a.currentTime === 0")
             page.keyboard.press("Escape")
             assert page.locator("#workspace").is_hidden()
+            # Exercise the attached controls through the visible review UI.
+            controls=page.get_by_role("button", name="🔒 Decision controls", exact=True)
+            controls.click()
+            panel=page.get_by_role("region", name="Synthetic transaction controls")
+            assert panel.is_visible()
+            panel.get_by_role("button", name="Create fictional case").click()
+            advance=panel.get_by_role("button", name="Advance one research gate")
+            advance.click()
+            assert '"status": "RESEARCH"' in panel.inner_text()
+            advance.click()
+            assert '"status": "EVIDENCE_REVIEW"' in panel.inner_text()
+            advance.click()
+            assert "BLOCKED: Missing or invalid evidence" in panel.inner_text()
+            panel.get_by_role("button", name="Stop this case").click()
+            assert '"status": "STOPPED"' in panel.inner_text()
+            controls.click()
+            assert panel.is_hidden()
+            # Independent synthetic engines test state invariants, not identity authentication.
+            checks=page.evaluate("""() => {
+                const e=MonarchControl.makeEngine({tenant:"journey-a",prototype:"test-trade"});
+                const other=MonarchControl.makeEngine({tenant:"journey-b",prototype:"test-trade"});
+                const passed=[];
+                function ok(condition, label) { if(!condition) throw Error(label); passed.push(label); }
+                function blocked(fn,label) { const before=JSON.stringify(e.snapshot()); let threw=false;
+                    try { fn(); } catch { threw=true; }
+                    ok(threw && before===JSON.stringify(e.snapshot()),label); }
+                e.create("SIM_JOURNEY");
+                blocked(()=>e.create("SIM_JOURNEY"),"duplicate case rejected without mutation");
+                blocked(()=>e.transition("SIM_JOURNEY","SETTLEMENT_SIMULATED"),"settlement cannot skip gates");
+                e.transition("SIM_JOURNEY","RESEARCH");
+                e.transition("SIM_JOURNEY","EVIDENCE_REVIEW");
+                blocked(()=>e.transition("SIM_JOURNEY","OWNER_REVIEW"),"UNKNOWN evidence blocks review");
+                for(const key of MonarchControl.REQUIRED) e.record("SIM_JOURNEY",key,"SUPPLIED_UNVERIFIED");
+                e.transition("SIM_JOURNEY","OWNER_REVIEW");
+                blocked(()=>e.transition("SIM_JOURNEY","APPROVED_FOR_SIMULATION",{actor:"researcher"}),"researcher cannot approve simulation");
+                blocked(()=>e.transition("SIM_JOURNEY","APPROVED_FOR_SIMULATION",{actor:"owner"}),"unreviewed evidence blocks simulation approval");
+                for(const key of MonarchControl.REQUIRED) e.record("SIM_JOURNEY",key,"REVIEWED_UNAUTHENTICATED");
+                e.transition("SIM_JOURNEY","OWNER_REVIEW");
+                e.transition("SIM_JOURNEY","APPROVED_FOR_SIMULATION",{actor:"owner"});
+                e.transition("SIM_JOURNEY","FULFILMENT_SIMULATED");
+                e.revokeConsent("SIM_JOURNEY");
+                ok(e.view("SIM_JOURNEY").status==="EVIDENCE_REVIEW" && e.view("SIM_JOURNEY").approvedBy===null,
+                    "consent revocation invalidates simulation approval");
+                blocked(()=>e.transition("SIM_JOURNEY","OWNER_REVIEW"),"revoked consent blocks review");
+                let hidden=false; try { other.view("SIM_JOURNEY"); } catch { hidden=true; }
+                ok(hidden && other.snapshot().cases.length===0,"separate engine instances do not share cases");
+                e.transition("SIM_JOURNEY","STOPPED",{reason:"Synthetic user stop"});
+                blocked(()=>e.record("SIM_JOURNEY","consent","REVIEWED_UNAUTHENTICATED"),"stopped case cannot change evidence");
+                blocked(()=>e.transition("SIM_JOURNEY","RESEARCH"),"stopped case cannot restart");
+                const beforeStop=JSON.stringify(e.snapshot());
+                e.transition("SIM_JOURNEY","STOPPED");
+                ok(beforeStop===JSON.stringify(e.snapshot()),"repeated stop is idempotent");
+                const ledger=e.ledger("SIM_JOURNEY");
+                ok(ledger.every((event,index)=>event.sequence===index+1),"synthetic ledger sequence is contiguous");
+                return passed;
+            }""")
+            assert len(checks)==12, checks
+            print(f"PASS {engine} {width}x{height}: shared controls UI and {len(checks)} synthetic invariants")
             Path("test-evidence").mkdir(exist_ok=True)
             page.screenshot(path=f"test-evidence/{engine}-{width}x{height}.png")
             assert not errors, f"Browser script errors: {errors}"
