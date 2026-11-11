@@ -1,0 +1,27 @@
+name: Mama Ebo V3 public URL verification
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'mama-ebo-six-buttons-v3.html'
+      - '.github/workflows/mama-ebo-v3-public.yml'
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Verify exact V3 page is publicly served
+        shell: bash
+        run: |
+          URL="https://ehigiej2.github.io/mauric-prototype-gallery/mama-ebo-six-buttons-v3.html"
+          for i in {1..12}; do
+            CODE=$(curl -L --max-time 25 -sS -o /tmp/ebo-v3.html -w '%{http_code}' "$URL" || true)
+            echo "Attempt $i: HTTP $CODE"
+            if [ "$CODE" = "200" ] && grep -q 'Six Buttons V3' /tmp/ebo-v3.html && grep -q 'data-action="menu"' /tmp/ebo-v3.html && grep -q 'data-action="grow"' /tmp/ebo-v3.html; then
+              echo 'PASS: public V3 contains expected six-button app'
+              exit 0
+            fi
+            sleep 15
+          done
+          echo 'FAIL: exact public V3 not ready'
+          exit 1
