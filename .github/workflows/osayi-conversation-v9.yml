@@ -1,0 +1,60 @@
+name: Osayi V9 reusable conversation acceptance
+on:
+  push:
+    branches: [main]
+    paths: ['osayi-construction-command-centre-v9.html','engines/monarch-conversation-engine-v1.js','.github/workflows/osayi-conversation-v9.yml']
+  workflow_dispatch:
+jobs:
+  engine:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify reusable engine logic
+        run: |
+          node <<'JS'
+          const e=require('./engines/monarch-conversation-engine-v1.js');
+          const s=e.createSession({sessionId:'test'});
+          const events=[];s.on(x=>events.push(x));
+          let r=s.respond('How much profit?',{progress:4,quote:350000,cost:303000});
+          if(!r.text.includes('₦47,000'))throw Error('Incorrect contribution');
+          const t=s.respond('What did I ask before?',{progress:4});
+          if(!t.text.includes('How much profit?'))throw Error('No turn memory');
+          const speech=s.speechRequest(r);
+          if(speech.status!=='BLOCKED'||speech.voiceId!=='D0uq55pjZpKu82kXzFOe')throw Error('Synthesis fail-closed violated');
+          if(!events.some(x=>x.type==='speech.cancelled')||!events.some(x=>x.type==='reply.ready'))throw Error('Event contract broken');
+          console.log('PASS reusable context, turn memory, arithmetic, cancellation, speech safety');
+          JS
+  mobile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install chromium
+      - run: |
+          cat >/tmp/v9.cjs <<'JS'
+          const {chromium,devices}=require(process.cwd()+'/node_modules/playwright');
+          (async()=>{const b=await chromium.launch();const p=await b.newPage({...devices['iPhone 13']});const errs=[];p.on('pageerror',e=>errs.push(e.message));await p.goto('file://'+process.cwd()+'/osayi-construction-command-centre-v9.html');
+          if(await p.locator('#home .tile:visible').count()!==6)throw Error('Six stages missing');
+          await p.locator('#v9Question').fill('How much profit?');await p.locator('#v9Ask').click();if(!(await p.locator('#v9Answer').textContent()).includes('No complete saved quote'))throw Error('Missing quote not explained');
+          await p.locator('#v9Voice').click();if(!(await p.locator('#v9Status').textContent()).includes('BLOCKED'))throw Error('Voice fail-closed missing');
+          for(const k of ['request','materials','worker','quote','safety','handover']){await p.locator('[data-step="'+k+'"]').click();if(k==='safety')await p.locator('#human').selectOption('practice');await p.locator('#save').click();await p.locator('#back').click()}
+          await p.locator('#v9Question').fill('Explain my profit');await p.locator('#v9Ask').click();if(!(await p.locator('#v9Answer').textContent()).includes('₦47,000'))throw Error('Saved job arithmetic missing');
+          await p.locator('#v9Question').fill('What did I ask before?');await p.locator('#v9Ask').click();if(!(await p.locator('#v9Answer').textContent()).includes('Explain my profit'))throw Error('Conversation memory missing');
+          if(errs.length)throw Error(errs.join(';'));console.log('PASS six stages, contextual answers, turn memory, voice status');await b.close()})().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node /tmp/v9.cjs
+  public:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - run: |
+          BASE=https://ehigiej2.github.io/mauric-prototype-gallery
+          for i in {1..18}; do
+            P=$(curl -LsS --max-time 20 -o /tmp/v9.html -w '%{http_code}' "$BASE/osayi-construction-command-centre-v9.html" || true)
+            E=$(curl -LsS --max-time 20 -o /tmp/engine.js -w '%{http_code}' "$BASE/engines/monarch-conversation-engine-v1.js" || true)
+            if [ "$P" = 200 ] && [ "$E" = 200 ] && grep -q 'osayi-v9-conversation-adapter' /tmp/v9.html && grep -q 'BLOCKED_NO' /tmp/engine.js; then echo 'PASS published V9 and engine'; exit 0; fi
+            sleep 10
+          done
+          exit 1
