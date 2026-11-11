@@ -1,0 +1,37 @@
+name: Mama Ebo restaurant public release check
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'mama-put-ebo-pepper-rice-osayi.html'
+      - '.github/workflows/mama-ebo-public.yml'
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify exact file, brand and six interactive workflows
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          s=Path('mama-put-ebo-pepper-rice-osayi.html').read_text()
+          for x in ('Mama Ebo Pepper Rice','data-action="menu"','data-action="price"','data-action="order"','data-action="kitchen"','data-action="delivery"','data-action="grow"','speechSynthesis','id="send"'):
+            assert x in s, f'Missing: {x}'
+          assert 'Mama Eno' not in s
+          print('PASS: source markers')
+          PY
+      - name: Verify real public URL returns application HTML
+        shell: bash
+        run: |
+          URL="https://ehigiej2.github.io/mauric-prototype-gallery/mama-put-ebo-pepper-rice-osayi.html"
+          for i in {1..15}; do
+            CODE=$(curl -L --max-time 25 -sS -o /tmp/ebo.html -w '%{http_code}' "$URL" || true)
+            echo "Attempt $i HTTP $CODE"
+            if [ "$CODE" = "200" ] && grep -q 'Mama Ebo Pepper Rice' /tmp/ebo.html && grep -q 'data-action="menu"' /tmp/ebo.html; then
+              echo 'PASS: public URL serves Mama Ebo app'
+              exit 0
+            fi
+            sleep 15
+          done
+          echo 'FAIL: URL not ready'; exit 1
