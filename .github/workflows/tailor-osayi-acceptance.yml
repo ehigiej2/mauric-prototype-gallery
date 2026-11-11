@@ -1,0 +1,45 @@
+name: Tailor Osayi acceptance
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tailor-osayi-nigeria.html'
+      - '.github/workflows/tailor-osayi-acceptance.yml'
+  workflow_dispatch:
+jobs:
+  mobile:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Verify interactive tailor workflows
+        run: |
+          cat > /tmp/tailor-test.cjs <<'EOF'
+          const {chromium}=require(process.cwd()+'/node_modules/playwright');
+          (async()=>{
+            const b=await chromium.launch();const p=await b.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+            const errors=[];p.on('pageerror',e=>errors.push(e.message));
+            await p.goto('file://'+process.cwd()+'/tailor-osayi-nigeria.html');
+            if(await p.locator('.tile').count()!==6)throw Error('six big buttons missing');
+            for(const type of ['customer','quote','fabric','sew','deliver','grow']){
+              await p.locator('[data-go="'+type+'"]').click();
+              if(!(await p.locator('#screen').isVisible()))throw Error(type+' not open');
+              if(type==='customer'){await p.locator('#saveCustomer').click();if(!(await p.locator('#result').innerText()).includes('Practice'))throw Error('measurements fail')}
+              if(type==='quote'){await p.locator('#calculate').click();if(!(await p.locator('#result').innerText()).includes('Contribution'))throw Error('quote fail')}
+              if(type==='fabric'){await p.locator('#materials').click();if(!(await p.locator('#result').innerText()).includes('materials'))throw Error('fabric fail')}
+              if(type==='sew'){await p.locator('#nextStage').click();if(!(await p.locator('#stageCount').innerText()).includes('2 of'))throw Error('sewing fail')}
+              if(type==='deliver'){for(const id of ['fittingOk','finishOk','balanceOk'])await p.locator('#'+id).check();await p.locator('#handover').click();if(!(await p.locator('#result').innerText()).includes('complete'))throw Error('handover fail')}
+              if(type==='grow'){await p.locator('#forecast').click();if(!(await p.locator('#result').innerText()).includes('weekly'))throw Error('growth fail')}
+              await p.locator('#backHome').click();
+            }
+            await p.locator('#openChat').click();await p.locator('#chatInput').fill('Ready for fitting');await p.locator('#sendChat').click();if(!(await p.locator('#chatLog').innerText()).includes('Ready for fitting'))throw Error('chat fail');await p.locator('#chatClose').click();
+            await p.locator('#startGuide').click();for(let i=0;i<7;i++)await p.locator('#guideNext').click();if(!(await p.locator('#guideWords').innerText()).includes('Well done'))throw Error('guide fail');await p.locator('#guideClose').click();
+            if(errors.length)throw Error(errors.join(';'));console.log('PASS: all six tailor workflows, calculations, fitting, messages, eight-step Osayi guide');await b.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          EOF
+          node /tmp/tailor-test.cjs
