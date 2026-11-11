@@ -1,14 +1,24 @@
-name: MONARCH Waka manual browser acceptance
+name: MONARCH Waka review browser acceptance
 on:
+  push:
+    branches:
+      - review/monarch-waka-q1-86
+    paths:
+      - monarch-trade-waka-review.html
+      - tests/test_monarch_waka_browser.py
+      - .github/workflows/monarch-waka-browser-manual.yml
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
   synthetic-browser-tests:
+    if: github.ref == 'refs/heads/review/monarch-waka-q1-86'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
