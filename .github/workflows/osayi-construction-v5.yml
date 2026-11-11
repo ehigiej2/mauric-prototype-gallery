@@ -1,0 +1,53 @@
+name: Osayi construction V5 acceptance
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'osayi-construction-command-centre-v5.html'
+      - '.github/workflows/osayi-construction-v5.yml'
+  workflow_dispatch:
+jobs:
+  mobile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install chromium
+      - name: Verify six-stage journey and V5 tools
+        run: |
+          cat >/tmp/v5.cjs <<'JS'
+          const {chromium,devices}=require(process.cwd()+'/node_modules/playwright');
+          (async()=>{const b=await chromium.launch();const p=await b.newPage({...devices['iPhone 13']});const errors=[];p.on('pageerror',e=>errors.push(e.message));
+          await p.goto('file://'+process.cwd()+'/osayi-construction-command-centre-v5.html');
+          if(await p.locator('#home .tile:visible').count()!==6)throw Error('Six tiles missing');
+          for(const k of ['request','materials','worker','quote','safety','handover']){
+            await p.locator('[data-step="'+k+'"]').click();
+            if(k==='safety')await p.locator('#human').selectOption('practice');
+            await p.locator('#save').click();
+            for(const id of ['v5Takeoff','v5Suppliers','v5Workers']){
+              await p.locator('#'+id).click();
+              if((await p.locator('#v4Answer').textContent()).length<80)throw Error(id+' failed');
+            }
+            await p.locator('#osayiToggle').click();
+            if(!await p.locator('#osayiPanel').isVisible())throw Error('Osayi absent');
+            await p.locator('#close').click();await p.locator('#back').click();
+          }
+          if(!(await p.locator('#status').textContent()).includes('6/6'))throw Error('Job not completed');
+          if(errors.length)throw Error(errors.join(';'));console.log('PASS six stages, V5 evidence tools, Osayi');await b.close()})().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node /tmp/v5.cjs
+  public:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Verify exact V5 public page
+        run: |
+          URL=https://ehigiej2.github.io/mauric-prototype-gallery/osayi-construction-command-centre-v5.html
+          for i in {1..18}; do
+            CODE=$(curl -L -sS --max-time 20 -o /tmp/v5.html -w '%{http_code}' "$URL" || true)
+            if [ "$CODE" = 200 ] && grep -q 'osayi-v5-engine' /tmp/v5.html; then echo 'PASS V5 public URL'; exit 0; fi
+            sleep 10
+          done
+          echo 'FAIL V5 public URL'; exit 1
