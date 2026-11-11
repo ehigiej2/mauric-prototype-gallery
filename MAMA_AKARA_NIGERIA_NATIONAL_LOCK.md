@@ -32,3 +32,11 @@ Preserve the current Benin City prototype as the reference experience for **akar
 
 ## Change control
 Do not modify the locked branch. Develop improvements on a separate branch, record changes and evidence, and require explicit human acceptance before promoting a new baseline. Refer to this file and the locked branch whenever the user asks for **Mama Akara**, **national akara seller app**, **Osayi akara onboarding**, or **the locked akara version**.
+
+## Canonical recall and exclusive founder-approved version — 2026-11-11
+
+**Exact recall phrase:** "bring our skate woman" (preserve this wording verbatim). Also recognise "our skate woman", "bring our akara woman", "Mama Akara", and "our akara seller app". Every such request must resolve first to **MAMA-AKARA-NG-NATIONAL-V1-2026-11-11**, on the locked branch `locked/mama-akara-nigeria-national-v1-2026-11-11`, anchored to commit `1ef94372f503421102219e74bf21743ceadf9f69`.
+
+**Exclusive approval rule:** This is the **only founder-approved Mama Akara application version/baseline** until the founder explicitly authorises its replacement. Other prototypes, drafts, branches and iterations are unapproved candidates; never silently substitute them. The founder's version approval is distinct from a production/commercial launch approval: CROWN HOLD and outstanding seller, device, safety and live-system acceptance gates remain in force.
+
+**Retrieval priority:** Read this canonical reference record, then fetch the exact locked branch/commit before presenting or modifying the app. Never claim a later main-branch version supersedes this baseline without explicit founder approval.
