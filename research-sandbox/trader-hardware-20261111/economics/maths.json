@@ -1,0 +1,122 @@
+{
+  "status": "SIMULATED planning scenarios anchored to public listing; NOT quotes or purchase approval",
+  "retailer_phone_anchor_ngn": 143500,
+  "extras_assumptions": {
+    "stand_case_charger_allowance": 8000,
+    "packaging_card_band": 2000,
+    "provisioning_and_QA": 5000,
+    "Benin_distribution": 3000
+  },
+  "fixed_assumptions": {
+    "knowledge_transfer_tools_allowance": 5000000,
+    "platform_alerts_security_readiness_allowance": 10000000
+  },
+  "monthly_other_assumptions": {
+    "support": 1000,
+    "EMM_licences": 500,
+    "energy": 250,
+    "hosting_alerts": 500,
+    "repair_loss_reserve": 750
+  },
+  "data_plan_public_price_30days": 1500,
+  "data_bundles_24_calendar_months_budgeted": 26,
+  "scenarios": [
+    {
+      "quantity": 1000,
+      "assumed_discount": 0.0,
+      "phone_unit": 143500.0,
+      "kit_unit_before_fixed_spares_contingency": 161500.0,
+      "extra_spare_devices": 30,
+      "upfront": 198885500.0,
+      "monthly_equivalent_running": 4625000.0,
+      "tco24": 309885500.0,
+      "monthly_equivalent_full_cost_per_deployed_unit": 12911.895833333334,
+      "orders_per_active_trader_day_at_60pct_active_500_contribution": 1.6553712606837607
+    },
+    {
+      "quantity": 2000,
+      "assumed_discount": 0.1,
+      "phone_unit": 129150.0,
+      "kit_unit_before_fixed_spares_contingency": 147150.0,
+      "extra_spare_devices": 60,
+      "upfront": 348753900.0,
+      "monthly_equivalent_running": 9250000.0,
+      "tco24": 570753900.0,
+      "monthly_equivalent_full_cost_per_deployed_unit": 11890.70625,
+      "orders_per_active_trader_day_at_60pct_active_500_contribution": 1.5244495192307692
+    },
+    {
+      "quantity": 5000,
+      "assumed_discount": 0.15,
+      "phone_unit": 121975.0,
+      "kit_unit_before_fixed_spares_contingency": 139975.0,
+      "extra_spare_devices": 150,
+      "upfront": 806488375.0,
+      "monthly_equivalent_running": 23125000.0,
+      "tco24": 1361488375.0,
+      "monthly_equivalent_full_cost_per_deployed_unit": 11345.736458333333,
+      "orders_per_active_trader_day_at_60pct_active_500_contribution": 1.4545815972222222
+    },
+    {
+      "quantity": 5000,
+      "assumed_discount": 0.0,
+      "phone_unit": 143500.0,
+      "kit_unit_before_fixed_spares_contingency": 161500.0,
+      "extra_spare_devices": 150,
+      "upfront": 928427500.0,
+      "monthly_equivalent_running": 23125000.0,
+      "tco24": 1483427500.0,
+      "monthly_equivalent_full_cost_per_deployed_unit": 12361.895833333334,
+      "orders_per_active_trader_day_at_60pct_active_500_contribution": 1.5848584401709402
+    }
+  ],
+  "extra_upfront_5k_vs_1k": 607602875.0,
+  "price_discount_5k_vs_same_volume_undiscounted": 121939125.0,
+  "SUNMI_lower_UK_price_gbp": 249.61,
+  "illustrative_reported_GBP_NGN": 1808.356,
+  "SUNMI_lower_device_only_conversion_ngn": 451383.74116000003,
+  "idle4000_purchase_cost_at_assumed5k_price": 487900000.0,
+  "ODM_TARGET_SCENARIOS_NOT_QUOTES": [
+    {
+      "quantity": 1000,
+      "target_landed_device_ngn": 110000,
+      "customisation_allowance_ngn": 5000000,
+      "upfront": 166430000.0,
+      "running_24_months": 111000000,
+      "tco24": 277430000.0,
+      "monthly_full_cost_per_deployed": 11559.583333333334,
+      "orders_per_active_day_at_60pct_active_500_contribution": 1.4819978632478632
+    },
+    {
+      "quantity": 2000,
+      "target_landed_device_ngn": 110000,
+      "customisation_allowance_ngn": 5000000,
+      "upfront": 310860000.0,
+      "running_24_months": 222000000,
+      "tco24": 532860000.0,
+      "monthly_full_cost_per_deployed": 11101.25,
+      "orders_per_active_day_at_60pct_active_500_contribution": 1.4232371794871794
+    },
+    {
+      "quantity": 5000,
+      "target_landed_device_ngn": 110000,
+      "customisation_allowance_ngn": 5000000,
+      "upfront": 744150000.0,
+      "running_24_months": 555000000,
+      "tco24": 1299150000.0,
+      "monthly_full_cost_per_deployed": 10826.25,
+      "orders_per_active_day_at_60pct_active_500_contribution": 1.3879807692307693
+    },
+    {
+      "quantity": 5000,
+      "target_landed_device_ngn": 90000,
+      "customisation_allowance_ngn": 5000000,
+      "upfront": 630850000.0,
+      "running_24_months": 555000000,
+      "tco24": 1185850000.0,
+      "monthly_full_cost_per_deployed": 9882.083333333334,
+      "orders_per_active_day_at_60pct_active_500_contribution": 1.2669337606837607
+    }
+  ],
+  "nre_break_even_rule": "Maximum justified additional customisation cost = quantity * verified same-scope landed saving per device, less other incremental costs. No savings assumed achieved."
+}
