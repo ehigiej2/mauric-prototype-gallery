@@ -1,0 +1,47 @@
+name: Osayi home repairs interactive acceptance
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'osayi-construction-finishing-home-repairs-v1.html'
+      - '.github/workflows/osayi-home-repairs-acceptance.yml'
+  workflow_dispatch:
+jobs:
+  mobile:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Test six trades and conversational Osayi on emulated phone
+        run: |
+          cat >/tmp/repairs.cjs <<'JS'
+          const {chromium,devices}=require(process.cwd()+'/node_modules/playwright');
+          (async()=>{
+            const browser=await chromium.launch();
+            const page=await browser.newPage({...devices['iPhone 13']});
+            const errors=[];page.on('pageerror',e=>errors.push(e.message));
+            await page.goto('file://'+process.cwd()+'/osayi-construction-finishing-home-repairs-v1.html');
+            if(await page.locator('#home .tile:visible').count()!==6)throw Error('Six tiles not visible');
+            for(const k of ['electrical','plumbing','finishing','fabrication','repairs','job']){
+              await page.locator('[data-go="'+k+'"]').click();
+              if(!await page.locator('#panel').isVisible())throw Error(k+' panel failed');
+              await page.locator('#run').click();
+              const output=await page.locator('#result').textContent();
+              if(!output.includes('₦')||!output.includes('Customer request'))throw Error(k+' end-to-end quote failed');
+              await page.locator('#osayiToggle').click();
+              if(!await page.locator('#osayiPanel').isVisible())throw Error(k+' Osayi absent');
+              await page.locator('#question').fill('Help with '+k);
+              await page.locator('#ask').click();
+              if((await page.locator('#answer').textContent()).length<30)throw Error(k+' Osayi answer failed');
+              await page.locator('#close').click();
+              await page.locator('#back').click();
+              if(!await page.locator('#home').isVisible())throw Error(k+' back failed');
+            }
+            if(errors.length)throw Error('JS errors '+errors.join(';'));
+            console.log('PASS six trades, quotes, Osayi conversations, back navigation');
+            await browser.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node /tmp/repairs.cjs
