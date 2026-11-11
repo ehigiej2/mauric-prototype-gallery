@@ -62,6 +62,28 @@ def run():
         page.locator("#stoplisten").click()
         check("microphone stop control",lambda:"stopped" in text(page,"#voiceStatus"))
         check("consent cleared",lambda:not page.locator("#voiceConsent").is_checked())
+        # Inject a deterministic fake recognition engine before reloading the app.
+        # This is a simulated browser event, NOT a real microphone acceptance test.
+        page.add_init_script("""window.__fakeRecognition=[];
+          window.SpeechRecognition=class {
+            constructor(){window.__fakeRecognition.push(this)}
+            start(){}
+            abort(){if(this.onend)this.onend()}
+          };""")
+        page.reload()
+        page.locator("#voiceConsent").check()
+        page.locator("#listen").click()
+        check("fake recognition starts with consent",lambda:"Listening after browser permission" in text(page,"#voiceStatus"))
+        page.locator("#stoplisten").click()
+        page.evaluate("""() => window.__fakeRecognition[0].onresult({results:[[{transcript:'cost'}]]})""")
+        check("late transcript rejected after stop",lambda:"stopped" in text(page,"#voiceStatus") and "Your synthetic contribution" not in text(page,"#response"))
+        check("stopped session remains without consent",lambda:not page.locator("#voiceConsent").is_checked())
+        page.locator("#voiceConsent").check()
+        page.locator("#listen").click()
+        page.evaluate("""() => window.__fakeRecognition[1].onresult({results:[[{transcript:'cost'}]]})""")
+        check("one utterance generates bounded response",lambda:"Your synthetic contribution" in text(page,"#response"))
+        check("one utterance closes listening session",lambda:"stopped" in text(page,"#voiceStatus").lower())
+        check("new voice session requires consent",lambda:not page.locator("#voiceConsent").is_checked())
         check("no uncaught browser JavaScript errors",lambda:not page_errors)
         page.screenshot(path=str(ROOT/"gate148-local-screenshot.png"),full_page=True)
         evidence={"captured_utc":datetime.datetime.now(datetime.timezone.utc).isoformat(),"prototype":str(HTML),"prototype_sha256":hashlib.sha256(HTML.read_bytes()).hexdigest(),"browser_version":browser.version,"browser_page_errors":page_errors,"checks":checks,"note":"Local Chromium only. No physical microphone, Safari, voice model, network or hardware validation."}
