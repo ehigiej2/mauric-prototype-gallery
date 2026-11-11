@@ -1,0 +1,23 @@
+{
+  "status": "BLOCKED",
+  "issues": [
+    "missing:identity",
+    "missing:sku",
+    "missing:nigeria_compliance",
+    "missing:warranty",
+    "missing:lifecycle",
+    "missing:app",
+    "missing:peripherals",
+    "missing:offline",
+    "missing:privacy",
+    "missing:power",
+    "missing:support",
+    "missing:ownership",
+    "missing:tco",
+    "missing:independent_review"
+  ],
+  "crown_hold": true,
+  "purchase_authorised": false,
+  "outreach_authorised": false,
+  "physical_device_certified": false
+}

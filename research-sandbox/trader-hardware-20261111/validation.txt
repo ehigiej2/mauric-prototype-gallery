@@ -1,0 +1,22 @@
+test_complete_fixture_no_purchase_authority (test_hardware_gate.HardwareGateTests.test_complete_fixture_no_purchase_authority) ... ok
+test_cost_arithmetic (test_hardware_gate.HardwareGateTests.test_cost_arithmetic) ... ok
+test_duplicate_blocks (test_hardware_gate.HardwareGateTests.test_duplicate_blocks) ... ok
+test_each_missing_criterion_blocks (test_hardware_gate.HardwareGateTests.test_each_missing_criterion_blocks) ... ok
+test_each_unknown_cost_stays_unknown (test_hardware_gate.HardwareGateTests.test_each_unknown_cost_stays_unknown) ... ok
+test_expired_blocks (test_hardware_gate.HardwareGateTests.test_expired_blocks) ... ok
+test_failure_blocks (test_hardware_gate.HardwareGateTests.test_failure_blocks) ... ok
+test_horizon_positive_integer (test_hardware_gate.HardwareGateTests.test_horizon_positive_integer) ... ok
+test_invalid_date_blocks (test_hardware_gate.HardwareGateTests.test_invalid_date_blocks) ... ok
+test_missing_proof_blocks (test_hardware_gate.HardwareGateTests.test_missing_proof_blocks) ... ok
+test_negative_nonfinite_boolean_costs (test_hardware_gate.HardwareGateTests.test_negative_nonfinite_boolean_costs) ... ok
+test_residual_cannot_hide_cost (test_hardware_gate.HardwareGateTests.test_residual_cannot_hide_cost) ... ok
+test_same_reviewer_blocks (test_hardware_gate.HardwareGateTests.test_same_reviewer_blocks) ... ok
+test_simulation_cannot_qualify (test_hardware_gate.HardwareGateTests.test_simulation_cannot_qualify) ... ok
+test_sources_required (test_hardware_gate.HardwareGateTests.test_sources_required) ... ok
+test_unknown_all_blocks (test_hardware_gate.HardwareGateTests.test_unknown_all_blocks) ... ok
+test_unknown_criterion_blocks (test_hardware_gate.HardwareGateTests.test_unknown_criterion_blocks) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.001s
+
+OK

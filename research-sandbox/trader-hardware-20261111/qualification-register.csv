@@ -1,0 +1,57 @@
+candidate,criterion_id,criterion,status,evidence,independent_review
+REUSE-EXISTING-PHONE,identity,Supplier legal entity and OEM authorisation,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+REUSE-EXISTING-PHONE,sku,Exact regional SKU and firmware,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+REUSE-EXISTING-PHONE,nigeria_compliance,Applicable Nigerian import/device approval,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+REUSE-EXISTING-PHONE,warranty,Nigeria warranty and local repair,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+REUSE-EXISTING-PHONE,lifecycle,Security patch and end-of-support,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+REUSE-EXISTING-PHONE,app,MONARCH actual-device workflow,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+REUSE-EXISTING-PHONE,peripherals,Printing/scanning workflow,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+REUSE-EXISTING-PHONE,offline,Offline and restart recovery,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+REUSE-EXISTING-PHONE,privacy,Tenant roles and local-data protection,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+REUSE-EXISTING-PHONE,power,Shift power and charger safety,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+REUSE-EXISTING-PHONE,support,Consumables spares training and replacement,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+REUSE-EXISTING-PHONE,ownership,Funded transparent ownership/exit,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+REUSE-EXISTING-PHONE,tco,Complete like-for-like ownership cost,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+REUSE-EXISTING-PHONE,independent_review,Independent reviewer evidence check,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+SUNMI-CONFIGURED-V3,identity,Supplier legal entity and OEM authorisation,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+SUNMI-CONFIGURED-V3,sku,Exact regional SKU and firmware,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+SUNMI-CONFIGURED-V3,nigeria_compliance,Applicable Nigerian import/device approval,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+SUNMI-CONFIGURED-V3,warranty,Nigeria warranty and local repair,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+SUNMI-CONFIGURED-V3,lifecycle,Security patch and end-of-support,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+SUNMI-CONFIGURED-V3,app,MONARCH actual-device workflow,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+SUNMI-CONFIGURED-V3,peripherals,Printing/scanning workflow,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+SUNMI-CONFIGURED-V3,offline,Offline and restart recovery,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+SUNMI-CONFIGURED-V3,privacy,Tenant roles and local-data protection,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+SUNMI-CONFIGURED-V3,power,Shift power and charger safety,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+SUNMI-CONFIGURED-V3,support,Consumables spares training and replacement,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+SUNMI-CONFIGURED-V3,ownership,Funded transparent ownership/exit,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+SUNMI-CONFIGURED-V3,tco,Complete like-for-like ownership cost,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+SUNMI-CONFIGURED-V3,independent_review,Independent reviewer evidence check,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+EPSON-TM-M30III-VARIANT,identity,Supplier legal entity and OEM authorisation,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+EPSON-TM-M30III-VARIANT,sku,Exact regional SKU and firmware,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+EPSON-TM-M30III-VARIANT,nigeria_compliance,Applicable Nigerian import/device approval,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+EPSON-TM-M30III-VARIANT,warranty,Nigeria warranty and local repair,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+EPSON-TM-M30III-VARIANT,lifecycle,Security patch and end-of-support,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+EPSON-TM-M30III-VARIANT,app,MONARCH actual-device workflow,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+EPSON-TM-M30III-VARIANT,peripherals,Printing/scanning workflow,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+EPSON-TM-M30III-VARIANT,offline,Offline and restart recovery,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+EPSON-TM-M30III-VARIANT,privacy,Tenant roles and local-data protection,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+EPSON-TM-M30III-VARIANT,power,Shift power and charger safety,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+EPSON-TM-M30III-VARIANT,support,Consumables spares training and replacement,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+EPSON-TM-M30III-VARIANT,ownership,Funded transparent ownership/exit,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+EPSON-TM-M30III-VARIANT,tco,Complete like-for-like ownership cost,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+EPSON-TM-M30III-VARIANT,independent_review,Independent reviewer evidence check,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+ZEBRA-DS2208-KIT,identity,Supplier legal entity and OEM authorisation,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+ZEBRA-DS2208-KIT,sku,Exact regional SKU and firmware,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+ZEBRA-DS2208-KIT,nigeria_compliance,Applicable Nigerian import/device approval,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+ZEBRA-DS2208-KIT,warranty,Nigeria warranty and local repair,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+ZEBRA-DS2208-KIT,lifecycle,Security patch and end-of-support,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+ZEBRA-DS2208-KIT,app,MONARCH actual-device workflow,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+ZEBRA-DS2208-KIT,peripherals,Printing/scanning workflow,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+ZEBRA-DS2208-KIT,offline,Offline and restart recovery,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+ZEBRA-DS2208-KIT,privacy,Tenant roles and local-data protection,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+ZEBRA-DS2208-KIT,power,Shift power and charger safety,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+ZEBRA-DS2208-KIT,support,Consumables spares training and replacement,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+ZEBRA-DS2208-KIT,ownership,Funded transparent ownership/exit,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+ZEBRA-DS2208-KIT,tco,Complete like-for-like ownership cost,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+ZEBRA-DS2208-KIT,independent_review,Independent reviewer evidence check,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED

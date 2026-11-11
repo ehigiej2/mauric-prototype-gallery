@@ -1,0 +1,12 @@
+DRAFT / NOT SENT. New named-counterparty outreach approval and confirmed sender identity required.
+To: mea@sunmi.com
+Subject: Non-binding trader hardware and Nigeria service qualification
+
+Hello,
+We are evaluating hardware for an early-stage trader workflow in Benin City, Edo State, Nigeria. No trader volumes, operational deployment or purchase commitment is represented.
+
+Please identify the Nigerian authorised distributor and repair provider for a currently supported V3-family configuration, and confirm whether a unit bought in China is serviceable in Nigeria. Provide exact hardware/regulatory code, regional firmware, scanner/printer options, GMS/browser/JS printer SDK requirements, security patch/end-of-support dates, Nigeria approval evidence, battery workload data, serial warranty validation, DOA terms, repair freight and spares. Supply a demonstration route or loan terms if available; no assumption of a free sample.
+
+Please provide itemised1/5/10/50-unit prices with currency, quotation validity, tax/freight inclusions, domestic China or Nigerian delivery, independent inspection and protected payment options. No speculative stock commitment, exclusivity, deposits, mandatory finance or agreement acceptance is offered. Please state legal contracting entity and authorised representative.
+
+This request is research only and non-binding. [Confirmed authorised sender pending]

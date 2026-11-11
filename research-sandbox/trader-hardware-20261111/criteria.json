@@ -1,0 +1,72 @@
+[
+  {
+    "id": "identity",
+    "criterion": "Supplier legal entity and OEM authorisation",
+    "evidence_required": "Original company and OEM confirmation; beneficiary independently matched"
+  },
+  {
+    "id": "sku",
+    "criterion": "Exact regional SKU and firmware",
+    "evidence_required": "Regulatory hardware code; OS/browser/SDK versions; interfaces and optional features"
+  },
+  {
+    "id": "nigeria_compliance",
+    "criterion": "Applicable Nigerian import/device approval",
+    "evidence_required": "Exact model/certificate evidence and importer responsibilities; not brand-only"
+  },
+  {
+    "id": "warranty",
+    "criterion": "Nigeria warranty and local repair",
+    "evidence_required": "Named authorised centre confirms this serial/region; turnaround and freight in writing"
+  },
+  {
+    "id": "lifecycle",
+    "criterion": "Security patch and end-of-support",
+    "evidence_required": "OEM-supported lifecycle dates; device usable across planned service horizon"
+  },
+  {
+    "id": "app",
+    "criterion": "MONARCH actual-device workflow",
+    "evidence_required": "Named commit/build executes six buttons; correct navigation/accessibility on target runtime"
+  },
+  {
+    "id": "peripherals",
+    "criterion": "Printing/scanning workflow",
+    "evidence_required": "Actual target unit prints/reads correct item and amount with status/error handling"
+  },
+  {
+    "id": "offline",
+    "criterion": "Offline and restart recovery",
+    "evidence_required": "Actual network loss/reboot retains permitted actions and deduplicates; payment approval not simulated as live"
+  },
+  {
+    "id": "privacy",
+    "criterion": "Tenant roles and local-data protection",
+    "evidence_required": "Authorised positive/negative role tests; encrypted recovery; consent/retention evidence"
+  },
+  {
+    "id": "power",
+    "criterion": "Shift power and charger safety",
+    "evidence_required": "Actual eight-hour workload log; compatible certified charger/backup"
+  },
+  {
+    "id": "support",
+    "criterion": "Consumables spares training and replacement",
+    "evidence_required": "Written local supply/support and accessible user training trial"
+  },
+  {
+    "id": "ownership",
+    "criterion": "Funded transparent ownership/exit",
+    "evidence_required": "Approved funding model; trader consent; no imposed credit or bank switch"
+  },
+  {
+    "id": "tco",
+    "criterion": "Complete like-for-like ownership cost",
+    "evidence_required": "Dated written scope; all cost categories known; no hidden recurring/FX/returns costs"
+  },
+  {
+    "id": "independent_review",
+    "criterion": "Independent reviewer evidence check",
+    "evidence_required": "Named reviewer independent of test execution assesses original artifacts"
+  }
+]

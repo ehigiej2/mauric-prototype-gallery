@@ -1,0 +1,35 @@
+[
+  {
+    "id": "HW-SUNMI",
+    "organisation": "SUNMI regional sales",
+    "contact": "mea@sunmi.com",
+    "source": "https://www.sunmi.com/en/contact-us",
+    "purpose": "Nigeria-supported mobile business terminal and authorised local partner referral",
+    "channel_evidence": "VERIFIED published manufacturer contact",
+    "nigeria_model_support": "UNKNOWN",
+    "contacted": "NO",
+    "outreach_authority": "NOT APPROVED - new counterparty"
+  },
+  {
+    "id": "HW-EPSON",
+    "organisation": "Epson Nigeria Customer Service",
+    "contact": "support@epson.com.ng; +23413438883",
+    "source": "https://www.epson.eu/en_EU/faq/KA-01760?null",
+    "purpose": "Confirm local TM-m30III supplier/service and exact variant warranty",
+    "channel_evidence": "VERIFIED published manufacturer-listed Nigeria route",
+    "nigeria_model_support": "UNKNOWN - product-specific scope not confirmed",
+    "contacted": "NO",
+    "outreach_authority": "NOT APPROVED - new counterparty"
+  },
+  {
+    "id": "HW-ZEBRA",
+    "organisation": "Zebra Technologies official contact route",
+    "contact": "Official Contact Zebra page; no individual Nigeria representative verified",
+    "source": "https://www.zebra.com/us/en/about-zebra/contact-zebra.html",
+    "purpose": "Nigeria authorised DS2208 reseller and warranty referral",
+    "channel_evidence": "VERIFIED manufacturer route only",
+    "nigeria_model_support": "UNKNOWN",
+    "contacted": "NO",
+    "outreach_authority": "NOT APPROVED - new counterparty"
+  }
+]

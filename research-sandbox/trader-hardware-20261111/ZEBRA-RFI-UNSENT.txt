@@ -1,0 +1,12 @@
+DRAFT / NOT SENT. New named-counterparty outreach approval and confirmed sender identity required.
+To: Official Contact Zebra route
+Subject: Non-binding trader hardware and Nigeria service qualification
+
+Hello,
+We are evaluating hardware for an early-stage trader workflow in Benin City, Edo State, Nigeria. No trader volumes, operational deployment or purchase commitment is represented.
+
+Please refer us to an OEM-authorised Nigerian supplier and service provider for a DS2208 USB HID scanner kit. Quote exact cable/stand/host-power configuration, supported host environments, leading-zero and barcode/keyboard setup, serial warranty verification, lifecycle, replacement/repair and Benin City shipping. We need a real MONARCH browser-field demonstration; USB HID support alone does not prove compatibility.
+
+Please provide itemised1/5/10/50-unit prices with currency, quotation validity, tax/freight inclusions, domestic China or Nigerian delivery, independent inspection and protected payment options. No speculative stock commitment, exclusivity, deposits, mandatory finance or agreement acceptance is offered. Please state legal contracting entity and authorised representative.
+
+This request is research only and non-binding. [Confirmed authorised sender pending]

@@ -1,0 +1,15 @@
+id,test,proposed_acceptance,result,device_serial,app_commit,evidence,reviewer
+BOOT,"Boot, supported OS/browser and firmware recorded",Exact model/serial/build matches quote,NOT RUN,UNKNOWN,UNKNOWN,NONE,NONE
+HOME,Six buttons and correct hidden workflow,All six accessible on intended device; no clipped controls,NOT RUN,UNKNOWN,UNKNOWN,NONE,NONE
+SCAN,EAN/QR and leading zeros,100 representative valid scans correct; unknown rejected; duplicate handling reviewed,NOT RUN,UNKNOWN,UNKNOWN,NONE,NONE
+PRINT,Receipt amount/naira/QR and copy labels,20 actual receipts legible; original/reprint distinguishable; no false paid mark,NOT RUN,UNKNOWN,UNKNOWN,NONE,NONE
+PAPER,Paper-out/cover-open/reload,No silent success or unintended sale/stock change,NOT RUN,UNKNOWN,UNKNOWN,NONE,NONE
+POWER,Power loss during operation/print,Recover original event; retry does not duplicate fulfilment or payment,NOT RUN,UNKNOWN,UNKNOWN,NONE,NONE
+OFFLINE,Network loss30min and overnight proposed,Permitted local queue only; bank-only steps blocked; no data loss after reboot,NOT RUN,UNKNOWN,UNKNOWN,NONE,NONE
+RECONNECT,Reconnect and duplicate delivery,Each queued action reconciles once; cancelled action not resurrected,NOT RUN,UNKNOWN,UNKNOWN,NONE,NONE
+BATTERY,Eight-hour representative trader workload,>=20%remaining target or documented safe backup solution,NOT RUN,UNKNOWN,UNKNOWN,NONE,NONE
+PRIVACY,Owner/worker and tenant negative tests,Unauthorised reads/actions blocked; audit evidence; no customer identifiers in screenshots,NOT RUN,UNKNOWN,UNKNOWN,NONE,NONE
+RECOVERY,Encrypted export/restore to replacement unit,Authorised restoration; tampering rejected; revoked device access blocked,NOT RUN,UNKNOWN,UNKNOWN,NONE,NONE
+VOICE,Consented Pidgin/English speech input/output,Only if implemented; real audio usability/no unsolicited capture; no generic demo pass,NOT RUN,UNKNOWN,UNKNOWN,NONE,NONE
+SUPPORT,Fault/DOA/return drill,Documented real service path and price; no public support message without approval,NOT RUN,UNKNOWN,UNKNOWN,NONE,NONE
+EXIT,Logout/reset/reassignment,No cross-tenant remnants; no private phone data wiped,NOT RUN,UNKNOWN,UNKNOWN,NONE,NONE
