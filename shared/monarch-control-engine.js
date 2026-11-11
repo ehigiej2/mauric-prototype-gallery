@@ -20,9 +20,20 @@ function makeEngine({tenant,prototype,clock=()=>new Date().toISOString()}={}){
  if(target==="APPROVED_FOR_SIMULATION"){if(actor!=="owner")throw Error("Owner required");if(REQUIRED.some(k=>c.checks[k]!=="REVIEWED_UNAUTHENTICATED"))throw Error("All evidence must be recorded as reviewed, but remains unverified");c.approvedBy="owner (synthetic)";}
  c.status=target;c.revision++;log(id,"TRANSITION",target+" via "+actor);return view(id)}
  function revokeConsent(id){return record(id,"consent","REVOKED")}
+
+ // Handoff carries synthetic non-sensitive references only. Never serialise approvals, evidence or payment details.
+ const CHANNEL="monarch-review-handoff-v1";
+ function handoff(id,destination){const c=get(id);if(c.status==="STOPPED")throw Error("Stopped case cannot be handed off");if(!allowedTenant.test(destination||""))throw Error("Invalid destination prototype");
+ const packet=Object.freeze({schema:CHANNEL,tenant,source:prototype,destination,sourceCaseId:id,sourceRevision:c.revision,kind:"RESEARCH_REFERENCE_ONLY",created:clock()});
+ log(id,"HANDOFF","Research-only reference prepared for "+destination);return packet}
+ function receive(packet){if(!packet||packet.schema!==CHANNEL||packet.tenant!==tenant||packet.destination!==prototype||packet.kind!=="RESEARCH_REFERENCE_ONLY")throw Error("Rejected cross-tenant, cross-target or invalid handoff");
+ if(!allowedTenant.test(packet.source||"")||!/^[a-zA-Z0-9_-]{2,80}$/.test(packet.sourceCaseId||"")||!Number.isSafeInteger(packet.sourceRevision)||packet.sourceRevision<1)throw Error("Malformed research reference");
+ const id="IN_"+packet.source+"_"+packet.sourceCaseId;
+ if(cases.has(id))return Object.freeze({duplicate:true,case:view(id)});
+ const imported=create(id);log(id,"RECEIVE","Quarantined research reference from "+packet.source+"; re-verification required");return Object.freeze({duplicate:false,case:imported})}
  function ledger(id){if(id)get(id);return Object.freeze(events.filter(e=>!id||e.caseId===id).map(x=>({...x})))}
  function snapshot(){return Object.freeze({tenant,prototype,cases:[...cases.keys()].map(view),events:ledger(),note:"SYNTHETIC SESSION ONLY; NOT AN AUTHORITATIVE AUDIT LEDGER"})}
- return Object.freeze({create,view,record,transition,revokeConsent,ledger,snapshot,states:STATES});
+ return Object.freeze({create,view,record,transition,revokeConsent,ledger,snapshot,handoff,receive,states:STATES});
 }
 function attach({tenant,prototype,label="Decision controls"}={}){if(!global.document)return null;const engine=makeEngine({tenant,prototype});const key="__monarch_controls_"+tenant+"_"+prototype;if(global[key])return global[key];global[key]=engine;
  const button=global.document.createElement("button");button.type="button";button.textContent="🔒 "+label;button.setAttribute("aria-expanded","false");button.style.cssText="position:fixed;right:12px;bottom:12px;z-index:2147483000;background:#153d6a;color:#fff;border:2px solid #fff;border-radius:16px;padding:12px 16px;font:700 14px system-ui;box-shadow:0 5px 20px #0004;cursor:pointer";
