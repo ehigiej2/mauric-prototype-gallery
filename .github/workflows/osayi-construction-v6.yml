@@ -1,0 +1,50 @@
+name: Osayi V6 voice and reasoning acceptance
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'osayi-construction-command-centre-v6.html'
+      - '.github/workflows/osayi-construction-v6.yml'
+  workflow_dispatch:
+jobs:
+  mobile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install chromium
+      - name: Verify contextual reasoning, voice feedback, six stages
+        run: |
+          cat >/tmp/v6.cjs <<'JS'
+          const {chromium,devices}=require(process.cwd()+'/node_modules/playwright');
+          (async()=>{const b=await chromium.launch();const p=await b.newPage({...devices['iPhone 13']});const errs=[];p.on('pageerror',e=>errs.push(e.message));
+          await p.goto('file://'+process.cwd()+'/osayi-construction-command-centre-v6.html');
+          if(await p.locator('#home .tile:visible').count()!==6)throw Error('Missing six buttons');
+          await p.locator('#osayiToggle').click();await p.locator('#question').fill('How much profit?');await p.locator('#ask').click();
+          if(!(await p.locator('#v6Reason').textContent()).includes('never get complete saved quote'))throw Error('No unknown-state reasoning');
+          await p.locator('#v6Talk').click();if(!(await p.locator('#voiceStatus').textContent()).length)throw Error('Voice diagnostics missing');
+          await p.locator('#close').click();
+          for(const k of ['request','materials','worker','quote','safety','handover']){
+            await p.locator('[data-step="'+k+'"]').click();if(k==='safety')await p.locator('#human').selectOption('practice');
+            await p.locator('#save').click();await p.locator('#back').click();
+          }
+          if(!(await p.locator('#status').textContent()).includes('6/6'))throw Error('Six-stage journey failed');
+          await p.locator('#osayiToggle').click();await p.locator('#question').fill('Explain my profit and cost overrun');await p.locator('#ask').click();
+          const t=await p.locator('#v6Reason').textContent();if(!t.includes('₦47,000')||!t.includes('10%')||!t.includes('CROWN HOLD'))throw Error('Job-aware arithmetic failed: '+t);
+          if(errs.length)throw Error('JS errors: '+errs.join(';'));console.log('PASS job reasoning, voice diagnostics, six stages');await b.close()})().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node /tmp/v6.cjs
+  public:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - run: |
+          URL=https://ehigiej2.github.io/mauric-prototype-gallery/osayi-construction-command-centre-v6.html
+          for i in {1..18}; do
+            CODE=$(curl -LsS --max-time 20 -o /tmp/v6.html -w '%{http_code}' "$URL" || true)
+            if [ "$CODE" = 200 ] && grep -q 'osayi-v6-reasoning-voice' /tmp/v6.html; then echo 'PASS public V6'; exit 0; fi
+            sleep 10
+          done
+          exit 1
