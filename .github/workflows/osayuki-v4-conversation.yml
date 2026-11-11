@@ -1,0 +1,41 @@
+name: Osayuki V4 conversation evidence
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'osayuki-field-intelligence-v4-conversation-candidate.html'
+      - 'engines/monarch-business-conversation-v1.js'
+      - '.github/workflows/osayuki-v4-conversation.yml'
+  workflow_dispatch:
+jobs:
+  logic:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          node <<'JS'
+          const fs=require('fs');
+          global.MonarchConversationEngine=require('./engines/monarch-conversation-engine-v1.js');
+          const e=require('./engines/monarch-business-conversation-v1.js');
+          const s=e.create({domain:'osayuki'});
+          const r=s.ask('How much profit?',{sales:200000,cost:160000});
+          if(!r.text.includes('₦40,000'))throw Error('Financial arithmetic failed');
+          if(!s.ask('What about carrier routes?').text.includes('capacity'))throw Error('Route context failed');
+          if(!s.ask('What did I ask before?').text.includes('carrier routes'))throw Error('Turn memory failed');
+          if(s.speech().status!=='BLOCKED')throw Error('Synthesis must fail closed');
+          const html=fs.readFileSync('osayuki-field-intelligence-v4-conversation-candidate.html','utf8');
+          for(const x of ['osayukiAskButton','osayukiAnswer','monarch-business-conversation-v1.js','runTrade','valueout'])if(!html.includes(x))throw Error('Missing '+x);
+          console.log('PASS Osayuki context, maths, memory, voice HOLD and preserved workflow');
+          JS
+  public:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - run: |
+          BASE=https://ehigiej2.github.io/mauric-prototype-gallery
+          for i in {1..18}; do
+            code=$(curl -LsS --max-time 20 -o /tmp/osayuki.html -w '%{http_code}' "$BASE/osayuki-field-intelligence-v4-conversation-candidate.html" || true)
+            if [ "$code" = 200 ] && grep -q 'osayuki-conversation-v4' /tmp/osayuki.html; then echo 'PASS public V4 candidate'; exit 0; fi
+            sleep 10
+          done
+          exit 1
