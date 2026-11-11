@@ -20,5 +20,8 @@ No silent replacement of a founder-approved app. New approvals require explicit 
 ## Founder decision recorded 2026-11-11
 The founder explicitly approved Tailor and Building Materials as the only founder-approved baselines for their respective sectors, pending real-user acceptance in Benin City. Preserve source commits/branches above; no silent substitutions. This is not production, mass-distribution, real-order or payment approval. Suya remains unapproved.
 
-## Mama Put × Osayi / Mama Eno Pepper Rice
-UNAPPROVED RESEARCH CANDIDATE, created 2026-11-11. File `mama-put-eno-pepper-rice-osayi.html`, initial commit `d307bad50e733af20531d1c03bd5cba22e35bb47`. Contains selectable Mama Put and Mama Eno Pepper Rice fictional restaurant experiences. No real restaurant identity, location, menu, prices, food-safety status or founder approval verified. Do not lock as approved or distribute as a real operating business without explicit founder and seller acceptance.
+## Mama Put × Osayi / Mama Ebo Pepper Rice
+UNAPPROVED RESEARCH CANDIDATE, created 2026-11-11. File `mama-put-eno-pepper-rice-osayi.html`, initial commit `d307bad50e733af20531d1c03bd5cba22e35bb47`. Contains selectable Mama Put and Mama Ebo Pepper Rice fictional restaurant experiences. No real restaurant identity, location, menu, prices, food-safety status or founder approval verified. Do not lock as approved or distribute as a real operating business without explicit founder and seller acceptance.
+
+## Restaurant URL correction
+Canonical restaurant candidate path: `mama-put-ebo-pepper-rice-osayi.html` (commit `d0236ad40ef63ce606702c55a7bf81b85a16105e`). Older `mama-put-eno-pepper-rice-osayi.html` is a deprecated alias, not the canonical sharing address. Founder corrected the name from Eno to **Ebo**. Public URL and real-device acceptance pending separate verification.
