@@ -1,0 +1,48 @@
+name: Osayi construction command centre V2 acceptance
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'osayi-construction-command-centre-v2.html'
+      - '.github/workflows/osayi-construction-v2.yml'
+  workflow_dispatch:
+jobs:
+  mobile:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Check V2 tools and all six workflows
+        run: |
+          cat >/tmp/v2.cjs <<'JS'
+          const {chromium,devices}=require(process.cwd()+'/node_modules/playwright');
+          (async()=>{
+            const browser=await chromium.launch();const page=await browser.newPage({...devices['iPhone 13']});
+            const errors=[];page.on('pageerror',e=>errors.push(e.message));
+            await page.goto('file://'+process.cwd()+'/osayi-construction-command-centre-v2.html');
+            if(await page.locator('#home .tile:visible').count()!==6)throw Error('Six buttons missing');
+            for(const step of ['request','materials','worker','quote','safety','handover']){
+              await page.locator('[data-step="'+step+'"]').click();
+              if(step==='safety')await page.locator('#human').selectOption('practice');
+              await page.locator('#save').click();
+              if(step==='request'&&!(await page.locator('#status').textContent()).includes('DEMO-BEN'))throw Error('Job ID missing');
+              for(const id of ['v2Risk','v2Supply','v2Next']){
+                await page.locator('#'+id).click();
+                if((await page.locator('#v2Insight').textContent()).length<45)throw Error(id+' not working');
+              }
+              await page.locator('#osayiToggle').click();
+              if(!await page.locator('#osayiPanel').isVisible())throw Error('Osayi missing');
+              await page.locator('#close').click();await page.locator('#back').click();
+            }
+            if(!(await page.locator('#status').textContent()).includes('6/6'))throw Error('Six-stage job incomplete');
+            await page.locator('[data-step="quote"]').click();
+            await page.locator('#v2Options').click();
+            if(!(await page.locator('#v2Insight').textContent()).includes('SCENARIOS'))throw Error('Scenario engine failed');
+            if(errors.length)throw Error('JS errors '+errors.join(';'));
+            console.log('PASS V2 six stages, shared job, Osayi, risk, supply, next step, cost scenarios');
+            await browser.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node /tmp/v2.cjs
