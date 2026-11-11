@@ -3,6 +3,7 @@ Run from repository root: python -m pip install playwright && python -m playwrig
 python tests/test_monarch_waka_browser.py
 No network or live customer data is required.
 """
+import os
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
@@ -10,7 +11,9 @@ URL = (Path(__file__).resolve().parents[1] / "monarch-trade-waka-review.html").a
 
 def main():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        engine = os.environ.get("WAKA_BROWSER", "chromium")
+        assert engine in ("chromium", "webkit"), f"Unsupported engine: {engine}"
+        browser = getattr(p, engine).launch(headless=True)
         for width, height in [(320,568),(375,667),(390,844)]:
             page = browser.new_page(viewport={"width":width,"height":height})
             outbound=[]
@@ -76,13 +79,22 @@ def main():
             page.locator('.tile[data-mode="osayi"]').click()
             assert page.locator("#playIntro").is_visible()
             assert page.locator("#osayiIntro").get_attribute("src").endswith("intro.mp3")
+            audio_path=Path(__file__).resolve().parents[1] / "audio/stephen-osayi-v5/intro.mp3"
+            assert audio_path.is_file() and audio_path.stat().st_size > 1000, "Recorded greeting asset missing or empty"
+            page.locator("#playIntro").click()
+            page.wait_for_function("() => { const a=document.querySelector('#osayiIntro'); return a && !a.paused && a.currentTime > 0.1 && !a.error; }", timeout=15000)
+            assert "prerecorded" in page.locator("#result").inner_text()
+            page.locator("#clearChat").click()
+            assert page.locator("#osayiIntro").evaluate("(a) => a.paused && a.currentTime === 0")
             page.keyboard.press("Escape")
             assert page.locator("#workspace").is_hidden()
+            Path("test-evidence").mkdir(exist_ok=True)
+            page.screenshot(path=f"test-evidence/{engine}-{width}x{height}.png")
             assert not errors, f"Browser script errors: {errors}"
             assert not outbound, f"Unexpected external requests: {outbound}"
             page.close()
         browser.close()
-    print("PASS: 3 mobile viewports; six-button navigation; five synthetic workflows; Osayi recall/cancel/clear; no outbound HTTP")
+    print(f"PASS {engine}: recorded greeting playback and stop; 3 mobile viewports; six-button navigation; five synthetic workflows; Osayi recall/cancel/clear; no outbound HTTP")
 
 if __name__=="__main__":
     main()
