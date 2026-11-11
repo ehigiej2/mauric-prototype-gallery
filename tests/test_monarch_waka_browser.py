@@ -35,6 +35,11 @@ def main():
                 page.locator('#journey button[type="submit"]').click()
                 assert "SIM-" in page.locator("#result").inner_text(),sample_mode
                 assert page.locator('#journey button[type="submit"]').is_disabled(), "Duplicate-submit guard missing"
+                counts={"sell":"orders","send":"trips","stock":"stock","money":"ledger","team":"delegations"}
+                before=page.evaluate("(key)=>state[key].length",counts[sample_mode])
+                page.locator("#journey").dispatch_event("submit")
+                after=page.evaluate("(key)=>state[key].length",counts[sample_mode])
+                assert after==before, f"Duplicate submission in {sample_mode}"
                 page.locator("#back").click()
             page.locator('.tile[data-mode="sell"]').click()
             page.locator('[name="item"]').fill("Fictional akara")
