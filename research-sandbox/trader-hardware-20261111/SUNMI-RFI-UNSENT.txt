@@ -1,14 +1,17 @@
-DRAFT / NOT SENT. New named-counterparty outreach approval and confirmed sender identity required.
-To: mea@sunmi.com
-Subject: Non-binding trader hardware and Nigeria service qualification
+DRAFT — NOT SENT
+To: SUNMI regional sales, mea@sunmi.com
+Subject: Non-binding qualification and quotation — planned 1,000 Nigeria order-receiver kits
 
 Hello,
-We are evaluating hardware for an early-stage trader workflow in Benin City, Edo State, Nigeria. No trader volumes, operational deployment or purchase commitment is represented.
+We are preparing a proposed procurement of at least 1,000 dedicated order-receiving devices for traders in Benin City, Edo State, Nigeria, subject to budget, technical validation, approvals and agreed terms. We have not placed an order, confirmed funding or committed customer volumes.
 
-Please identify the Nigerian authorised distributor and repair provider for a currently supported V3-family configuration, and confirm whether a unit bought in China is serviceable in Nigeria. Provide exact hardware/regulatory code, regional firmware, scanner/printer options, GMS/browser/JS printer SDK requirements, security patch/end-of-support dates, Nigeria approval evidence, battery workload data, serial warranty validation, DOA terms, repair freight and spares. Supply a demonstration route or loan terms if available; no assumption of a free sample.
+Please compare a currently supported phone-sized Android receiver configuration against a printer-equipped SUNMI configuration. Traders should receive a preconfigured device; no installation on their personal phone is required. Printing is optional. Please identify the authorised Nigerian supply and repair route.
 
-Please provide itemised1/5/10/50-unit prices with currency, quotation validity, tax/freight inclusions, domestic China or Nigerian delivery, independent inspection and protected payment options. No speculative stock commitment, exclusivity, deposits, mandatory finance or agreement acceptance is offered. Please state legal contracting entity and authorised representative.
+Quote 1,000 complete kits and, separately, the optional 2,000-unit price tier. Price validation samples separately without assuming a free sample or follow-on award. Itemise device, stand, correct charger/cable, protective packaging/identity band/start card, authorised provisioning, management licences, data/connectivity, support, spares, shipping/taxes and all recurring costs. Confirm exact SKU, regulatory code, firmware/browser/notification and kiosk deployment requirements, lifecycle/security patch dates, production capacity, stock/lead time, quotation currency/validity and protected payment options.
 
-This request is research only and non-binding. [Confirmed authorised sender pending]
+We need exact-device demonstrations of foreground/background alerts, sound/wake/reboot, network failure/recovery, duplicate/cancelled/expired requests and acknowledgement. No existing MONARCH integration is represented as operational.
 
-Revised priority: a supplied ready-to-use order receiver for traders who do not want to install anything on their personal phone. Compare supported phone-sized options against printer-equipped terminals. Confirm exact lawful kiosk/provisioning route, alert/wake/reboot and offline/runtime behaviour, notification permissions and battery/charging performance. No actual MONARCH compatibility is assumed. Stand, protection, connectivity, setup, service and all recurring charges must be separately priced.
+Please propose pre-production sample validation, independent inspection, serial records, no unauthorised substitutions, staged shipment/payment linked to accepted evidence, DOA replacements, Nigerian warranty/repair turnaround and who bears repair freight. Explain warranty activation/dispatch timing for units awaiting allocation. Provide legal contracting identity, factory/distributor status and authorised representative.
+
+This is non-binding research only. No order, deposit, exclusivity, contract acceptance or guarantee of purchase is offered.
+[Confirmed authorised MAURIC sender and buyer pending]
