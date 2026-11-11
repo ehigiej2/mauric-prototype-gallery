@@ -1,0 +1,56 @@
+name: Osayi V4 mobile and public acceptance
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'osayi-construction-command-centre-v4.html'
+      - '.github/workflows/osayi-construction-v4.yml'
+  workflow_dispatch:
+jobs:
+  mobile:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Test iPhone V4 tools and assistant positioning
+        run: |
+          cat >/tmp/v4.cjs <<'JS'
+          const {chromium,devices}=require(process.cwd()+'/node_modules/playwright');
+          (async()=>{const browser=await chromium.launch();const page=await browser.newPage({...devices['iPhone 13']});const errors=[];page.on('pageerror',e=>errors.push(e.message));
+          await page.goto('file://'+process.cwd()+'/osayi-construction-command-centre-v4.html');
+          if(await page.locator('#home .tile:visible').count()!==6)throw Error('Six tiles missing');
+          for(const k of ['request','materials','worker','quote','safety','handover']){
+            await page.locator('[data-step="'+k+'"]').click();
+            if(k==='safety')await page.locator('#human').selectOption('practice');
+            await page.locator('#save').click();
+            for(const id of ['v4Compare','v4Margin','v4Checklist']){
+              await page.locator('#'+id).click();
+              if((await page.locator('#v4Answer').textContent()).length<45)throw Error(id+' failed');
+            }
+            await page.locator('#osayiToggle').click();
+            if(!await page.locator('#osayiPanel').isVisible())throw Error('Osayi missing');
+            await page.locator('#close').click();await page.locator('#back').click();
+          }
+          if(!(await page.locator('#status').textContent()).includes('6/6'))throw Error('Incomplete stages');
+          await page.locator('[data-step="quote"]').click();await page.locator('#v4Margin').click();
+          if(!(await page.locator('#v4Answer').textContent()).includes('Contribution margin'))throw Error('Profit calculation failed');
+          if(errors.length)throw Error('JS errors '+errors.join(';'));
+          console.log('PASS V4 6 stages, 3 new tools, Osayi, profit guard');
+          await browser.close()})().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node /tmp/v4.cjs
+  public:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check exact public URL
+        run: |
+          URL=https://ehigiej2.github.io/mauric-prototype-gallery/osayi-construction-command-centre-v4.html
+          for i in {1..18}; do
+            CODE=$(curl -L -sS --max-time 25 -o /tmp/v4.html -w '%{http_code}' "$URL" || true)
+            echo "Attempt $i: $CODE"
+            if [ "$CODE" = 200 ] && grep -q 'osayi-v4-intelligence' /tmp/v4.html && grep -q 'v4Margin' /tmp/v4.html; then echo 'PASS public V4'; exit 0; fi
+            sleep 12
+          done
+          echo 'FAIL public V4'; exit 1
