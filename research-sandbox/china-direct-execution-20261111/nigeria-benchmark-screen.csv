@@ -1,0 +1,5 @@
+benchmark_id,product,advertised_price_ngn,evidence_status,comparability,delivered_total_ngn
+NG01,Merok plain shirt,3500,SUPPLIER-CLAIMED,NOT COMPARABLE - weight and terms conflict,UNKNOWN
+NG02,Tshirts.ng180gsm shirt,26973,SUPPLIER-CLAIMED - inconsistent search price,UNCONFIRMED - sizing fit stock returns delivery,UNKNOWN
+NG03,PhoneXperts TPU case,4100,SEARCH ONLY - detail timeout,UNCONFIRMED - colour model material scope,UNKNOWN
+NG04,Next child tee,8500-15800,SEARCH ONLY,NOT COMPARABLE - product age and type,UNKNOWN
