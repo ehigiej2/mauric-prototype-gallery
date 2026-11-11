@@ -14,6 +14,8 @@ def main():
         for width, height in [(320,568),(375,667),(390,844)]:
             page = browser.new_page(viewport={"width":width,"height":height})
             page.goto(URL)
+            outbound=[]
+            page.on("request",lambda req: outbound.append(req.url) if req.url.startswith(("https://","http://")) else None)
             assert page.get_by_role("heading",name="Watein you wan do?").is_visible()
             assert page.locator(".tile").count()==6
             assert page.evaluate("document.documentElement.scrollWidth <= innerWidth"), f"Horizontal overflow at {width}"
@@ -23,6 +25,14 @@ def main():
                 assert page.locator("#workspace").evaluate("(e)=>getComputedStyle(e).position")=="fixed"
                 page.locator("#back").click()
                 assert page.locator("#workspace").is_hidden(),mode
+            samples={"sell":{"item":"Akara","amount":"250","quantity":"2"},"send":{"item":"Farm produce","destination":"Fictional Ekekhuan Road"},"stock":{"item":"Rice bag","amount":"55000"},"money":{"item":"Claimed receipt","amount":"1000"},"team":{"item":"Fictional worker"}}
+            for sample_mode,fields in samples.items():
+                page.locator(f'.tile[data-mode="{sample_mode}"]').click()
+                for name,value in fields.items():
+                    page.locator(f'[name="{name}"]').fill(value)
+                page.locator('#journey button[type="submit"]').click()
+                assert "SIM-" in page.locator("#result").inner_text(),sample_mode
+                page.locator("#back").click()
             page.locator('.tile[data-mode="sell"]').click()
             page.locator('[name="item"]').fill("Fictional akara")
             page.locator('[name="amount"]').fill("250")
@@ -50,9 +60,10 @@ def main():
             assert page.locator("#osayiIntro").get_attribute("src").endswith("intro.mp3")
             page.keyboard.press("Escape")
             assert page.locator("#workspace").is_hidden()
+            assert not outbound, f"Unexpected external requests: {outbound}"
             page.close()
         browser.close()
-    print("PASS: 3 viewports × six-button navigation; sell; recall; cancel; clear; Escape")
+    print("PASS: 3 mobile viewports; six-button navigation; five synthetic workflows; Osayi recall/cancel/clear; no outbound HTTP")
 
 if __name__=="__main__":
     main()
