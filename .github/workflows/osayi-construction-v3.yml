@@ -1,0 +1,46 @@
+name: Osayi construction command V3 acceptance
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'osayi-construction-command-centre-v3.html'
+      - '.github/workflows/osayi-construction-v3.yml'
+  workflow_dispatch:
+jobs:
+  mobile:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Test V3 guided power tools and six-step job
+        run: |
+          cat >/tmp/v3.cjs <<'JS'
+          const {chromium,devices}=require(process.cwd()+'/node_modules/playwright');
+          (async()=>{
+            const browser=await chromium.launch();const page=await browser.newPage({...devices['iPhone 13']});
+            const errors=[];page.on('pageerror',e=>errors.push(e.message));
+            await page.goto('file://'+process.cwd()+'/osayi-construction-command-centre-v3.html');
+            if(await page.locator('#home .tile:visible').count()!==6)throw Error('Six tiles missing');
+            for(const k of ['request','materials','worker','quote','safety','handover']){
+              await page.locator('[data-step="'+k+'"]').click();
+              if(k==='safety')await page.locator('#human').selectOption('practice');
+              await page.locator('#save').click();
+              for(const tool of ['v3Schedule','v3Match','v3Recovery']){
+                await page.locator('#'+tool).click();
+                if((await page.locator('#v2Insight').textContent()).length<60)throw Error(tool+' failed');
+              }
+              await page.locator('#back').click();
+            }
+            await page.locator('[data-step="quote"]').click();
+            await page.locator('#v3Alternatives').click();
+            if(!(await page.locator('#v2Insight').textContent()).includes('ALTERNATIVES'))throw Error('Alternatives failed');
+            await page.locator('#osayiToggle').click();
+            if(!await page.locator('#osayiPanel').isVisible())throw Error('Osayi missing');
+            if(errors.length)throw Error('JS errors: '+errors.join(';'));
+            console.log('PASS V3 six stages, four new tools, conversational Osayi');
+            await browser.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node /tmp/v3.cjs
