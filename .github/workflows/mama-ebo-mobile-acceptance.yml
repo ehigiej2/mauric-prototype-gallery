@@ -1,0 +1,50 @@
+name: Mama Ebo interactive mobile acceptance
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'mama-put-ebo-pepper-rice-osayi.html'
+      - '.github/workflows/mama-ebo-mobile-acceptance.yml'
+  workflow_dispatch:
+jobs:
+  chromium-mobile:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Test six workflows, calculations, chat and speech controls
+        run: |
+          cat > /tmp/check-ebo.cjs <<'JS'
+          const {chromium,devices}=require(process.cwd()+'/node_modules/playwright');
+          (async()=>{
+            const browser=await chromium.launch({headless:true});
+            const page=await browser.newPage({...devices['iPhone 13'],browserName:undefined});
+            const errors=[];page.on('pageerror',e=>errors.push(e.message));
+            await page.goto('file://'+process.cwd()+'/mama-put-ebo-pepper-rice-osayi.html');
+            await page.locator('#brand').selectOption('eno');
+            if(!await page.locator('#brandIntro').textContent().then(s=>s.includes('Mama Ebo')||s.includes('Pepper rice')))throw Error('Mama Ebo selection failed');
+            for(const action of ['menu','price','order','kitchen','delivery','grow']){
+              await page.locator('[data-action="'+action+'"]').click();
+              if(!await page.locator('#panel').isVisible())throw Error(action+' panel missing');
+              await page.locator('#calculate').click();
+              const out=await page.locator('#output').textContent();
+              if(!out||out.includes('Enter fictional values'))throw Error(action+' workflow did not run');
+              await page.locator('#back').click();
+              if(!await page.locator('#home').isVisible())throw Error('Home return failed');
+            }
+            await page.locator('#chat').click();
+            await page.locator('#reply').fill('We get sample pepper rice');
+            await page.locator('#send').click();
+            if(!await page.locator('#messages').textContent().then(s=>s.includes('We get sample pepper rice')))throw Error('Chat failed');
+            await page.locator('#closeChat').click();
+            await page.locator('#guide').click();
+            if(!await page.locator('#panel').isVisible())throw Error('Guide failed');
+            if(errors.length)throw Error('JS errors: '+errors.join('; '));
+            console.log('PASS: six buttons, six workflows, two brand choices, chat, guide, navigation, no JS exceptions');
+            await browser.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node /tmp/check-ebo.cjs
