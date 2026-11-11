@@ -1,0 +1,59 @@
+name: Osayi V5 state and safety regression
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'osayi-construction-command-centre-v5.html'
+      - '.github/workflows/osayi-v5-state-safety.yml'
+  workflow_dispatch:
+jobs:
+  safety:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install chromium
+      - name: Check dependency blocks, quote math, invalidation and safety
+        run: |
+          cat >/tmp/v5-safety.cjs <<'JS'
+          const {chromium,devices}=require(process.cwd()+'/node_modules/playwright');
+          (async()=>{
+            const b=await chromium.launch();
+            const p=await b.newPage({...devices['iPhone 13']});
+            const errs=[];p.on('pageerror',e=>errs.push(e.message));
+            await p.goto('file://'+process.cwd()+'/osayi-construction-command-centre-v5.html');
+            const go=async k=>p.locator('[data-step="'+k+'"]').click();
+            const back=async()=>p.locator('#back').click();
+            await go('handover');await p.locator('#save').click();
+            if(!(await p.locator('#output').textContent()).includes('BLOCKED'))throw Error('Handover prerequisite missing');await back();
+            await go('quote');await p.locator('#save').click();
+            if(!(await p.locator('#output').textContent()).includes('BLOCKED'))throw Error('Quote prerequisite missing');await back();
+            await go('request');await p.locator('#save').click();
+            const id=(await p.locator('#status').textContent()).match(/DEMO-BEN-\d+/)?.[0];if(!id)throw Error('Job ID missing');await back();
+            await go('materials');await p.locator('#save').click();await back();
+            await go('worker');await p.locator('#save').click();await back();
+            await go('quote');await p.locator('#save').click();
+            const out=await p.locator('#output').textContent();
+            if(!out.includes('Sample cost: ₦303,000')||!out.includes('Sample contribution: ₦47,000'))throw Error('Quote math incorrect: '+out);
+            await p.locator('#v4Margin').click();
+            if(!(await p.locator('#v4Answer').textContent()).includes('Contribution margin'))throw Error('Margin guard absent');
+            await back();await go('safety');await p.locator('#save').click();await back();
+            await go('handover');await p.locator('#save').click();
+            if(!(await p.locator('#output').textContent()).includes('BLOCKED'))throw Error('Human review gate bypassed');
+            await back();await go('safety');await p.locator('#human').selectOption('practice');await p.locator('#save').click();await back();
+            await go('handover');await p.locator('#save').click();await back();
+            if(!(await p.locator('#status').textContent()).includes('6/6'))throw Error('Completion record absent');
+            await go('materials');await p.locator('#timber').fill('90000');await p.locator('#save').click();
+            const changed=await p.locator('#output').textContent();
+            if(changed.includes('Sample cost:'))throw Error('Stale quote survived material change');
+            if(!changed.includes('DEMO-BEN-'))throw Error('Job ID lost');
+            await back();
+            if(!(await p.locator('#status').textContent()).includes('3/6'))throw Error('Downstream stages not invalidated');
+            if(errs.length)throw Error('JS errors '+errs.join(';'));
+            console.log('PASS prerequisite blocking, quote math, margin guard, human gate, upstream invalidation, job ID');
+            await b.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node /tmp/v5-safety.cjs
