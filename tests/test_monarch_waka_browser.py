@@ -41,6 +41,13 @@ def main():
             assert page.locator('[name="item"]').input_value()==""
             page.locator("#clearChat").click()
             assert "Conversation cleared" in page.locator("#messages").inner_text()
+            page.locator("#back").click()
+            page.locator('.tile[data-mode="osayi"]').click()
+            assert page.locator("#messages").is_visible()
+            page.locator("#back").click()
+            page.locator('.tile[data-mode="osayi"]').click()
+            assert page.locator("#playIntro").is_visible()
+            assert page.locator("#osayiIntro").get_attribute("src").endswith("intro.mp3")
             page.keyboard.press("Escape")
             assert page.locator("#workspace").is_hidden()
             page.close()
