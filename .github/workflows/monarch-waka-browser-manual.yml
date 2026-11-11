@@ -6,6 +6,7 @@ on:
     paths:
       - monarch-trade-waka-review.html
       - tests/test_monarch_waka_browser.py
+      - shared/monarch-control-engine.js
       - .github/workflows/monarch-waka-browser-manual.yml
   workflow_dispatch:
 permissions:
