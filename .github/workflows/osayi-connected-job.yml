@@ -1,0 +1,54 @@
+name: Osayi connected job acceptance
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'osayi-connected-construction-job-v1.html'
+      - '.github/workflows/osayi-connected-job.yml'
+  workflow_dispatch:
+jobs:
+  mobile:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Test job ID, gates, recalculation, Osayi and six stages
+        run: |
+          cat >/tmp/job.cjs <<'JS'
+          const {chromium,devices}=require(process.cwd()+'/node_modules/playwright');
+          (async()=>{
+            const browser=await chromium.launch();const page=await browser.newPage({...devices['iPhone 13']});
+            const errors=[];page.on('pageerror',e=>errors.push(e.message));
+            await page.goto('file://'+process.cwd()+'/osayi-connected-construction-job-v1.html');
+            if(await page.locator('#home .tile:visible').count()!==6)throw Error('Missing six buttons');
+            async function go(k){await page.locator('[data-step="'+k+'"]').click()}
+            async function back(){await page.locator('#back').click()}
+            await go('quote');await page.locator('#save').click();
+            if(!(await page.locator('#output').textContent()).includes('BLOCKED'))throw Error('Missing prerequisite block');await back();
+            await go('request');await page.locator('#save').click();
+            if(!(await page.locator('#output').textContent()).includes('DEMO-BEN-0001'))throw Error('No job ID');await back();
+            for(const k of ['materials','worker','quote','safety','handover']){
+              await go(k);
+              if(k==='safety')await page.locator('#human').selectOption('practice');
+              if(k==='handover')await page.locator('#completion').selectOption('sample');
+              await page.locator('#save').click();
+              const out=await page.locator('#output').textContent();
+              if(!out.includes('DEMO-BEN-0001')||!out.includes('simulated record saved'))throw Error(k+' failed');
+              await page.locator('#osayiToggle').click();
+              if(!await page.locator('#osayiPanel').isVisible())throw Error('Osayi unavailable at '+k);
+              await page.locator('#question').fill('Help with '+k);
+              await page.locator('#ask').click();
+              if((await page.locator('#answer').textContent()).length<50)throw Error('Osayi response missing');
+              await page.locator('#close').click();await back();
+            }
+            if(!(await page.locator('#status').textContent()).includes('6/6'))throw Error('Missing complete stages');
+            await go('materials');await page.locator('#timber').fill('80000');await page.locator('#save').click();
+            if((await page.locator('#output').textContent()).includes('6/6'))throw Error('Dependent steps not invalidated');
+            if(errors.length)throw Error('JS errors: '+errors.join(';'));
+            console.log('PASS: one job ID, six stages, prerequisite gates, dependency invalidation, Osayi and navigation');
+            await browser.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node /tmp/job.cjs
