@@ -23,7 +23,7 @@ jobs:
           await p.goto('file://'+process.cwd()+'/osayi-construction-command-centre-v6.html');
           if(await p.locator('#home .tile:visible').count()!==6)throw Error('Missing six buttons');
           await p.locator('#osayiToggle').click();await p.locator('#question').fill('How much profit?');await p.locator('#ask').click();
-          if(!(await p.locator('#v6Reason').textContent()).includes('never get complete saved quote'))throw Error('No unknown-state reasoning');
+          if(!(await p.locator('#v6Reason').textContent()).includes('never get complete saved quote'))throw Error('No unknown-state reasoning: '+await p.locator('#v6Reason').textContent()+' | errors='+errs.join(';'));
           await p.locator('#v6Talk').click();if(!(await p.locator('#voiceStatus').textContent()).length)throw Error('Voice diagnostics missing');
           await p.locator('#close').click();
           for(const k of ['request','materials','worker','quote','safety','handover']){
