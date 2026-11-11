@@ -1,0 +1,57 @@
+name: Mama Akara interactive acceptance
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  mobile-browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser test dependencies
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Test mobile interface and practice workflows
+        run: |
+          cat > /tmp/test-mama.cjs <<'EOF'
+          const { chromium }=require(process.cwd()+'/node_modules/playwright');
+          (async()=>{
+            const browser=await chromium.launch({headless:true});
+            const page=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+            const errors=[];
+            page.on('pageerror',e=>errors.push(e.message));
+            await page.goto('file://'+process.cwd()+'/mama-akara-osayi-benin.html');
+            await page.locator('#incomingReject').click();
+            const buttons=page.locator('#home button[data-go]');
+            if(await buttons.count()!==6)throw Error('Expected six big buttons');
+            for(const type of ['money','buy','beans','carry','grow']){
+              await page.locator('#home button[data-go="'+type+'"]').click();
+              if(!(await page.locator('#work').isVisible()))throw Error(type+' did not open');
+              await page.locator('#homeBtn').click();
+            }
+            await page.locator('#home button[data-go="orders"]').click();
+            if(!(await page.locator('#mamaJourney').isVisible()))throw Error('Order journey missing');
+            for(let i=0;i<5;i++)await page.locator('#journeyYes').click();
+            if(!(await page.locator('#journeyWords').innerText()).includes('practice don finish'))throw Error('Order not completed');
+            await page.locator('#journeyClose').click();
+            await page.locator('#mamaMessageBtn').click();
+            if(!(await page.locator('#mamaMessages').isVisible()))throw Error('Messages not open');
+            await page.locator('#mamaChatText').fill('I go ready by 9');
+            await page.locator('#mamaChatSend').click();
+            if(!(await page.locator('#mamaChatLog').innerText()).includes('I go ready by 9'))throw Error('Seller reply missing');
+            await page.locator('#mamaBuyerRole').click();
+            await page.locator('#mamaChatText').fill('Thank you Mama');
+            await page.locator('#mamaChatSend').click();
+            if(!(await page.locator('#mamaChatLog').innerText()).includes('Thank you Mama'))throw Error('Buyer reply missing');
+            await page.locator('#mamaChatRead').click();
+            await page.locator('#mamaMessagesClose').click();
+            if(errors.length)throw Error('JS errors: '+errors.join('; '));
+            console.log('PASS: 6 buttons, five-stage order, buyer/seller replies, message audio control, no page errors');
+            await browser.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          EOF
+          node /tmp/test-mama.cjs
