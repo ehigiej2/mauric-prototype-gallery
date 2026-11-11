@@ -1,0 +1,38 @@
+name: Osayi V4 fast integrity gate
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'osayi-construction-command-centre-v4.html'
+      - '.github/workflows/osayi-v4-fast-integrity.yml'
+  workflow_dispatch:
+jobs:
+  integrity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify six buttons, Osayi, and V4 engines without dependencies
+        run: |
+          node <<'JS'
+          const fs=require('fs'),vm=require('vm');
+          const html=fs.readFileSync('osayi-construction-command-centre-v4.html','utf8');
+          const checks={
+            'six main buttons':(html.match(/class="tile" data-step="/g)||[]).length===6,
+            'job lifecycle': ['request','materials','worker','quote','safety','handover'].every(x=>html.includes('data-step="'+x+'"')),
+            'Osayi available': ['id="osayiToggle"','id="osayiPanel"','id="ask"','id="hear"','id="mic"'].every(x=>html.includes(x)),
+            'V4 intelligence': ['id="v4Compare"','id="v4Margin"','id="v4Checklist"','id="v4Answer"'].every(x=>html.includes(x)),
+            'CROWN HOLD':html.includes('CROWN HOLD'),
+            'no remote scripts':!/<script[^>]+src\s*=/.test(html)
+          };
+          for(const [name,pass] of Object.entries(checks)){console.log((pass?'PASS ':'FAIL ')+name);if(!pass)process.exitCode=1}
+          const scripts=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)];
+          for(let i=0;i<scripts.length;i++){new vm.Script(scripts[i][1],{filename:'inline-'+i+'.js'});console.log('PASS inline JS parse '+i)}
+          JS
+      - name: Verify live public content
+        run: |
+          URL=https://ehigiej2.github.io/mauric-prototype-gallery/osayi-construction-command-centre-v4.html
+          curl --fail --location --silent --show-error --max-time 30 "$URL" -o /tmp/public.html
+          grep -q 'osayi-v4-intelligence' /tmp/public.html
+          grep -q 'v4Margin' /tmp/public.html
+          echo 'PASS exact public URL and V4 content'
