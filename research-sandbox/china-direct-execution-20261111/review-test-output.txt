@@ -1,0 +1,23 @@
+PASS fee reduces potential savings
+PASS negative difference retained
+PASS no savings retained
+PASS unknown fee not zero
+PASS mismatched specification blocks ranking
+PASS mismatched quantity blocks ranking
+PASS mismatched currency blocks ranking
+PASS mismatched destination blocks ranking
+PASS mismatched delivery_scope blocks ranking
+PASS mismatched quality_returns blocks ranking
+PASS missing source blocks ranking
+PASS missing valid_until blocks ranking
+PASS missing total blocks ranking
+PASS expired quote blocked
+PASS invalid date blocked
+PASS text quantity blocked
+PASS whitespace price blocked
+PASS negative fee blocked
+PASS infinite price blocked
+PASS brief cannot approve or lift hold
+PASS whitespace evidence rejected
+PASS cost sum overflow rejected
+22 review/hardening tests passed; no supplier quotations verified.

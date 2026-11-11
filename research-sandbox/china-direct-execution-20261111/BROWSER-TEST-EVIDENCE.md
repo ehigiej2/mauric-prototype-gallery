@@ -11,3 +11,5 @@ Observed by executing UI clicks and reading returned DOM snapshots, separate fro
 - Ask Osayi default Pidgin displayed; selecting English changed guidance text. Explicit scripted/no voice limitation visible.
 
 21 arithmetic checks passed; see test-output.txt and test-cost-engine.cjs. This is not an independent third-party audit: the implementing assistant ran a separate test harness and browser checks. Real iPhone/Safari layout, screen-reader usability, live conversations/voice, protected payments, stock integrations, tenant isolation, recovery, fulfilment and returns were NOT tested. No production release or operational acceptance claimed. No customer/tenant data stored; source-reference input is session-only and should not receive personal information.
+
+Follow-up comparison and decision-brief browser checks are recorded in CONTINUATION-20261111.md; 43 arithmetic/comparison checks now pass.
