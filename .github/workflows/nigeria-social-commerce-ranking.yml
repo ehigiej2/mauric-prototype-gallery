@@ -13,4 +13,4 @@ jobs:
         with:
           node-version: '22'
       - name: Validate scoring and unit economics
-        run: node tests/social-commerce-ranking.test.cjs
+        run: node tests/social-commerce-ranking.test.cjs && node tests/evidence-intake.test.cjs
