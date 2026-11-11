@@ -1,0 +1,48 @@
+name: African Sovereign Voice Proof 001
+on:
+  push:
+    branches: [main]
+    paths: ['monarch-african-sovereign-voice-proof-001.html','.github/workflows/monarch-voice-proof-001.yml']
+  workflow_dispatch:
+jobs:
+  evidence:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify reusable identity and audio assets
+        run: |
+          python3 - <<'PY'
+          import json,pathlib
+          m=json.loads(pathlib.Path('audio/stephen-osayi-v5/manifest.json').read_text())
+          assert m['voice_id']=='D0uq55pjZpKu82kXzFOe'
+          assert m['model']=='eleven_v4'
+          assert m['on_demand_synthesis_connected'] is False
+          for name in ('universal','loss','cash','positive','intro'):
+            f=pathlib.Path('audio/stephen-osayi-v5/'+name+'.mp3')
+            assert f.is_file() and f.stat().st_size>1000,(name,'missing')
+          s=pathlib.Path('monarch-african-sovereign-voice-proof-001.html').read_text()
+          assert 'BLOCKED_NO_AUTHORISED_SYNTHESIS_ADAPTER' in s
+          assert 'navigator.clipboard' in s
+          print('PASS manifest, five recorded audio assets, fail-closed synthesis gate')
+          PY
+  public:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Verify public page and all five audio files
+        run: |
+          BASE=https://ehigiej2.github.io/mauric-prototype-gallery
+          for i in {1..18}; do
+            P=$(curl -LsS --max-time 20 -o /tmp/voice-proof.html -w '%{http_code}' "$BASE/monarch-african-sovereign-voice-proof-001.html" || true)
+            M=$(curl -LsS --max-time 20 -o /tmp/voice-manifest.json -w '%{http_code}' "$BASE/audio/stephen-osayi-v5/manifest.json" || true)
+            if [ "$P" = 200 ] && [ "$M" = 200 ] && grep -q 'BLOCKED_NO_AUTHORISED_SYNTHESIS_ADAPTER' /tmp/voice-proof.html; then
+              for key in universal loss cash positive intro; do
+                code=$(curl -LsS --max-time 30 -o "/tmp/$key.mp3" -w '%{http_code}' "$BASE/audio/stephen-osayi-v5/$key.mp3")
+                [ "$code" = 200 ] && [ "$(wc -c <"/tmp/$key.mp3")" -gt 1000 ] || exit 1
+              done
+              echo 'PASS public page, manifest, five audio files'
+              exit 0
+            fi
+            sleep 10
+          done
+          exit 1
