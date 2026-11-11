@@ -1,0 +1,41 @@
+name: Approved Benin UAT release gate
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'approved-*-ng-v1.html'
+      - 'osayi-benin-uat.html'
+      - '.github/workflows/approved-benin-uat-release.yml'
+  workflow_dispatch:
+jobs:
+  public-pages:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Confirm UAT hub targets pinned approved snapshots
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          s=Path('osayi-benin-uat.html').read_text()
+          for name in ('approved-mama-akara-ng-v1.html','approved-tailor-ng-v1.html','approved-building-materials-ng-v1.html'):
+            assert name in s, f'Missing pinned UAT target: {name}'
+            assert Path(name).exists(), f'Missing approved snapshot: {name}'
+            assert Path(name).stat().st_size>5000, f'Unexpectedly small snapshot: {name}'
+          print('PASS: UAT links use three approved snapshot files')
+          PY
+      - name: Verify all four exact public URLs
+        shell: bash
+        run: |
+          set -uo pipefail
+          ROOT="https://ehigiej2.github.io/mauric-prototype-gallery"
+          for NAME in osayi-benin-uat.html approved-mama-akara-ng-v1.html approved-tailor-ng-v1.html approved-building-materials-ng-v1.html; do
+            GOOD=0
+            for i in {1..12}; do
+              CODE=$(curl -L --max-time 25 -sS -o /tmp/approved-page.html -w '%{http_code}' "$ROOT/$NAME" || true)
+              echo "$NAME attempt $i HTTP $CODE"
+              if [ "$CODE" = "200" ] && grep -qi 'osayi' /tmp/approved-page.html && ! grep -q 'File not found' /tmp/approved-page.html; then GOOD=1; break; fi
+              sleep 15
+            done
+            if [ "$GOOD" != 1 ]; then echo "FAIL: $NAME"; exit 1; fi
+            echo "PASS: $NAME"
+          done
