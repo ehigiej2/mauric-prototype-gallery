@@ -73,5 +73,15 @@
     "id": "complete_kit",
     "criterion": "Complete packaged receiver and handover",
     "evidence_required": "Fit/protection/stand/power/connectivity/start-card/ownership/support evidence, actual alert and missed-order tests; all-in funded cost"
+  },
+  {
+    "id": "knowledge_transfer",
+    "criterion": "Demonstrated local support competence",
+    "evidence_required": "Independent trainee teach-back and practical provisioning, diagnosis, recovery, replacement and trainer assessment; accepted reusable handover materials"
+  },
+  {
+    "id": "local_service_authorisation",
+    "criterion": "Written local service and warranty authority",
+    "evidence_required": "OEM-confirmed permitted repairs, named authorised scope, tools/licences, spares, warranty boundaries and escalation route"
   }
 ]

@@ -59,3 +59,11 @@ REUSE-EXISTING-PHONE,complete_kit,Complete packaged receiver and handover,UNKNOW
 SUNMI-CONFIGURED-V3,complete_kit,Complete packaged receiver and handover,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
 EPSON-TM-M30III-VARIANT,complete_kit,Complete packaged receiver and handover,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
 ZEBRA-DS2208-KIT,complete_kit,Complete packaged receiver and handover,UNKNOWN,NOT TESTED / NOT OBTAINED,NOT REVIEWED
+"REUSE-EXISTING-PHONE","knowledge_transfer","Demonstrated local support competence","UNKNOWN","NOT DEMONSTRATED / NOT AUTHORISED","NOT REVIEWED"
+"REUSE-EXISTING-PHONE","local_service_authorisation","Written local service and warranty authority","UNKNOWN","NOT DEMONSTRATED / NOT AUTHORISED","NOT REVIEWED"
+"SUNMI-CONFIGURED-V3","knowledge_transfer","Demonstrated local support competence","UNKNOWN","NOT DEMONSTRATED / NOT AUTHORISED","NOT REVIEWED"
+"SUNMI-CONFIGURED-V3","local_service_authorisation","Written local service and warranty authority","UNKNOWN","NOT DEMONSTRATED / NOT AUTHORISED","NOT REVIEWED"
+"EPSON-TM-M30III-VARIANT","knowledge_transfer","Demonstrated local support competence","UNKNOWN","NOT DEMONSTRATED / NOT AUTHORISED","NOT REVIEWED"
+"EPSON-TM-M30III-VARIANT","local_service_authorisation","Written local service and warranty authority","UNKNOWN","NOT DEMONSTRATED / NOT AUTHORISED","NOT REVIEWED"
+"ZEBRA-DS2208-KIT","knowledge_transfer","Demonstrated local support competence","UNKNOWN","NOT DEMONSTRATED / NOT AUTHORISED","NOT REVIEWED"
+"ZEBRA-DS2208-KIT","local_service_authorisation","Written local service and warranty authority","UNKNOWN","NOT DEMONSTRATED / NOT AUTHORISED","NOT REVIEWED"

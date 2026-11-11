@@ -38,4 +38,18 @@ class HardwareGateTests(unittest.TestCase):
     def test_horizon_positive_integer(self):
         for n in [0,-1,2.5,True]:
             with self.subTest(n=n):self.assertEqual(h.tco(self.costs(),n)['status'],'INVALID')
+    def test_knowledge_transfer_cannot_be_omitted(self):
+        r=[x for x in self.fixture() if x['id']!='knowledge_transfer']
+        self.assertEqual(h.gate(r,self.now)['status'],'BLOCKED')
+    def test_attendance_without_competence_evidence_blocks(self):
+        r=self.fixture()
+        next(x for x in r if x['id']=='knowledge_transfer')['evidence']=' '
+        self.assertEqual(h.gate(r,self.now)['status'],'BLOCKED')
+    def test_training_does_not_replace_repair_authorisation(self):
+        r=[x for x in self.fixture() if x['id']!='local_service_authorisation']
+        self.assertEqual(h.gate(r,self.now)['status'],'BLOCKED')
+    def test_claimed_training_is_not_observed_evidence(self):
+        r=self.fixture()
+        next(x for x in r if x['id']=='knowledge_transfer')['kind']='SUPPLIER-CLAIMED'
+        self.assertEqual(h.gate(r,self.now)['status'],'BLOCKED')
 if __name__=='__main__':unittest.main(verbosity=2)
