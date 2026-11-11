@@ -1,0 +1,43 @@
+name: Osayi construction public and supply-chain integration gate
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/osayi-construction-integration.yml'
+      - 'osayi-construction-finishing-home-repairs-v1.html'
+      - 'osayi-timber-construction-supply-v1.html'
+  workflow_dispatch:
+jobs:
+  integration:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify public links and supply chain journey evidence
+        shell: bash
+        run: |
+          ROOT=https://ehigiej2.github.io/mauric-prototype-gallery
+          for FILE in osayi-construction-finishing-home-repairs-v1.html osayi-timber-construction-supply-v1.html; do
+            OK=0
+            for i in {1..12}; do
+              CODE=$(curl -L -sS --max-time 25 -o /tmp/verified.html -w '%{http_code}' "$ROOT/$FILE" || true)
+              if [ "$CODE" = 200 ] && grep -q 'osayiToggle' /tmp/verified.html; then OK=1; break; fi
+              sleep 15
+            done
+            [ "$OK" = 1 ] || { echo "FAIL public $FILE"; exit 1; }
+            echo "PASS public $FILE"
+          done
+          python3 - <<'PY'
+          from pathlib import Path
+          timber=Path('osayi-timber-construction-supply-v1.html').read_text()
+          repairs=Path('osayi-construction-finishing-home-repairs-v1.html').read_text()
+          for term in ('forest','sawmill','carpenter','builder','materials','supply'):
+            assert 'data-sector="'+term+'"' in timber, term
+          for term in ('electrical','plumbing','finishing','fabrication','repairs','job'):
+            assert 'data-go="'+term+'"' in repairs, term
+          for term in ('Supplier and material evidence check','Independent qualified trade assessment','Customer request and consent','evidence and handover','Existing payment provider'):
+            assert term in repairs, term
+          for term in ('Validate lawful log origin','Confirm sawmill conversion','Quote builder/carpenter','vehicle, loading and delivery proof'):
+            assert term in timber, term
+          print('PASS: source-defined supplier → tradesperson → quote → safety → handover chain exists')
+          print('NOTE: cross-app shared transaction state and live supplier connectivity NOT IMPLEMENTED')
+          PY
