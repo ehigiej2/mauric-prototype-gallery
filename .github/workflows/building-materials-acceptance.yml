@@ -1,0 +1,44 @@
+name: Building Materials Osayi acceptance
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'building-materials-osayi-nigeria.html'
+      - '.github/workflows/building-materials-acceptance.yml'
+  workflow_dispatch:
+jobs:
+  mobile:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Exercise materials shop on mobile Chromium
+        run: |
+          cat > /tmp/materials-test.cjs <<'EOF'
+          const {chromium}=require(process.cwd()+'/node_modules/playwright');
+          (async()=>{
+            const b=await chromium.launch();const p=await b.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});const errors=[];p.on('pageerror',e=>errors.push(e.message));
+            await p.goto('file://'+process.cwd()+'/building-materials-osayi-nigeria.html');
+            if(await p.locator('.tile').count()!==6)throw Error('six buttons missing');
+            for(const t of ['stock','price','delivery','orders','supplier','grow']){
+              await p.locator('[data-go="'+t+'"]').click();
+              if(!(await p.locator('#work').isVisible()))throw Error(t+' not open');
+              if(t==='stock'){await p.locator('#checkStock').click();if(!(await p.locator('#result').innerText()).includes('stock'))throw Error('stock')}
+              if(t==='price'){await p.locator('#calc').click();if(!(await p.locator('#result').innerText()).includes('Contribution'))throw Error('quote')}
+              if(t==='delivery'){for(const id of ['truck','load','access','proof'])await p.locator('#'+id).check();await p.locator('#checkDelivery').click();if(!(await p.locator('#result').innerText()).includes('complete'))throw Error('delivery')}
+              if(t==='orders'){await p.locator('#saveOrder').click();await p.locator('#next').click();if(!(await p.locator('#stageCount').innerText()).includes('2 /'))throw Error('order')}
+              if(t==='supplier'){await p.locator('#compare').click();if(!(await p.locator('#result').innerText()).includes('landed'))throw Error('supplier')}
+              if(t==='grow'){await p.locator('#forecast').click();if(!(await p.locator('#result').innerText()).includes('weekly'))throw Error('grow')}
+              await p.locator('#back').click();
+            }
+            await p.locator('#openChat').click();await p.locator('#chatInput').fill('10 bags ready');await p.locator('#send').click();if(!(await p.locator('#chatLog').innerText()).includes('10 bags ready'))throw Error('chat');await p.locator('#chatClose').click();
+            await p.locator('#startGuide').click();for(let i=0;i<8;i++)await p.locator('#guideNext').click();if(!(await p.locator('#guideWords').innerText()).includes('Well done'))throw Error('guide');await p.locator('#guideClose').click();
+            if(errors.length)throw Error(errors.join('; '));console.log('PASS: six workflows, simulated quote, delivery, order, supplier, chat and nine-step Osayi guide');await b.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          EOF
+          node /tmp/materials-test.cjs
