@@ -1,0 +1,40 @@
+name: Osayi V8 recorded voice and mobile acceptance
+on:
+  push:
+    branches: [main]
+    paths: ['osayi-construction-command-centre-v8.html','.github/workflows/osayi-construction-v8.yml']
+  workflow_dispatch:
+jobs:
+  mobile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install chromium
+      - run: |
+          cat >/tmp/v8.cjs <<'JS'
+          const {chromium,devices}=require(process.cwd()+'/node_modules/playwright');
+          (async()=>{const b=await chromium.launch();const p=await b.newPage({...devices['iPhone 13']});const errs=[];p.on('pageerror',e=>errs.push(e.message));await p.goto('file://'+process.cwd()+'/osayi-construction-command-centre-v8.html');
+          await p.locator('#v7Question').fill('How much profit?');await p.locator('#v7Ask').click();if(!(await p.locator('#v7Answer').textContent()).includes('No saved quote'))throw Error('Text response missing');
+          if(!(await p.locator('#v8Recording source').getAttribute('src')).includes('osayi-african-sovereign-v4.mp3'))throw Error('Recorded voice missing');
+          await p.locator('#v8Play').click();if(!(await p.locator('#v8Status').textContent()).length)throw Error('Audio feedback missing');
+          if(await p.locator('#home .tile:visible').count()!==6)throw Error('Missing six stages');
+          if(errs.length)throw Error(errs.join(';'));console.log('PASS V8 text response, recording control, six stages');await b.close()})().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node /tmp/v8.cjs
+  public:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - run: |
+          PAGE=https://ehigiej2.github.io/mauric-prototype-gallery/osayi-construction-command-centre-v8.html
+          AUDIO=https://ehigiej2.github.io/mauric-prototype-gallery/osayi-african-sovereign-v4.mp3
+          for i in {1..18}; do
+            P=$(curl -LsS --max-time 20 -o /tmp/v8.html -w '%{http_code}' "$PAGE" || true)
+            A=$(curl -LsS --max-time 30 -o /tmp/v8.mp3 -w '%{http_code}' "$AUDIO" || true)
+            if [ "$P" = 200 ] && [ "$A" = 200 ] && grep -q 'osayi-v8-recorded-audio' /tmp/v8.html && [ "$(wc -c </tmp/v8.mp3)" -gt 100000 ]; then echo 'PASS public page and recorded MP3'; exit 0; fi
+            sleep 10
+          done
+          exit 1
