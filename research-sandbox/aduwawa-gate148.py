@@ -3,7 +3,7 @@
 Usage: python research-sandbox/aduwawa-gate148.py
 Requires: playwright Python and installed Chromium. No deployment, orders or payments.
 """
-import json, os, pathlib, sys, datetime
+import json, os, pathlib, sys, datetime, hashlib, traceback
 from playwright.sync_api import sync_playwright
 
 ROOT=pathlib.Path(__file__).resolve().parent
@@ -22,6 +22,8 @@ def run():
     with sync_playwright() as p:
         browser=p.chromium.launch(executable_path=os.environ.get("CHROMIUM_PATH","/usr/bin/chromium"),headless=True,args=["--no-sandbox"])
         page=browser.new_page()
+        page_errors=[]
+        page.on("pageerror",lambda error:page_errors.append(str(error)))
         page.goto(HTML.as_uri())
         page.locator("#compute").click()
         page.locator("#confirm").click()
@@ -60,8 +62,9 @@ def run():
         page.locator("#stoplisten").click()
         check("microphone stop control",lambda:"stopped" in text(page,"#voiceStatus"))
         check("consent cleared",lambda:not page.locator("#voiceConsent").is_checked())
+        check("no uncaught browser JavaScript errors",lambda:not page_errors)
         page.screenshot(path=str(ROOT/"gate148-local-screenshot.png"),full_page=True)
-        evidence={"captured_utc":datetime.datetime.now(datetime.timezone.utc).isoformat(),"prototype":str(HTML),"browser_version":browser.version,"checks":checks,"note":"Local Chromium only. No physical microphone, Safari, voice model, network or hardware validation."}
+        evidence={"captured_utc":datetime.datetime.now(datetime.timezone.utc).isoformat(),"prototype":str(HTML),"prototype_sha256":hashlib.sha256(HTML.read_bytes()).hexdigest(),"browser_version":browser.version,"browser_page_errors":page_errors,"checks":checks,"note":"Local Chromium only. No physical microphone, Safari, voice model, network or hardware validation."}
         OUT.write_text(json.dumps(evidence,indent=2),encoding="utf-8")
         browser.close()
         passed=sum(c["status"]=="PASS" for c in checks)
@@ -71,4 +74,5 @@ if __name__=="__main__":
     try: sys.exit(run())
     except Exception as e:
         print("BLOCKED: "+str(e),file=sys.stderr)
+        traceback.print_exc()
         sys.exit(2)
