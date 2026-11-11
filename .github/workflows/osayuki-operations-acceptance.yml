@@ -26,6 +26,9 @@ jobs:
           assert(html.includes('on_demand_synthesis_connected')===false,'Voice claims must be manifest-based');
           assert(html.includes("(fields[k]||['Completed jobs'"),'Decision Brief must support economics records');
           assert(html.includes('document.body.appendChild(a)'),'Safari export link must be attached');
+          assert(html.includes("records[name]?'Saved in this session."),'Saved-state navigation feedback missing');
+          assert(html.includes('records[name]=fields[name].map'),'Research save handler missing');
+          assert(html.includes("b.onclick=()=>view(b.dataset.view)"),'Workflow navigation handler missing');
           const context={console};context.globalThis=context;vm.createContext(context);
           for(const file of ['engines/monarch-conversation-engine-v1.js','engines/monarch-business-conversation-v1.js']){
             vm.runInContext(fs.readFileSync(file,'utf8'),context,{filename:file});
