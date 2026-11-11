@@ -26,7 +26,9 @@ jobs:
             await page.goto('file://'+process.cwd()+'/mama-put-ebo-pepper-rice-osayi.html');
             await page.locator('#brand').evaluate(el=>{el.value='eno';el.dispatchEvent(new Event('change',{bubbles:true}))});
             const visibleButtons=await page.locator('#home .big:visible').count();
-            if(visibleButtons!==6)throw Error('HOME SCREEN FAILURE: expected six visible buttons, got '+visibleButtons);\n            const headerVisible=await page.locator('header').isVisible();\n            if(!headerVisible)throw Error('Header not visible');
+            if(visibleButtons!==6)throw Error('HOME SCREEN FAILURE: expected six visible buttons, got '+visibleButtons);
+            const headerVisible=await page.locator('header').isVisible();
+            if(!headerVisible)throw Error('Header not visible');
             if(!await page.locator('#home').isVisible())throw Error('HOME SCREEN FAILURE: home not visible');
             if(!await page.locator('#brandIntro').textContent().then(s=>s.includes('Mama Ebo')||s.includes('Pepper rice')))throw Error('Mama Ebo selection failed');
             for(const action of ['menu','price','order','kitchen','delivery','grow']){
