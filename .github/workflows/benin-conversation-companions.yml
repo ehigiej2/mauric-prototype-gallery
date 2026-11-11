@@ -1,0 +1,52 @@
+name: Approved Benin conversational companion gate
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'engines/monarch-business-conversation-v1.js'
+      - 'osayi-*-conversation-candidate-v2.html'
+      - '.github/workflows/benin-conversation-companions.yml'
+  workflow_dispatch:
+jobs:
+  logic:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify original approval files and reusable engine
+        run: |
+          node <<'JS'
+          const fs=require('fs'),vm=require('vm');
+          const original=['approved-mama-akara-ng-v1.html','approved-tailor-ng-v1.html','approved-building-materials-ng-v1.html'];
+          for(const p of original)if(!fs.existsSync(p))throw Error('Approved V1 missing '+p);
+          for(const p of ['engines/monarch-conversation-engine-v1.js','engines/monarch-business-conversation-v1.js'])new vm.Script(fs.readFileSync(p,'utf8'));
+          const core=require('./engines/monarch-conversation-engine-v1.js');global.MonarchConversationEngine=core;
+          const biz=require('./engines/monarch-business-conversation-v1.js');
+          for(const domain of ['akara','tailor','materials']){
+            const s=biz.create({domain});let r=s.ask('How much profit?',{sales:100000,cost:70000,unpaid:20000});
+            if(!r.text.includes('₦30,000')||!r.text.includes('₦80,000'))throw Error('Financial result '+domain+': '+r.text);
+            r=s.ask('What did I ask before?');
+            if(!r.text.includes('How much profit?'))throw Error('Turn memory '+domain);
+            if(s.speech().status!=='BLOCKED')throw Error('Voice gate '+domain);
+            const p='osayi-'+domain+'-conversation-candidate-v2.html';
+            const html=fs.readFileSync(p,'utf8');
+            if(!html.includes('monarch-business-conversation-v1.js')||!html.includes('CROWN HOLD'))throw Error('Missing adapter '+domain);
+          }
+          console.log('PASS three domain companions, financial math, memory, speech HOLD, approved originals present');
+          JS
+  public:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Verify all public candidate pages and shared adapters
+        run: |
+          BASE=https://ehigiej2.github.io/mauric-prototype-gallery
+          for i in {1..18}; do
+            ok=1
+            for p in osayi-akara-conversation-candidate-v2.html osayi-tailor-conversation-candidate-v2.html osayi-materials-conversation-candidate-v2.html engines/monarch-conversation-engine-v1.js engines/monarch-business-conversation-v1.js; do
+              code=$(curl -LsS --max-time 20 -o /tmp/companion -w '%{http_code}' "$BASE/$p" || true)
+              [ "$code" = 200 ] || ok=0
+            done
+            [ "$ok" = 1 ] && { echo 'PASS all five public resources'; exit 0; }
+            sleep 10
+          done
+          exit 1
