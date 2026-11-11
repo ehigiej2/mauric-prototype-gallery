@@ -1,0 +1,26 @@
+name: Verify connected construction public URL
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'osayi-connected-construction-job-v1.html'
+      - '.github/workflows/osayi-connected-public.yml'
+  workflow_dispatch:
+jobs:
+  public:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Verify exact live page and six buttons
+        run: |
+          URL=https://ehigiej2.github.io/mauric-prototype-gallery/osayi-connected-construction-job-v1.html
+          for i in {1..12}; do
+            CODE=$(curl -L --max-time 25 -sS -o /tmp/page.html -w '%{http_code}' "$URL" || true)
+            echo "Attempt $i HTTP $CODE"
+            if [ "$CODE" = 200 ] && grep -q 'One Job, One Journey' /tmp/page.html && grep -q 'data-step="handover"' /tmp/page.html && grep -q 'osayiToggle' /tmp/page.html; then
+              echo "PASS exact public app URL"
+              exit 0
+            fi
+            sleep 15
+          done
+          echo "FAIL public URL"
+          exit 1
