@@ -23,8 +23,16 @@ def run():
         browser=p.chromium.launch(executable_path=os.environ.get("CHROMIUM_PATH","/usr/bin/chromium"),headless=True,args=["--no-sandbox"])
         page=browser.new_page()
         page.goto(HTML.as_uri())
+        page.locator("#compute").click()
+        page.locator("#confirm").click()
+        before=(page.locator('[data-role="cattle"]').get_attribute("aria-pressed"),
+                text(page,"#math"),text(page,"#ledger"),page.locator("#qty").input_value())
         page.locator("#tests").click()
         check("19 embedded checks",lambda:"19/19 assertions" in text(page,"#testout"))
+        after=(page.locator('[data-role="cattle"]').get_attribute("aria-pressed"),
+               text(page,"#math"),text(page,"#ledger"),page.locator("#qty").input_value())
+        check("self-tests restore trader quote and approval",lambda:before==after)
+        page.locator("#reset").click()
         page.locator("#confirm").click()
         check("approval without calculation blocked",lambda:"BLOCKED" in text(page,"#ledger"))
         page.locator("#compute").click()
