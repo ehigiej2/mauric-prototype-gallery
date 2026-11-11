@@ -23,11 +23,13 @@ jobs:
             const browser=await chromium.launch({headless:true});
             const page=await browser.newPage({...devices['iPhone 13'],browserName:undefined});
             const errors=[];page.on('pageerror',e=>errors.push(e.message));
-            await page.goto('file://'+process.cwd()+'/mama-put-ebo-pepper-rice-osayi.html');
+            await page.goto('file://'+process.cwd()+'/mama-ebo-six-buttons-v3.html');
             await page.locator('#brand').evaluate(el=>{el.value='eno';el.dispatchEvent(new Event('change',{bubbles:true}))});
             const visibleButtons=await page.locator('#home .big:visible').count();
             if(visibleButtons!==6)throw Error('HOME SCREEN FAILURE: expected six visible buttons, got '+visibleButtons);
             const headerVisible=await page.locator('header').isVisible();
+            const metrics=await page.evaluate(()=>({height:innerHeight,top:document.querySelector('#home').getBoundingClientRect().top,bottom:document.querySelector('#home').getBoundingClientRect().bottom,buttons:[...document.querySelectorAll('#home .big')].map(x=>({top:x.getBoundingClientRect().top,bottom:x.getBoundingClientRect().bottom}))}));
+            if(metrics.buttons.some(x=>x.top<0||x.bottom>metrics.height))throw Error('HOME VIEWPORT FAILURE: six buttons do not fit screen '+JSON.stringify(metrics));
             if(!headerVisible)throw Error('Header not visible');
             if(!await page.locator('#home').isVisible())throw Error('HOME SCREEN FAILURE: home not visible');
             if(!await page.locator('#brandIntro').textContent().then(s=>s.includes('Mama Ebo')||s.includes('Pepper rice')))throw Error('Mama Ebo selection failed');
