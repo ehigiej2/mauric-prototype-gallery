@@ -1,13 +1,13 @@
 DRAFT — NOT SENT
 To: SUNMI regional sales, mea@sunmi.com
-Subject: Non-binding qualification and quotation — planned 1,000 Nigeria order-receiver kits
+Subject: Non-binding qualification and quotation — planned 1,000–5,000 Nigeria order-receiver kits
 
 Hello,
-We are preparing a proposed procurement of at least 1,000 dedicated order-receiving devices for traders in Benin City, Edo State, Nigeria, subject to budget, technical validation, approvals and agreed terms. We have not placed an order, confirmed funding or committed customer volumes.
+We are preparing a proposed procurement of 1,000 dedicated order-receiving devices initially, with consideration of up to 5,000 only if pricing and overall economics justify it for traders in Benin City, Edo State, Nigeria, subject to budget, technical validation, approvals and agreed terms. We have not placed an order, confirmed funding or committed customer volumes.
 
 Please compare a currently supported phone-sized Android receiver configuration against a printer-equipped SUNMI configuration. Traders should receive a preconfigured device; no installation on their personal phone is required. Printing is optional. Please identify the authorised Nigerian supply and repair route.
 
-Quote 1,000 complete kits and, separately, the optional 2,000-unit price tier. Price validation samples separately without assuming a free sample or follow-on award. Itemise device, stand, correct charger/cable, protective packaging/identity band/start card, authorised provisioning, management licences, data/connectivity, support, spares, shipping/taxes and all recurring costs. Confirm exact SKU, regulatory code, firmware/browser/notification and kiosk deployment requirements, lifecycle/security patch dates, production capacity, stock/lead time, quotation currency/validity and protected payment options.
+Quote identical complete kits at 1,000, 2,000 and 5,000 units. For the 5,000 tier, separately quote a possible initial 1,000-unit call-off with optional later releases, supplier-held stock and price validity. State clearly any binding minimum, deposit/reservation charge, cancellation penalty or repricing; we assume none of these terms is available until agreed. Compare total cash commitment and all recurring charges, not only unit prices. Price validation samples separately without assuming a free sample or follow-on award. Itemise device, stand, correct charger/cable, protective packaging/identity band/start card, authorised provisioning, management licences, data/connectivity, support, spares, shipping/taxes and all recurring costs. Confirm exact SKU, regulatory code, firmware/browser/notification and kiosk deployment requirements, lifecycle/security patch dates, production capacity, stock/lead time, quotation currency/validity and protected payment options.
 
 We need exact-device demonstrations of foreground/background alerts, sound/wake/reboot, network failure/recovery, duplicate/cancelled/expired requests and acknowledgement. No existing MONARCH integration is represented as operational.
 

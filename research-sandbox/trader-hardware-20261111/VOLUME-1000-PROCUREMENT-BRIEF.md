@@ -1,10 +1,10 @@
-# Planned volume purchase — minimum 1,000 order receivers
+# Planned volume purchase — 1,000 baseline; up to 5,000 conditional
 11 November 2026. Founder stated: “we are going to purchase Atleast 1000 pieces”.
 Record this as intended procurement quantity, not an executed order, funded budget, supplier acceptance or permission to pay an unspecified amount.
 
 ## Requested buying outcome
 At least 1,000 dedicated supported order-receiving devices, each priced as a complete usable kit: receiver, stand, safe charger/cable, appropriate protection and low-cost identity band/start card, authorised provisioning, training/support, and separately disclosed connectivity. No personal-phone download required from trader. Printer optional, not baseline. No mandatory bank switch or unapproved device finance.
-Request binding-price validity for supplier quotations, but enquiries themselves remain non-binding. Quote 1,000 units and optional 2,000-unit price break; no claim that either order has been awarded or funded.
+Request written quotation validity; enquiries remain non-binding. Compare 1,000 / 2,000 / 5,000 units of the identical complete-kit specification. Founder added 5,000 as conditional on better pricing, not as a firm funded order. No quantity has been awarded.
 
 ## Cost and commercial schedule to obtain
 Exact hardware/regulatory model and configuration; device unit cost; kit/packaging and setup; samples separately; factory capacity and allocation; production/dispatch milestones; China-direct versus Nigeria-supported delivered scope; insurance/duty/VAT/clearance/Benin delivery; data, EMM/device-management and service licences; repair freight, consumables and replacements; currency/FX validity and payment protection.
@@ -29,3 +29,11 @@ Original CROWN HOLD still controls unspecified purchase/deposit/signature/paymen
 Founder quantity: VERIFIED conversation instruction.
 1,000-unit supplier price, capacity, inventory, kit TCO and actual device compatibility: UNKNOWN.
 Earlier software simulations do not establish physical acceptance or order delivery.
+
+## Conditional 5,000-unit tier — founder update
+Compare identical supported devices, accessories, packaging, provisioning, Nigerian warranty and service scope. Capture total purchase cash, staged-payment terms, monthly fleet data/support and full24-month ownership cost at each tier. Keep all actual amounts UNKNOWN until written quotes exist.
+Request a5,000-unit price with an initial1,000-unit call-off and optional remaining batches; disclose reservation fee, cancellation/repricing rights, minimum binding commitment and supplier-held stock terms. This is a negotiation request, not an assumed available deal. A5,000-unit contract can create full liability even with staged deliveries; obtain explicit legal/founder approval before any such arrangement.
+Compare buying only needed initial units at the1,000 price against accepting5,000-unit commitment. Include the4,000 extra devices, storage, handling, insurance, obsolescence, firmware support, warranty start, activation, damage, replacement and deployment capacity. Do not count the extra4,000 as free savings or assume5,000 willing/funded traders.
+Pure arithmetic: each NGN1,000 per-kit difference across5,000 changes that tier's acquisition total by NGN5,000,000. Actual total exposure still depends on price×quantity and all other costs.
+Recommend5,000 only if incremental demand/approved allocation, funding, exact-device validation, supported lifecycle and comparative economics justify the additional exposure. Prefer negotiating scalable unit rates without speculative stock where genuinely offered.
+Budget per landed kit and total funding ceiling remain unanswered. New hardware outreach is still UNSENT and requires the named-counterparty authority and confirmed sender already recorded.
