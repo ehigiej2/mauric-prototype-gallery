@@ -1,0 +1,39 @@
+name: Osayi conversational candidate public checks
+on:
+  push:
+    branches: [main]
+    paths:
+      - '*-osayi-conversation-candidate.html'
+      - '.github/workflows/osayi-conversation-candidates.yml'
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate all three candidates and approved snapshots remain separate
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          for name in ('mama-akara','tailor','building-materials'):
+            candidate=Path(name+'-osayi-conversation-candidate.html')
+            approved=Path('approved-'+('mama-akara-ng-v1' if name=='mama-akara' else name+'-ng-v1')+'.html')
+            a=candidate.read_text(); b=approved.read_text()
+            assert 'osayiCompanion' in a and 'osayiAskComp' in a and 'osayiHearComp' in a and 'osayiMicComp' in a
+            assert a!=b and len(a)>len(b)
+            print('PASS: distinct Osayi companion candidate',name)
+          PY
+      - name: Check exact public pages
+        run: |
+          ROOT=https://ehigiej2.github.io/mauric-prototype-gallery
+          for N in mama-akara tailor building-materials; do
+            NAME="$N-osayi-conversation-candidate.html"
+            OK=0
+            for i in {1..12}; do
+              CODE=$(curl -L -sS --max-time 25 -o /tmp/osayi.html -w '%{http_code}' "$ROOT/$NAME" || true)
+              if [ "$CODE" = "200" ] && grep -q 'osayiCompanion' /tmp/osayi.html; then OK=1; break; fi
+              sleep 15
+            done
+            [ "$OK" = 1 ] || { echo "FAIL $NAME"; exit 1; }
+            echo "PASS $NAME"
+          done
