@@ -36,7 +36,9 @@ const options={tenant:'demo-tenant',prototype:'trade',storage,crypto:webcrypto,n
  const race=create({...options,crypto:controlledCrypto});
  const pending=race.save({notes:'Must never reappear',questions:[]},pass,{consent:true});
  await started;
- race.clear();
+ // A second instance sharing storage must be able to revoke the first instance's save.
+ const peer=create({...options,crypto:webcrypto});
+ peer.clear();
  releaseEncryption();
  await assert.rejects(pending,/Save cancelled by deletion/);
  assert.equal(race.hasSaved(),false,'Pending save resurrected deleted research');
