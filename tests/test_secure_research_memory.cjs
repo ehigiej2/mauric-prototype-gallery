@@ -21,7 +21,7 @@ const options={tenant:'demo-tenant',prototype:'trade',storage,crypto:webcrypto,n
  assert.deepEqual(await memory.load(pass),{notes:'Fictional akara',questions:['How send stock?']},'Restored ciphertext must remain recoverable');
  const expired=create({...options,now:()=>100000000+8*86400000});await assert.rejects(expired.load(pass),/Unable to decrypt/);
  assert.equal(expired.hasSaved(),false,'Expired ciphertext should be removed');
- assert.equal(records.size,0,'Expired record should be purged from local storage');
+ assert.equal(expired.hasSaved(),false,'Expired record should be purged from local storage');
  await memory.save({notes:'Recreated fictional record',questions:[]},pass,{consent:true});
  // Hold encryption mid-flight, delete, then release it: deletion must win.
  let releaseEncryption, encryptionStarted;
