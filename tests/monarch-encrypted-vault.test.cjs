@@ -1,5 +1,5 @@
 const assert=require('node:assert/strict');const crypto=require('node:crypto').webcrypto;const fs=require('node:fs'),vm=require('node:vm');
-const ctx={TextEncoder,TextDecoder,Buffer};vm.runInNewContext(fs.readFileSync(__dirname+'/monarch-encrypted-vault.js','utf8'),ctx);
+const ctx={TextEncoder,TextDecoder,Buffer};vm.runInNewContext(fs.readFileSync(__dirname+'/../shared/monarch-encrypted-vault.js','utf8'),ctx);
 const api=ctx.MonarchEncryptedVault;
 (async()=>{
 const db=new Map(),storage={getItem:async k=>db.get(k),setItem:async(k,v)=>{db.set(k,v)},removeItem:async k=>{db.delete(k)}};
