@@ -17,6 +17,21 @@ function connect({tenant,prototype,storage,now=()=>Date.now()}={}){
   if(entries.length>=100)throw Error('Ledger capacity reached');
   storage.setItem(key,JSON.stringify([...entries,event]));return Object.freeze({...event});
  }
+ // Single-action adapter for authorised conversation interfaces.
+ // The caller must explicitly supply an approval event; never infer approval
+ // from assistant text, a model summary, or an untrusted chat message.
+ function captureApproved({decisionKey,summary,source,approvedBy,approvalRecorded=false}={}){
+  if(!ID.test(decisionKey||''))throw Error('Valid decision key required');
+  if(approvalRecorded!==true)throw Error('Explicit approval record required');
+  const existing=read().find(x=>x.id===decisionKey);
+  if(existing){
+   if(existing.summary!==summary||existing.source!==source||existing.approvedBy!==approvedBy)
+    throw Error('Decision key conflict: use a new key and supersede explicitly');
+   return Object.freeze({...existing,alreadyRecorded:true});
+  }
+  return lock({id:decisionKey,summary,source,approvedBy,approvalRecorded});
+ }
+ function latestLocked(){return list().filter(x=>x.status==='locked').sort((a,b)=>b.at-a.at);}
  function change({id,status,approvedBy}={}){
   if(!ID.test(id||'')||!TYPES.has(status)||status==='locked'||typeof approvedBy!=='string'||approvedBy.length<2)throw Error('Invalid change');
   const entries=read(),idx=entries.findIndex(x=>x.id===id);
@@ -27,7 +42,7 @@ function connect({tenant,prototype,storage,now=()=>Date.now()}={}){
  }
  function list(){return read().map(x=>Object.freeze({...x}));}
  function clear(){storage.removeItem(key);}
- return Object.freeze({lock,change,list,clear});
+ return Object.freeze({lock,captureApproved,latestLocked,change,list,clear});
 }
 root.MauricSyntheticDecisionLedger=Object.freeze({connect});
 if(typeof module!=='undefined'&&module.exports)module.exports={connect};
