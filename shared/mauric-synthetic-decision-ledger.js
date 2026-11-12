@@ -25,6 +25,7 @@ function connect({tenant,prototype,storage,now=()=>Date.now()}={}){
   if(approvalRecorded!==true)throw Error('Explicit approval record required');
   const existing=read().find(x=>x.id===decisionKey);
   if(existing){
+   if(existing.status!=='locked')throw Error('Decision no longer active: explicit new approval required');
    if(existing.summary!==summary||existing.source!==source||existing.approvedBy!==approvedBy)
     throw Error('Decision key conflict: use a new key and supersede explicitly');
    return Object.freeze({...existing,alreadyRecorded:true});
