@@ -22,9 +22,9 @@ const pod=a.execute({...base,action:"POD_RECORD",key:"pod-1",expectedRevision:4}
 assert.equal(pod.fulfilment,"POD_SIM");
 assert.throws(()=>a.execute({...base,action:"REFUND_REQUEST",key:"refund-1",expectedRevision:5,amountMinor:100000}),/Refund not eligible/);
 a.register("CASE_02");
-assert.throws(()=>a.execute({...base,action:"PAYMENT_REQUEST",key:"x",expectedRevision:1,amountMinor:0}),/Positive amount/);
-assert.throws(()=>a.execute({...base,action:"PAYMENT_REQUEST",key:"x",expectedRevision:1,amountMinor:10}),/Case not found/);
-assert.throws(()=>a.execute({...base,action:"PAYMENT_REQUEST",key:"x",expectedRevision:1,amountMinor:10,simulationAcknowledgement:"owner"}),/Synthetic-only/);
+assert.throws(()=>a.execute({...base,action:"PAYMENT_REQUEST",key:"xx",expectedRevision:1,amountMinor:0}),/Positive amount/);
+assert.throws(()=>a.execute({...base,action:"PAYMENT_REQUEST",key:"xx",expectedRevision:1,amountMinor:10}),/Case not found/);
+assert.throws(()=>a.execute({...base,action:"PAYMENT_REQUEST",key:"xx",expectedRevision:1,amountMinor:10,simulationAcknowledgement:"owner"}),/Synthetic-only/);
 assert.equal(b.evidence().length,0);
 a.stop("CASE_02");
 assert.throws(()=>a.execute({...base,caseId:"CASE_02",action:"PAYMENT_REQUEST",key:"stop",expectedRevision:2,amountMinor:100}),/STOPPED/);
