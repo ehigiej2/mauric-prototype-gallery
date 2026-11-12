@@ -16,5 +16,5 @@ function mount(){
  holder.querySelector('#researchRecover').onclick=async()=>{try{const data=await memory.load(pass.value);if(!data){status.textContent='No saved research for this demo scope.';return;}note.value=data.notes;status.textContent='Fictional research recovered locally.';}catch{status.textContent='Recovery failed: wrong passphrase, expired or invalid record.';}};
  holder.querySelector('#researchDelete').onclick=()=>{memory.clear();note.value='';pass.value='';consent.checked=false;status.textContent='Local encrypted research record deleted.';};
 }
-document.querySelectorAll('.tile[data-mode="osayi"]').forEach(b=>b.addEventListener('click',mount));
+document.querySelectorAll('.tile').forEach(b=>b.addEventListener('click',()=>{document.querySelector('#researchMemory')?.remove();if(b.dataset.mode==='osayi')mount();}));
 })();
