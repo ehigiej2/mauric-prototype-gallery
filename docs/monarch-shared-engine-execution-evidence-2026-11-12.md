@@ -47,3 +47,12 @@
 - Executed four additional checks against fetched engine source: first reference creates REQUEST, duplicate reference is idempotent, assurance checks default UNKNOWN, unsupported PAYMENT kind is rejected. **4/4 passed**.
 - Regression suite extended with the same metadata-only capture checks. Test source is committed; browser event delivery has not been verified in Safari or end-to-end browser automation.
 - These event details are client-originated and spoofable. They are not authoritative records and cannot prove a real workflow occurred. No server-side authentication, persistence, or audit guarantee is implied.
+
+## Adversarial handoff hardening — follow-up
+- Handoff receiver now rejects malformed timestamps, timestamps more than 2 minutes in the future, and references older than 15 minutes (using injected clock).
+- A repeated same-case handoff with a different source revision/timestamp fingerprint is rejected as a conflicting replay; an identical replay is idempotent.
+- Updated committed regression suite uses deterministic clocks and tests stale and conflicting replay rejection.
+- Executed the committed test source against the exact fetched engine source in an isolated V8 harness: **PASS**.
+- Engine blob SHA: `a57f852ac0b7aac9dd35f6f3c9b744844ba4afba`.
+- Test blob SHA: `b9b38ff01abe45bfec650384a3607fa10bfc0edc`.
+- This is still not cryptographic authenticity: packets can be forged by a client, the source revision is not independently checked against a trusted source, and replay state is in-memory only. The 15-minute freshness check limits accidental stale reuse, not a determined attacker.
