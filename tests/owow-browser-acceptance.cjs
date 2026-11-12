@@ -27,7 +27,7 @@ const {chromium}=require('playwright');
   await p.locator('.tile[data-mode="sell"]').click();await p.locator('[name="item"]').fill('Fictional akara');await p.locator('[name="amount"]').fill('250');await p.locator('[name="quantity"]').fill('2');await p.locator('#journey button[type="submit"]').click();
   assert.equal(await p.evaluate(()=>state.orders.length),1);
   assert.equal(await p.locator('#journey button[type="submit"]').isDisabled(),true);count++;
-  await p.reload();assert.equal(await p.evaluate(()=>state.orders.length),0,'Known limitation: Waka state must not be misrepresented as persistent');count++;
+  await p.reload();const recovered=await p.evaluate(()=>state.orders.length);assert.equal(recovered,0,'Research baseline must not claim persistence until encrypted recovery is integrated');count++;
   await p.locator('.tile[data-mode="osayi"]').click();await p.locator('#playIntro').click();await p.waitForTimeout(700);
   const audio=await p.locator('#osayiIntro').evaluate(a=>({time:a.currentTime,ready:a.readyState,error:a.error?.message||null}));
   assert.ok(audio.time>0&&audio.ready>=2&&!audio.error,'Recorded audio browser playback');count++;
