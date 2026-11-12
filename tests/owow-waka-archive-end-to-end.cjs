@@ -34,6 +34,18 @@ const server=http.createServer((req,res)=>{
   await p.locator('#owowArchiveRestore').click();
   await assertEventually(p,'#owowArchiveStatus','Quarantined archive recovered: 1 orders');
   assert.equal(await p.evaluate(()=>state.orders.length),0,'Quarantined data must not execute');
+  // The passphrase must never remain in the form after either operation.
+  assert.equal(await p.locator('#owowArchivePass').inputValue(),'','Passphrase cleared after restore');
+  // A new tab must not overwrite an archive it has not inspected (CAS fail-closed).
+  const second=await context.newPage();
+  second.on('pageerror',e=>errors.push('second tab: '+e.message));
+  await second.goto(base);
+  await second.locator('#owowArchivePass').fill('synthetic-passphrase-12345');
+  await second.locator('#owowArchiveSave').click();
+  await assertEventually(second,'#owowArchiveStatus','Existing archive differs from this session');
+  assert.equal(await second.locator('#owowArchivePass').inputValue(),'','Passphrase cleared after rejected save');
+  await second.close();
+  assert.equal(await p.evaluate(()=>state.orders.length),0,'No transaction replay after restore');
   assert.deepEqual(errors,[]);
   console.log(JSON.stringify({status:'PASS',saved,restored:await p.locator('#owowArchiveStatus').innerText(),noAutoReplay:true,wrongKeyRejected:true,pageErrors:errors.length}));
  }finally{await browser?.close();await new Promise(resolve=>server.close(resolve))}
