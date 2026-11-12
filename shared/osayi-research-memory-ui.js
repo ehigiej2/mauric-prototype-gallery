@@ -2,6 +2,7 @@
 (function(){
 'use strict';
 const tenant='demo-tenant',prototype='trade';
+// Scope is a synthetic demo namespace, never a verified account identity.
 function mount(){
  const panel=document.querySelector('#workspace');
  if(!panel||panel.classList.contains('hidden')||document.querySelector('#heading')?.textContent!=='Ask Osayi'||document.querySelector('#researchMemory'))return;
@@ -12,9 +13,10 @@ function mount(){
  let memory;
  try{memory=MonarchResearchMemory.create({tenant,prototype,storage:localStorage});}
  catch{status.textContent='Encrypted local memory unavailable in this browser/context.';holder.querySelectorAll('button').forEach(b=>b.disabled=true);return;}
- holder.querySelector('#researchSave').onclick=async()=>{try{await memory.save({notes:note.value,questions:[]},pass.value,{consent:consent.checked});status.textContent='Encrypted fictional research saved locally for up to seven days.';}catch(e){status.textContent='Not saved: '+e.message;}};
- holder.querySelector('#researchRecover').onclick=async()=>{try{const data=await memory.load(pass.value);if(!data){status.textContent='No saved research for this demo scope.';return;}note.value=data.notes;status.textContent='Fictional research recovered locally.';}catch{status.textContent='Recovery failed: wrong passphrase, expired or invalid record.';}};
+ holder.querySelector('#researchSave').onclick=async()=>{try{await memory.save({notes:note.value,questions:[]},pass.value,{consent:consent.checked});pass.value='';status.textContent='Encrypted fictional research saved locally for up to seven days.';}catch(e){status.textContent='Not saved: '+e.message;}};
+ holder.querySelector('#researchRecover').onclick=async()=>{try{const data=await memory.load(pass.value);if(!data){status.textContent='No saved research for this demo scope.';return;}note.value=data.notes;pass.value='';status.textContent='Fictional research recovered locally.';}catch{status.textContent='Recovery failed: wrong passphrase, expired or invalid record.';}};
  holder.querySelector('#researchDelete').onclick=()=>{memory.clear();note.value='';pass.value='';consent.checked=false;status.textContent='Local encrypted research record deleted.';};
 }
 document.querySelectorAll('.tile').forEach(b=>b.addEventListener('click',()=>{document.querySelector('#researchMemory')?.remove();if(b.dataset.mode==='osayi')mount();}));
+document.querySelector('#back')?.addEventListener('click',()=>{const holder=document.querySelector('#researchMemory');if(holder){holder.querySelector('#researchPass').value='';holder.remove();}});
 })();
