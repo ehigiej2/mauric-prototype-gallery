@@ -4,7 +4,7 @@ import threading
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, expect
 
 ROOT = Path(__file__).resolve().parents[1]
 class QuietHandler(SimpleHTTPRequestHandler):
@@ -38,7 +38,7 @@ def main():
             assert page.evaluate("() => localStorage.length") == 0, "Research stored without consent"
             page.locator("#researchConsent").check()
             page.locator("#researchSave").click()
-            assert "saved locally" in page.locator("#researchStatus").inner_text()
+            expect(page.locator("#researchStatus")).to_contain_text("saved locally", timeout=15000)
             assert page.locator("#researchPass").input_value() == "", "Passphrase retained after save"
             assert page.evaluate("() => !JSON.stringify(localStorage).includes('Fictional Benin supplier scenario')")
             page.reload()
@@ -46,11 +46,11 @@ def main():
             page.locator('.tile[data-mode="osayi"]').click()
             page.locator("#researchPass").fill("synthetic-research-passphrase-123")
             page.locator("#researchRecover").click()
-            assert page.locator("#researchNote").input_value() == "Fictional Benin supplier scenario"
+            expect(page.locator("#researchNote")).to_have_value("Fictional Benin supplier scenario", timeout=15000)
             assert page.locator("#researchPass").input_value() == "", "Passphrase retained after recovery"
             page.locator("#researchPass").fill("incorrect-passphrase-123")
             page.locator("#researchRecover").click()
-            assert "Recovery failed" in page.locator("#researchStatus").inner_text()
+            expect(page.locator("#researchStatus")).to_contain_text("Recovery failed", timeout=15000)
             assert page.locator("#researchNote").input_value() == "Fictional Benin supplier scenario", "Failed recovery unexpectedly changed note"
             page.locator("#back").click()
             assert page.locator("#researchMemory").count() == 0, "Research controls persist after exit"
@@ -61,7 +61,7 @@ def main():
             page.locator('.tile[data-mode="osayi"]').click()
             page.locator("#researchPass").fill("synthetic-research-passphrase-123")
             page.locator("#researchRecover").click()
-            assert "No saved research" in page.locator("#researchStatus").inner_text()
+            expect(page.locator("#researchStatus")).to_contain_text("No saved research", timeout=15000)
             assert not requests, f"Unexpected outbound requests: {requests}"
             assert not errors, f"JavaScript errors: {errors}"
             context.close()
