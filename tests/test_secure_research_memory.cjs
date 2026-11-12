@@ -15,6 +15,9 @@ const options={tenant:'demo-tenant',prototype:'trade',storage,crypto:webcrypto,n
  const key=records.keys().next().value,original=records.get(key);const obj=JSON.parse(original);obj.cipher='AAAA'+obj.cipher.slice(4);records.set(key,JSON.stringify(obj));
  await assert.rejects(memory.load(pass),/Unable to decrypt/);records.set(key,original);
  const expired=create({...options,now:()=>100000000+8*86400000});await assert.rejects(expired.load(pass),/Unable to decrypt/);
+ assert.equal(expired.hasSaved(),false,'Expired ciphertext should be removed');
+ assert.equal(records.size,0,'Expired record should be purged from local storage');
+ await memory.save({notes:'Recreated fictional record',questions:[]},pass,{consent:true});
  memory.clear();assert.equal(memory.hasSaved(),false);assert.equal(await memory.load(pass),null);
  console.log('PASS: consent, allowlist, ciphertext, recovery, wrong passphrase, tenant separation, tamper, expiry, deletion');
 })().catch(e=>{console.error(e);process.exitCode=1});
