@@ -29,5 +29,5 @@ assert.equal(b.evidence().length,0);
 a.stop("CASE_02");
 assert.throws(()=>a.execute({...base,caseId:"CASE_02",action:"PAYMENT_REQUEST",key:"stop-1",expectedRevision:2,amountMinor:100}),/STOPPED/);
 assert.equal(a.view("CASE_01").release,"HOLD");
-assert.equal(a.evidence("CASE_01").every(x=>x.status==="SYNTHETIC_ONLY"||x.status==="REGISTERED"||x.status==="STOPPED"),true);
+assert.equal(a.evidence("CASE_01").every(x=>x.status==="SYNTHETIC_ONLY"||x.status==="SYNTHETIC"||x.status==="STOPPED"),true);
 console.log("PASS: idempotency, conflicts, stale revision, payment sequence, duplicate fulfilment, POD order, refund protection, zero amount, tenant isolation, acknowledgement, stop gate and permanent HOLD");
