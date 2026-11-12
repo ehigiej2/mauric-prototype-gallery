@@ -36,6 +36,7 @@ jobs:
       fail-fast: false
       matrix:
         browser: [chromium, webkit]
+        viewport: ['320x568', '375x667', '390x844']
     steps:
       - uses: actions/checkout@v4
         with:
@@ -48,4 +49,5 @@ jobs:
       - name: Browser encrypted research acceptance
         env:
           WAKA_BROWSER: ${{ matrix.browser }}
+          WAKA_VIEWPORT: ${{ matrix.viewport }}
         run: python tests/test_monarch_memory_browser.py
