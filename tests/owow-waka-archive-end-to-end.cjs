@@ -21,6 +21,7 @@ const server=http.createServer((req,res)=>{
   await p.locator('[name="quantity"]').fill('1');
   await p.locator('#journey button[type="submit"]').click();
   assert.equal(await p.evaluate(()=>state.orders.length),1);
+  await p.locator('#back').click(); // Close modal before accessing the archive panel.
   await p.locator('#owowArchivePass').fill('synthetic-passphrase-12345');
   await p.locator('#owowArchiveSave').click();
   await assertEventually(p,'#owowArchiveStatus','Encrypted synthetic archive committed');
