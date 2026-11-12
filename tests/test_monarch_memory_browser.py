@@ -19,8 +19,8 @@ def main():
             engine = os.environ.get("WAKA_BROWSER", "chromium")
             assert engine in ("chromium", "webkit")
             browser = getattr(p, engine).launch(headless=True)
-            width = int(os.environ.get("WAKA_WIDTH", "390"))
-            height = int(os.environ.get("WAKA_HEIGHT", "844"))
+            viewport = os.environ.get("WAKA_VIEWPORT", "390x844")
+            width, height = (int(n) for n in viewport.split("x"))
             context = browser.new_context(viewport={"width": width, "height": height})
             page = context.new_page()
             requests, errors = [], []
