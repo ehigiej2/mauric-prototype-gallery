@@ -1,0 +1,22 @@
+const assert=require('node:assert/strict');const crypto=require('node:crypto').webcrypto;const fs=require('node:fs'),vm=require('node:vm');
+const ctx={TextEncoder,TextDecoder,crypto};vm.runInNewContext(fs.readFileSync(__dirname+'/../shared/monarch-evidence-version-gate.js','utf8'),ctx);
+const api=ctx.MonarchEvidenceVersionGate;
+(async()=>{
+const envelope=(tenant,marker)=>JSON.stringify({format:'monarch-research-vault-v1',tenant,marker});
+const current=envelope('tenant_one','current'),old=envelope('tenant_one','old'),future=envelope('tenant_one','future');
+let anchor={tenant:'tenant_one',version:3,digest:await api.makeVersionGate({tenant:'tenant_one',authority:{read:async()=>null},webcrypto:crypto}).digest(current)};
+const gate=api.makeVersionGate({tenant:'tenant_one',authority:{read:async()=>anchor},webcrypto:crypto});
+assert.equal((await gate.inspect({envelope:current,version:3})).status,'ANCHOR_MATCH_QUARANTINE');
+assert.equal((await gate.inspect({envelope:old,version:2})).status,'ROLLBACK_DETECTED');
+assert.equal((await gate.inspect({envelope:future,version:4})).status,'UNCOMMITTED_VERSION');
+assert.equal((await gate.inspect({envelope:old,version:3})).status,'SAME_VERSION_CONFLICT');
+const offline=api.makeVersionGate({tenant:'tenant_one',authority:{read:async()=>{throw Error('offline')}},webcrypto:crypto});
+await assert.rejects(()=>offline.inspect({envelope:current,version:3}),/HOLD/);
+const unanchored=api.makeVersionGate({tenant:'tenant_one',authority:{read:async()=>null},webcrypto:crypto});
+assert.equal((await unanchored.inspect({envelope:current,version:1})).status,'UNANCHORED_HOLD');
+assert.equal((await unanchored.propose({envelope:current,nextVersion:1})).status,'PROPOSAL_ONLY');
+await assert.rejects(()=>unanchored.propose({envelope:current,nextVersion:3}),/Initial anchored version/);
+const other=api.makeVersionGate({tenant:'tenant_two',authority:{read:async()=>anchor},webcrypto:crypto});
+await assert.rejects(()=>other.inspect({envelope:current,version:3}),/Wrong tenant/);
+console.log('PASS: version anchor match quarantine, rollback, future version, same-version conflict, authority outage, unanchored hold, proposal-only, nonmonotonic version and tenant isolation');
+})().catch(e=>{console.error(e);process.exitCode=1});
