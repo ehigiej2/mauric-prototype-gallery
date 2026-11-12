@@ -17,7 +17,10 @@ assert.equal(result.failures.length,0);assert.equal(result.release,'HOLD');asser
 const broken=api.makeBridge({tenant,adapters:{...pass,checkpoint:async m=>({tenant,caseId,verified:false,version:3,vaultDigest,independentCustody:false})}});
 const blocked=await broken.inspect(base);assert.ok(blocked.failures.some(x=>x.startsWith('checkpoint:')));assert.equal(blocked.release,'HOLD');
 const wrongTenant=api.makeBridge({tenant,adapters:{...pass,capreg:async m=>({tenant:'tenant_two',caseId,valid:true,registryDigest,canonicalMain:true,commitSha:'a'.repeat(40)})}});
-assert.ok((await wrongTenant.inspect(base)).failures.some(x=>x.startsWith('capreg:')));\nconst wrongSigner=api.makeBridge({tenant,adapters:{...pass,habHia:async m=>({tenant:m.tenant,caseId:m.caseId,valid:true,signerRegistryDigest:registryDigest,signatureScheme:'ED25519-HIA-PAYLOAD-V1',scopeMatched:true,currentKeyActive:true,policyValid:true,verificationReceiptCurrent:true})}});\nassert.ok((await wrongSigner.inspect(base)).failures.some(x=>x.startsWith('habHia:')));\nawait assert.rejects(()=>bridge.inspect({...base,signerRegistryDigest:'invalid'}),/Invalid version or digest/);
+assert.ok((await wrongTenant.inspect(base)).failures.some(x=>x.startsWith('capreg:')));
+const wrongSigner=api.makeBridge({tenant,adapters:{...pass,habHia:async m=>({tenant:m.tenant,caseId:m.caseId,valid:true,signerRegistryDigest:registryDigest,signatureScheme:'ED25519-HIA-PAYLOAD-V1',scopeMatched:true,currentKeyActive:true,policyValid:true,verificationReceiptCurrent:true})}});
+assert.ok((await wrongSigner.inspect(base)).failures.some(x=>x.startsWith('habHia:')));
+await assert.rejects(()=>bridge.inspect({...base,signerRegistryDigest:'invalid'}),/Invalid version or digest/);
 await assert.rejects(()=>bridge.inspect({...base,tenant:'tenant_two'}),/Tenant mismatch/);
 await assert.rejects(()=>bridge.inspect({...base,version:0}),/Invalid version/);
 assert.throws(()=>api.makeBridge({tenant,adapters:{}}),/Five independently supplied/);
