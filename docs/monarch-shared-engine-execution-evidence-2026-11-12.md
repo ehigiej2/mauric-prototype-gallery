@@ -39,3 +39,11 @@
 3. Add trusted origin/version/expiry checks for handoffs before any cross-app data exchange.
 4. Add durable, tenant-isolated, encrypted storage and negative security tests.
 5. Execute independent browser and iPhone regressions.
+
+## Follow-on workflow reference integration
+- Added `captureReference` to accept only synthetic external IDs and an allow-listed record kind; it copies no source payload fields.
+- Shared browser adapter listens for `monarch:synthetic-record` events and checks the declared tenant and prototype before recording a reference.
+- Connected Trade × Waka synthetic record save, Waka completed fictional rehearsal, and Stephen local experiment save to emit these metadata-only events.
+- Executed four additional checks against fetched engine source: first reference creates REQUEST, duplicate reference is idempotent, assurance checks default UNKNOWN, unsupported PAYMENT kind is rejected. **4/4 passed**.
+- Regression suite extended with the same metadata-only capture checks. Test source is committed; browser event delivery has not been verified in Safari or end-to-end browser automation.
+- These event details are client-originated and spoofable. They are not authoritative records and cannot prove a real workflow occurred. No server-side authentication, persistence, or audit guarantee is implied.
