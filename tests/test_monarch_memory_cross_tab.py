@@ -26,21 +26,28 @@ def main():
             b.goto(url)
             for page in (a,b):
                 page.evaluate("""() => { localStorage.clear(); }""")
-            # Hold tab A's encrypt promise after encryption starts.
+            # Inject a controllable crypto facade, rather than attempting to
+            # overwrite the browser's possibly read-only crypto.subtle.encrypt.
             a.evaluate("""() => {
               window.__encryptStarted=false;
               window.__releaseEncrypt=null;
-              const original=crypto.subtle.encrypt.bind(crypto.subtle);
-              crypto.subtle.encrypt=async (...args)=>{
-                window.__encryptStarted=true;
-                await new Promise(resolve=>window.__releaseEncrypt=resolve);
-                return original(...args);
+              const native=crypto;
+              const facade={
+                getRandomValues: array => native.getRandomValues(array),
+                subtle:{
+                  importKey:(...args)=>native.subtle.importKey(...args),
+                  deriveKey:(...args)=>native.subtle.deriveKey(...args),
+                  decrypt:(...args)=>native.subtle.decrypt(...args),
+                  encrypt:async (...args)=>{
+                    window.__encryptStarted=true;
+                    await new Promise(resolve=>window.__releaseEncrypt=resolve);
+                    return native.subtle.encrypt(...args);
+                  }
+                }
               };
-            }""")
-            # WebCrypto methods may be non-writable; assert interception actually works.
-            a.evaluate("""() => {
               window.__memoryA=MonarchResearchMemory.create({
-                tenant:'demo-tenant',prototype:'trade',storage:localStorage
+                tenant:'demo-tenant',prototype:'trade',
+                storage:localStorage,crypto:facade
               });
               window.__pendingA=window.__memoryA.save(
                 {notes:'Synthetic cross-tab record',questions:[]},
