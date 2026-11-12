@@ -8,6 +8,8 @@ on:
       - 'shared/osayi-research-memory-ui.js'
       - 'tests/test_secure_research_memory.cjs'
       - 'tests/test_mauric_prototype_research_adapter.cjs'
+      - 'tests/test_monarch_memory_browser.py'
+      - 'monarch-trade-waka-review.html'
       - '.github/workflows/monarch-memory-review.yml'
   workflow_dispatch:
 permissions:
@@ -27,3 +29,23 @@ jobs:
         run: node tests/test_secure_research_memory.cjs
       - name: Test prototype isolation and reference handoffs
         run: node tests/test_mauric_prototype_research_adapter.cjs
+  browser-memory:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install playwright==1.56.0
+      - run: python -m playwright install --with-deps ${{ matrix.browser }}
+      - name: Browser encrypted research acceptance
+        env:
+          WAKA_BROWSER: ${{ matrix.browser }}
+        run: python tests/test_monarch_memory_browser.py
