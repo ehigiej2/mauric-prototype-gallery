@@ -21,11 +21,16 @@ assert.equal(a.view("CASE_01").status,"EVIDENCE_REVIEW");
 assert.equal(a.view("CASE_01").approvedBy,null);
 const packet=a.handoff("CASE_01","waka");
 assert.throws(()=>b.receive(packet),/cross-tenant/);
-const sameTenant=api.makeEngine({tenant:"tenant_one",prototype:"waka"});
+const sameTenant=api.makeEngine({tenant:"tenant_one",prototype:"waka",clock:()=> "2026-11-11T00:00:00Z"});
 const received=sameTenant.receive(packet);
 assert.equal(received.duplicate,false);
 assert.equal(received.case.status,"REQUEST");
 assert.equal(sameTenant.receive(packet).duplicate,true);
+const changedPacket={...packet,sourceRevision:packet.sourceRevision+1};
+assert.throws(()=>sameTenant.receive(changedPacket),/Conflicting handoff replay/);
+const staleReceiver=api.makeEngine({tenant:"tenant_one",prototype:"waka",clock:()=> "2026-11-12T00:00:00Z"});
+assert.throws(()=>staleReceiver.receive(packet),/Stale/);
+
 a.transition("CASE_01","STOPPED",{reason:"test stop"});
 assert.throws(()=>a.transition("CASE_01","RESEARCH"),/Stopped case/);
 assert.throws(()=>a.record("CASE_01","supplier","SUPPLIED_UNVERIFIED"),/STOPPED/);
