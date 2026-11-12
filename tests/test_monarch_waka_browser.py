@@ -23,6 +23,9 @@ def main():
             page.goto(URL)
             assert page.get_by_role("heading",name="Watein you wan do?").is_visible()
             assert page.locator(".tile").count()==6
+            # Explicitly detect current product gaps without misreporting them as acceptance PASS.
+            assert page.evaluate("() => !('serviceWorker' in navigator && navigator.serviceWorker.controller)"), "Unexpected active service worker in isolated review"
+            assert page.locator("#homeActions .tile").evaluate_all("(nodes) => nodes.every(n => n.tagName === 'BUTTON' && n.textContent.trim().length > 0)"), "Home actions lack semantic button labels"
             for tile in page.locator(".tile").all():
                 box=tile.bounding_box()
                 assert tile.is_visible() and box is not None
@@ -78,6 +81,8 @@ def main():
             page.locator("#back").click()
             page.locator('.tile[data-mode="osayi"]').click()
             assert page.locator("#playIntro").is_visible()
+            # The review page is scripted guidance, not live conversational AI.
+            assert "not a connected AI" in page.locator("#hint").inner_text()
             assert page.locator("#osayiIntro").get_attribute("src").endswith("intro.mp3")
             audio_path=Path(__file__).resolve().parents[1] / "audio/stephen-osayi-v5/intro.mp3"
             assert audio_path.is_file() and audio_path.stat().st_size > 1000, "Recorded greeting asset missing or empty"
@@ -148,6 +153,10 @@ def main():
             print(f"PASS {engine} {width}x{height}: shared controls UI and {len(checks)} synthetic invariants")
             Path("test-evidence").mkdir(exist_ok=True)
             page.screenshot(path=f"test-evidence/{engine}-{width}x{height}.png")
+            # Refresh/reopen persistence is a documented release blocker. Assert honest
+            # non-persistence of this synthetic demo; this is NOT a persistence PASS.
+            page.reload()
+            assert page.evaluate("() => state.chat.length === 0 && state.orders.length === 0 && state.trips.length === 0"), "Unexpected persistent state; review privacy and recovery semantics"
             assert not errors, f"Browser script errors: {errors}"
             assert not outbound, f"Unexpected external requests: {outbound}"
             page.close()
