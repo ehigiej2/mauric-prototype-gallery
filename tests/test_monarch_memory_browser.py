@@ -36,6 +36,7 @@ def main():
             page.locator("#researchConsent").check()
             page.locator("#researchSave").click()
             assert "saved locally" in page.locator("#researchStatus").inner_text()
+            assert page.locator("#researchPass").input_value() == "", "Passphrase retained after save"
             assert page.evaluate("() => !JSON.stringify(localStorage).includes('Fictional Benin supplier scenario')")
             page.reload()
             assert page.locator(".tile").count() == 6
@@ -43,9 +44,13 @@ def main():
             page.locator("#researchPass").fill("synthetic-research-passphrase-123")
             page.locator("#researchRecover").click()
             assert page.locator("#researchNote").input_value() == "Fictional Benin supplier scenario"
+            assert page.locator("#researchPass").input_value() == "", "Passphrase retained after recovery"
             page.locator("#researchPass").fill("incorrect-passphrase-123")
             page.locator("#researchRecover").click()
             assert "Recovery failed" in page.locator("#researchStatus").inner_text()
+            page.locator("#back").click()
+            assert page.locator("#researchMemory").count() == 0, "Research controls persist after exit"
+            page.locator('.tile[data-mode="osayi"]').click()
             page.locator("#researchDelete").click()
             assert "deleted" in page.locator("#researchStatus").inner_text()
             page.reload()
