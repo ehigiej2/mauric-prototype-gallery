@@ -1,0 +1,17 @@
+const assert=require('node:assert/strict');
+const {connect}=require('../shared/mauric-synthetic-decision-ledger.js');
+const map=new Map(),storage={getItem:k=>map.get(k)??null,setItem:(k,v)=>map.set(k,v),removeItem:k=>map.delete(k)};
+const a=connect({tenant:'synthetic_a',prototype:'waka',storage,now:()=>100});
+const b=connect({tenant:'synthetic_b',prototype:'waka',storage});
+assert.throws(()=>a.lock({id:'gate_1',summary:'Review only',source:'chat_1',approvedBy:'founder'}),/approval/);
+const d=a.lock({id:'gate_1',summary:'Research only; no release',source:'chat_1',approvedBy:'founder',approvalRecorded:true});
+assert.equal(d.executionAuthorised,false);
+assert.equal(b.list().length,0);
+assert.throws(()=>a.lock({id:'gate_1',summary:'Duplicate',source:'chat_1',approvedBy:'founder',approvalRecorded:true}),/already recorded/);
+assert.equal(a.list()[0].status,'locked');
+a.change({id:'gate_1',status:'superseded',approvedBy:'founder'});
+assert.equal(a.list()[0].status,'superseded');
+assert.throws(()=>a.change({id:'gate_1',status:'revoked',approvedBy:'founder'}),/already closed/);
+assert.equal(a.list()[0].executionAuthorised,false);
+a.clear();assert.equal(a.list().length,0);
+console.log('PASS: explicit lock, duplicate protection, scope isolation, supersession, no execution authority, deletion');
