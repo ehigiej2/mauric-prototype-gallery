@@ -9,6 +9,7 @@ on:
       - 'tests/test_secure_research_memory.cjs'
       - 'tests/test_mauric_prototype_research_adapter.cjs'
       - 'tests/test_monarch_memory_browser.py'
+      - 'tests/test_monarch_memory_cross_tab.py'
       - 'monarch-trade-waka-review.html'
       - '.github/workflows/monarch-memory-review.yml'
   workflow_dispatch:
@@ -61,6 +62,32 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: memory-${{ matrix.browser }}-${{ matrix.viewport }}
+          path: test-evidence/
+          if-no-files-found: warn
+          retention-days: 7
+  cross-tab-known-blocker:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    continue-on-error: true # Known limitation; not a release PASS
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install playwright==1.56.0
+      - run: python -m playwright install --with-deps chromium
+      - name: Known blocker — cross-tab delete/save race
+        run: |
+          mkdir -p test-evidence
+          python tests/test_monarch_memory_cross_tab.py 2>&1 | tee test-evidence/cross-tab-result.log
+          exit ${PIPESTATUS[0]}
+      - name: Preserve cross-tab failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-tab-known-blocker
           path: test-evidence/
           if-no-files-found: warn
           retention-days: 7
