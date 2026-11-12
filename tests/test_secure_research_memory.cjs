@@ -1,0 +1,20 @@
+const assert=require('node:assert/strict');
+const {webcrypto}=require('node:crypto');
+const {create}=require('../shared/secure-research-memory.js');
+const records=new Map();const storage={getItem:k=>records.get(k)??null,setItem:(k,v)=>records.set(k,v),removeItem:k=>records.delete(k)};
+const options={tenant:'demo-tenant',prototype:'trade',storage,crypto:webcrypto,now:()=>100000000};
+(async()=>{
+ const memory=create(options),pass='fictional-demo-passphrase';
+ await assert.rejects(memory.save({notes:'Synthetic only',questions:[]},pass),/consent/);
+ await assert.rejects(memory.save({notes:'test',questions:[],bankAccount:'123'},pass,{consent:true}),/Only synthetic/);
+ await memory.save({notes:'Fictional akara',questions:['How send stock?']},pass,{consent:true});
+ assert.equal(records.size,1);assert.equal(records.values().next().value.includes('Fictional akara'),false);
+ assert.deepEqual(await memory.load(pass),{notes:'Fictional akara',questions:['How send stock?']});
+ await assert.rejects(memory.load('incorrect-passphrase'),/Unable to decrypt/);
+ const other=create({...options,tenant:'other-tenant'});assert.equal(await other.load(pass),null);
+ const key=records.keys().next().value,original=records.get(key);const obj=JSON.parse(original);obj.cipher='AAAA'+obj.cipher.slice(4);records.set(key,JSON.stringify(obj));
+ await assert.rejects(memory.load(pass),/Unable to decrypt/);records.set(key,original);
+ const expired=create({...options,now:()=>100000000+8*86400000});await assert.rejects(expired.load(pass),/Unable to decrypt/);
+ memory.clear();assert.equal(memory.hasSaved(),false);assert.equal(await memory.load(pass),null);
+ console.log('PASS: consent, allowlist, ciphertext, recovery, wrong passphrase, tenant separation, tamper, expiry, deletion');
+})().catch(e=>{console.error(e);process.exitCode=1});
