@@ -7,13 +7,13 @@ const ID=/^[a-z0-9][a-z0-9_-]{1,63}$/,DIGEST=/^sha256:[a-f0-9]{64}$/,SHA=/^[a-f0
 function makeBridge({tenant,adapters}={}){
  if(!ID.test(tenant||""))throw Error("Tenant required");
  if(!adapters||!["capreg","habHia","consumption","audit","checkpoint"].every(k=>typeof adapters[k]==="function"))throw Error("Five independently supplied read-only adapters required");
- const REQUIRED=["caseId","registryDigest","version","vaultDigest","executionId","idempotencyKey"];
+ const REQUIRED=["caseId","registryDigest","signerRegistryDigest","version","vaultDigest","executionId","idempotencyKey"];
  function validate(input){
  if(!input||typeof input!=="object"||input.tenant!==tenant)throw Error("Tenant mismatch or absent case");
  if(REQUIRED.some(k=>!(k in input)))throw Error("Missing metadata");
  if(!/^[A-Za-z0-9_-]{2,80}$/.test(input.caseId)||!/^[A-Za-z0-9._:-]{2,100}$/.test(input.executionId)||!/^[A-Za-z0-9._:-]{2,100}$/.test(input.idempotencyKey))throw Error("Invalid identifiers");
- if(!DIGEST.test(input.registryDigest)||!DIGEST.test(input.vaultDigest)||!Number.isSafeInteger(input.version)||input.version<1)throw Error("Invalid version or digest");
- return Object.freeze({tenant,caseId:input.caseId,registryDigest:input.registryDigest,version:input.version,vaultDigest:input.vaultDigest,executionId:input.executionId,idempotencyKey:input.idempotencyKey});
+ if(!DIGEST.test(input.registryDigest)||!DIGEST.test(input.signerRegistryDigest)||!DIGEST.test(input.vaultDigest)||!Number.isSafeInteger(input.version)||input.version<1)throw Error("Invalid version or digest");
+ return Object.freeze({tenant,caseId:input.caseId,registryDigest:input.registryDigest,signerRegistryDigest:input.signerRegistryDigest,version:input.version,vaultDigest:input.vaultDigest,executionId:input.executionId,idempotencyKey:input.idempotencyKey});
  }
  async function inspect(input){
  const m=validate(input),checks={};const failures=[];
@@ -24,7 +24,7 @@ function makeBridge({tenant,adapters}={}){
  if(kind==="capreg"){
  if(result.valid!==true||result.registryDigest!==m.registryDigest||result.canonicalMain!==true||!SHA.test(result.commitSha||""))throw Error("Canonical CAPREG current head not proved");
  }else if(kind==="habHia"){
- if(result.valid!==true||result.registryDigest!==m.registryDigest||result.signatureScheme!=="ED25519-HIA-PAYLOAD-V1"||result.scopeMatched!==true||result.currentKeyActive!==true)throw Error("Current HAB/HIA binding invalid");
+ if(result.valid!==true||result.signerRegistryDigest!==m.signerRegistryDigest||result.signatureScheme!=="ED25519-HIA-PAYLOAD-V1"||result.scopeMatched!==true||result.currentKeyActive!==true||result.policyValid!==true||result.verificationReceiptCurrent!==true)throw Error("Current HAB/HIA binding invalid");
  }else if(kind==="consumption"){
  if(result.replayBlocked!==true||result.unknown!==false)throw Error("Consumption/replay status insufficient");
  }else if(kind==="audit"){
