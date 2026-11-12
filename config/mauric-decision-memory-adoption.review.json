@@ -1,0 +1,36 @@
+{
+  "schema": "mauric-decision-memory-adoption-v1",
+  "status": "REVIEW_ONLY",
+  "decision": "Founder explicitly approved decision-memory One Way of Working on 2026-11-12",
+  "governance": {
+    "framework": "CROWN x GENESIS x AION",
+    "crown_hold": true,
+    "execution_authorised_by_decision_lock": false,
+    "allowed_data": "synthetic only",
+    "release_gate": "BLOCKED_UNTIL_EVIDENCE"
+  },
+  "shared_modules": {
+    "decision_ledger": "shared/mauric-synthetic-decision-ledger.js",
+    "research_memory": "shared/secure-research-memory.js",
+    "prototype_adapter": "shared/mauric-prototype-research-adapter.js"
+  },
+  "prototype_targets": [
+    {"id":"monarch-waka","state":"REVIEW_MEMORY_UI_ONLY","decision_integration":"NOT_VERIFIED"},
+    {"id":"osayi-osayuki","state":"PENDING_SOURCE_INSPECTION"},
+    {"id":"joeyvette-stephen","state":"PENDING_SOURCE_INSPECTION"},
+    {"id":"knightpride","state":"PENDING_SOURCE_INSPECTION"},
+    {"id":"hospital","state":"PENDING_SOURCE_INSPECTION","sensitive_data_prohibited":true},
+    {"id":"pharmacy","state":"PENDING_SOURCE_INSPECTION","sensitive_data_prohibited":true},
+    {"id":"other-approved-prototypes","state":"INVENTORY_UNKNOWN"}
+  ],
+  "mandatory_gates": [
+    "explicit_approval_provenance",
+    "authenticated_tenant_scope",
+    "idempotency_and_conflict_handling",
+    "encryption_and_key_management",
+    "cross_tab_deletion",
+    "browser_ci_pass",
+    "physical_safari_acceptance",
+    "founder_release_approval"
+  ]
+}
