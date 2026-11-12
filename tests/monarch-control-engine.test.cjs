@@ -26,4 +26,7 @@ const received=sameTenant.receive(packet);
 assert.equal(received.duplicate,false);
 assert.equal(received.case.status,"REQUEST");
 assert.equal(sameTenant.receive(packet).duplicate,true);
-a.transition("CASE_01","STOPPED",{reason:"test stop"});\nassert.throws(()=>a.transition("CASE_01","RESEARCH"),/Stopped case/);\nassert.throws(()=>a.record("CASE_01","supplier","SUPPLIED_UNVERIFIED"),/STOPPED/);\nconsole.log("PASS: tenant isolation, duplicate prevention, ordered transitions, owner gate, consent revocation, quarantined handoff and immutable stop");
+a.transition("CASE_01","STOPPED",{reason:"test stop"});
+assert.throws(()=>a.transition("CASE_01","RESEARCH"),/Stopped case/);
+assert.throws(()=>a.record("CASE_01","supplier","SUPPLIED_UNVERIFIED"),/STOPPED/);
+console.log("PASS: tenant isolation, duplicate prevention, ordered transitions, owner gate, consent revocation, quarantined handoff and immutable stop");
