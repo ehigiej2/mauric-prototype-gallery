@@ -5,9 +5,11 @@ on:
     paths:
       - 'shared/secure-research-memory.js'
       - 'shared/mauric-prototype-research-adapter.js'
+      - 'shared/mauric-synthetic-decision-ledger.js'
       - 'shared/osayi-research-memory-ui.js'
       - 'tests/test_secure_research_memory.cjs'
       - 'tests/test_mauric_prototype_research_adapter.cjs'
+      - 'tests/test_mauric_synthetic_decision_ledger.cjs'
       - 'tests/test_monarch_memory_browser.py'
       - 'tests/test_monarch_memory_cross_tab.py'
       - 'monarch-trade-waka-review.html'
@@ -30,6 +32,8 @@ jobs:
         run: node tests/test_secure_research_memory.cjs
       - name: Test prototype isolation and reference handoffs
         run: node tests/test_mauric_prototype_research_adapter.cjs
+      - name: Test explicit synthetic decision locks
+        run: node tests/test_mauric_synthetic_decision_ledger.cjs
   browser-memory:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
