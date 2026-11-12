@@ -56,3 +56,13 @@
 - Engine blob SHA: `a57f852ac0b7aac9dd35f6f3c9b744844ba4afba`.
 - Test blob SHA: `b9b38ff01abe45bfec650384a3607fa10bfc0edc`.
 - This is still not cryptographic authenticity: packets can be forged by a client, the source revision is not independently checked against a trusted source, and replay state is in-memory only. The 15-minute freshness check limits accidental stale reuse, not a determined attacker.
+
+## Decision-control hardening — iteration 16
+- Simulation approval now requires both the explicit synthetic actor label and a separate `simulationAcknowledgement:"SYNTHETIC_ONLY"`. This remains a local simulation safeguard, **not authenticated owner identity**.
+- Added optimistic revision check (`expectedRevision`) to reject stale state-transition requests.
+- Added explicit `releaseReadiness` response which always returns `release:"HOLD"` and `realApproval:false` in this client-side research engine.
+- Added handoff case-ID length guard to prevent generated IDs exceeding the engine's own case-ID constraints.
+- Updated regression suite to test the explicit simulation acknowledgement, stale revision rejection and permanent HOLD output.
+- Executed committed test source against exact fetched engine in isolated V8 harness: **PASS**.
+- Engine SHA: `74dc40cb361019ff5a0a1ed53c1d01af19e2bf7b`; test SHA: `8dd0b4179f2ea5f5308ee62612fe889e0ded7ac5`.
+- Security limit remains: caller-supplied actor labels and acknowledgements are forgeable. This engine intentionally cannot grant real approval or release. Trusted server-side authentication, authorisation, durable tenant-scoped state and independent audit remain mandatory.
