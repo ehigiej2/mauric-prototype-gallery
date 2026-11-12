@@ -31,9 +31,13 @@ function makeEngine({tenant,prototype,clock=()=>new Date().toISOString()}={}){
  const id="IN_"+packet.source+"_"+packet.sourceCaseId;
  if(cases.has(id))return Object.freeze({duplicate:true,case:view(id)});
  const imported=create(id);log(id,"RECEIVE","Quarantined research reference from "+packet.source+"; re-verification required");return Object.freeze({duplicate:false,case:imported})}
+ // Accept only synthetic reference metadata from a host prototype. Never import raw customer, financial or identity fields.
+ function captureReference({externalId,kind}={}){if(!/^[a-zA-Z0-9_-]{2,60}$/.test(externalId||""))throw Error("Synthetic external ID required");if(!["ORDER","DELIVERY","SOURCE","MONEY","TEAM","LAB"].includes(kind))throw Error("Unsupported synthetic record kind");
+ const id="REF_"+kind+"_"+externalId;if(cases.has(id))return Object.freeze({duplicate:true,case:view(id)});
+ const c=create(id);log(id,"CAPTURE","Synthetic "+kind+" reference only; source values not copied");return Object.freeze({duplicate:false,case:c})}
  function ledger(id){if(id)get(id);return Object.freeze(events.filter(e=>!id||e.caseId===id).map(x=>({...x})))}
  function snapshot(){return Object.freeze({tenant,prototype,cases:[...cases.keys()].map(view),events:ledger(),note:"SYNTHETIC SESSION ONLY; NOT AN AUTHORITATIVE AUDIT LEDGER"})}
- return Object.freeze({create,view,record,transition,revokeConsent,ledger,snapshot,handoff,receive,states:STATES});
+ return Object.freeze({create,view,record,transition,revokeConsent,ledger,snapshot,handoff,receive,captureReference,states:STATES});
 }
 function attach({tenant,prototype,label="Decision controls"}={}){if(!global.document)return null;const engine=makeEngine({tenant,prototype});const key="__monarch_controls_"+tenant+"_"+prototype;if(global[key])return global[key];global[key]=engine;
  const button=global.document.createElement("button");button.type="button";button.textContent="🔒 "+label;button.setAttribute("aria-expanded","false");button.style.cssText="position:fixed;right:12px;bottom:12px;z-index:2147483000;background:#153d6a;color:#fff;border:2px solid #fff;border-radius:16px;padding:12px 16px;font:700 14px system-ui;box-shadow:0 5px 20px #0004;cursor:pointer";
@@ -50,6 +54,7 @@ function attach({tenant,prototype,label="Decision controls"}={}){if(!global.docu
  advance.onclick=()=>{if(!current)return render("Create a case first");try{const s=engine.view(current).status;engine.transition(current,NEXT[s]||"OWNER_REVIEW");render("Moved forward")}catch(e){render("BLOCKED: "+e.message)}};
  stop.onclick=()=>{if(current){engine.transition(current,"STOPPED",{reason:"Manually stopped in review prototype"});render("Case stopped")}};
  button.onclick=()=>{panel.hidden=!panel.hidden;button.setAttribute("aria-expanded",String(!panel.hidden));if(!panel.hidden)render()};
+ if(typeof global.addEventListener==="function")global.addEventListener("monarch:synthetic-record",event=>{try{const d=event.detail||{};if(d.tenant&&d.tenant!==tenant)return;if(d.prototype&&d.prototype!==prototype)return;const r=engine.captureReference(d);render(r.duplicate?"Duplicate synthetic reference ignored":"Synthetic reference captured; all gates UNKNOWN")}catch(e){render("BLOCKED synthetic reference: "+e.message)}});
  global.document.body.append(button,panel);return engine}
 global.MonarchControl=Object.freeze({makeEngine,attach,STATES,REQUIRED});
 })(typeof window!=="undefined"?window:globalThis);
