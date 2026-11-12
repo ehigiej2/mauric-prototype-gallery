@@ -1,0 +1,29 @@
+name: MONARCH encrypted research POC checks (review only)
+on:
+  push:
+    branches: [review/monarch-memory-poc-20261112]
+    paths:
+      - 'shared/secure-research-memory.js'
+      - 'shared/mauric-prototype-research-adapter.js'
+      - 'shared/osayi-research-memory-ui.js'
+      - 'tests/test_secure_research_memory.cjs'
+      - 'tests/test_mauric_prototype_research_adapter.cjs'
+      - '.github/workflows/monarch-memory-review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  synthetic-memory:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test synthetic encrypted research memory
+        run: node tests/test_secure_research_memory.cjs
+      - name: Test prototype isolation and reference handoffs
+        run: node tests/test_mauric_prototype_research_adapter.cjs
