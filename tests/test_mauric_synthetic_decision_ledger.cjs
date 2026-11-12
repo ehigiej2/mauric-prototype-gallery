@@ -17,6 +17,8 @@ assert.throws(()=>a.captureApproved({decisionKey:'gate_1',summary:'Conflicting d
 assert.throws(()=>a.captureApproved({decisionKey:'gate_2',summary:'No explicit approval',source:'chat_1',approvedBy:'founder'}),/approval/);
 a.change({id:'gate_1',status:'superseded',approvedBy:'founder'});
 assert.equal(a.list()[0].status,'superseded');
+assert.equal(a.latestLocked().length,0,'Superseded decisions must not appear active');
+assert.throws(()=>a.captureApproved({decisionKey:'gate_1',summary:'Research only; no release',source:'chat_1',approvedBy:'founder',approvalRecorded:true}),/no longer active/);
 assert.throws(()=>a.change({id:'gate_1',status:'revoked',approvedBy:'founder'}),/already closed/);
 assert.equal(a.list()[0].executionAuthorised,false);
 a.clear();assert.equal(a.list().length,0);
