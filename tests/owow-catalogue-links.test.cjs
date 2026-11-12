@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // OWOW review-only static catalogue audit. No network, deployment, writes, or real data.
-const fs=require('node:fs');const path=require('node:path');const assert=require('node:assert/strict');
+const fs=require('node:fs');const path=require('node:path');
 const root=path.resolve(__dirname,'..');const page=path.join(root,'owow-approved-prototypes-review.html');
 const html=fs.readFileSync(page,'utf8');const failures=[];let links=0;
 for(const [,href] of html.matchAll(/\bhref="([^"]+)"/g)){
@@ -16,5 +16,10 @@ for(const id of buttons){if(!html.includes('id="'+id+'"'))failures.push('Missing
 if(!html.includes('CROWN HOLD'))failures.push('Missing CROWN HOLD disclaimer');
 if(!html.includes('Knightpride Logistics'))failures.push('Missing Knightpride unresolved entry');
 if(!html.includes('Stephen · Joeyvette'))failures.push('Missing Stephen preview entry');
+const registry=JSON.parse(fs.readFileSync(path.join(root,'owow/prototype-registry.review.json'),'utf8'));
+if(registry.release!=='HOLD')failures.push('Release guard must remain HOLD');
+if(registry.entries.length<19)failures.push('Prototype register incomplete');
+for(const item of registry.entries){if(item.path&&!fs.existsSync(path.resolve(root,item.path)))failures.push('Missing registered source: '+item.id+' '+item.path);}
+for(const name of ['mama-akara','tailor-osayi','building-materials-osayi']){const item=registry.entries.find(x=>x.id===name);if(!item||item.status!=='FOUNDER_APPROVED_SNAPSHOT'||!item.ref.startsWith('locked/'))failures.push('Approved snapshot missing: '+name);}
 console.log(JSON.stringify({check:'OWOW_STATIC_CATALOGUE',localLinksChecked:links,sections:buttons.length,failures},null,2));
 if(failures.length)process.exitCode=1;
