@@ -14,10 +14,10 @@ function makeEngine({tenant,prototype,clock=()=>new Date().toISOString()}={}){
  function view(id){const c=get(id);return Object.freeze({...c,checks:Object.freeze({...c.checks})})}
  function invalidate(c,why){c.revision++;c.approvedBy=null;c.reason=why;if(c.status!=="STOPPED"&&c.status!=="REQUEST")c.status="EVIDENCE_REVIEW";log(c.id,"INVALIDATE",why)}
  function record(id,key,status){const c=get(id);if(!REQUIRED.includes(key))throw Error("Unknown evidence gate");if(!["UNKNOWN","SUPPLIED_UNVERIFIED","REVIEWED_UNAUTHENTICATED","REVOKED","EXPIRED"].includes(status))throw Error("Invalid evidence status");if(c.status==="STOPPED")throw Error("STOPPED case is immutable");if(c.checks[key]===status)return view(id);c.checks[key]=status;invalidate(c,key+" changed to "+status);return view(id)}
- function transition(id,target,{actor="researcher",reason=""}={}){const c=get(id);if(!STATES.includes(target))throw Error("Unknown state");if(target==="STOPPED"){if(c.status==="STOPPED")return view(id);c.status="STOPPED";c.approvedBy=null;c.reason=reason||"Stopped by human or safeguard";c.revision++;log(id,"STOP",c.reason);return view(id)}
- if(c.status==="STOPPED")throw Error("Stopped case cannot restart");if(NEXT[c.status]!==target)throw Error("Invalid state transition");
+ function transition(id,target,{actor="researcher",reason="",simulationAcknowledgement=null,expectedRevision=null}={}){const c=get(id);if(!STATES.includes(target))throw Error("Unknown state");if(target==="STOPPED"){if(c.status==="STOPPED")return view(id);c.status="STOPPED";c.approvedBy=null;c.reason=reason||"Stopped by human or safeguard";c.revision++;log(id,"STOP",c.reason);return view(id)}
+ if(c.status==="STOPPED")throw Error("Stopped case cannot restart");if(expectedRevision!==null&&expectedRevision!==c.revision)throw Error("Stale decision revision");if(NEXT[c.status]!==target)throw Error("Invalid state transition");
  if(target==="OWNER_REVIEW"&&REQUIRED.some(k=>c.checks[k]==="UNKNOWN"||c.checks[k]==="REVOKED"||c.checks[k]==="EXPIRED"))throw Error("Missing or invalid evidence; owner review blocked");
- if(target==="APPROVED_FOR_SIMULATION"){if(actor!=="owner")throw Error("Owner required");if(REQUIRED.some(k=>c.checks[k]!=="REVIEWED_UNAUTHENTICATED"))throw Error("All evidence must be recorded as reviewed, but remains unverified");c.approvedBy="owner (synthetic)";}
+ if(target==="APPROVED_FOR_SIMULATION"){if(actor!=="owner")throw Error("Owner required");if(simulationAcknowledgement!=="SYNTHETIC_ONLY")throw Error("Explicit synthetic-only acknowledgement required");if(REQUIRED.some(k=>c.checks[k]!=="REVIEWED_UNAUTHENTICATED"))throw Error("All evidence must be recorded as reviewed, but remains unverified");c.approvedBy="owner (synthetic)";}
  c.status=target;c.revision++;log(id,"TRANSITION",target+" via "+actor);return view(id)}
  function revokeConsent(id){return record(id,"consent","REVOKED")}
 
@@ -29,7 +29,7 @@ function makeEngine({tenant,prototype,clock=()=>new Date().toISOString()}={}){
  function receive(packet){if(!packet||packet.schema!==CHANNEL||packet.tenant!==tenant||packet.destination!==prototype||packet.kind!=="RESEARCH_REFERENCE_ONLY")throw Error("Rejected cross-tenant, cross-target or invalid handoff");
  if(!allowedTenant.test(packet.source||"")||!/^[a-zA-Z0-9_-]{2,80}$/.test(packet.sourceCaseId||"")||!Number.isSafeInteger(packet.sourceRevision)||packet.sourceRevision<1)throw Error("Malformed research reference");
  const createdAt=Date.parse(packet.created),now=Date.parse(clock());if(!Number.isFinite(createdAt)||!Number.isFinite(now)||createdAt>now+120000||now-createdAt>900000)throw Error("Stale, future or malformed handoff");
- const id="IN_"+packet.source+"_"+packet.sourceCaseId;
+ const id="IN_"+packet.source+"_"+packet.sourceCaseId;if(id.length>80)throw Error("Handoff reference exceeds case ID limit");
  const fingerprint=[packet.sourceRevision,packet.created].join("|");if(cases.has(id)){if(imports.get(id)!==fingerprint)throw Error("Conflicting handoff replay");return Object.freeze({duplicate:true,case:view(id)})}
  const imported=create(id);imports.set(id,fingerprint);log(id,"RECEIVE","Quarantined research reference from "+packet.source+"; re-verification required");return Object.freeze({duplicate:false,case:imported})}
  // Accept only synthetic reference metadata from a host prototype. Never import raw customer, financial or identity fields.
@@ -37,8 +37,9 @@ function makeEngine({tenant,prototype,clock=()=>new Date().toISOString()}={}){
  const id="REF_"+kind+"_"+externalId;if(cases.has(id))return Object.freeze({duplicate:true,case:view(id)});
  const c=create(id);log(id,"CAPTURE","Synthetic "+kind+" reference only; source values not copied");return Object.freeze({duplicate:false,case:c})}
  function ledger(id){if(id)get(id);return Object.freeze(events.filter(e=>!id||e.caseId===id).map(x=>({...x})))}
+ function releaseReadiness(id){const c=get(id);return Object.freeze({caseId:id,release:"HOLD",realApproval:false,missing:REQUIRED.filter(k=>c.checks[k]!=="REVIEWED_UNAUTHENTICATED"),reason:"Client-side research engine cannot authenticate owner, consent, evidence or operational authority"})}
  function snapshot(){return Object.freeze({tenant,prototype,cases:[...cases.keys()].map(view),events:ledger(),note:"SYNTHETIC SESSION ONLY; NOT AN AUTHORITATIVE AUDIT LEDGER"})}
- return Object.freeze({create,view,record,transition,revokeConsent,ledger,snapshot,handoff,receive,captureReference,states:STATES});
+ return Object.freeze({create,view,record,transition,revokeConsent,ledger,snapshot,handoff,receive,captureReference,releaseReadiness,states:STATES});
 }
 function attach({tenant,prototype,label="Decision controls"}={}){if(!global.document)return null;const engine=makeEngine({tenant,prototype});const key="__monarch_controls_"+tenant+"_"+prototype;if(global[key])return global[key];global[key]=engine;
  const button=global.document.createElement("button");button.type="button";button.textContent="🔒 "+label;button.setAttribute("aria-expanded","false");button.style.cssText="position:fixed;right:12px;bottom:12px;z-index:2147483000;background:#153d6a;color:#fff;border:2px solid #fff;border-radius:16px;padding:12px 16px;font:700 14px system-ui;box-shadow:0 5px 20px #0004;cursor:pointer";
