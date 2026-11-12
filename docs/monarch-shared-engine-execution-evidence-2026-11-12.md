@@ -66,3 +66,14 @@
 - Executed committed test source against exact fetched engine in isolated V8 harness: **PASS**.
 - Engine SHA: `74dc40cb361019ff5a0a1ed53c1d01af19e2bf7b`; test SHA: `8dd0b4179f2ea5f5308ee62612fe889e0ded7ac5`.
 - Security limit remains: caller-supplied actor labels and acknowledgements are forgeable. This engine intentionally cannot grant real approval or release. Trusted server-side authentication, authorisation, durable tenant-scoped state and independent audit remain mandatory.
+
+## Synthetic payment / refund / fulfilment idempotency — iteration 17
+- Added `shared/monarch-synthetic-ledger.js`: tenant-scoped, in-memory synthetic state machine for payment request/confirmation, refund request/confirmation, fulfilment start and proof-of-delivery.
+- Every operation requires a synthetic-only acknowledgement, positive minor-unit amounts for payment/refund, an idempotency key and expected case revision.
+- Identical idempotent retry returns the original receipt; reuse of a key with different action/amount conflicts.
+- Payment confirmation must follow request; fulfilment requires simulated paid status and cannot start twice; POD requires simulated fulfilment.
+- Adversarial test initially exposed that refund could be requested after fulfilment had begun. Added guard: refunds are ineligible once fulfilment starts. Test fixture syntax and event-status assertion were also corrected.
+- Executed the committed test source against the exact fetched ledger source in isolated V8 harness: **PASS**.
+- Coverage includes replay, key conflict, stale revision, ordered payment, duplicate fulfilment, POD order, refund after fulfilment, zero amount, missing case, invalid acknowledgement, tenant-local ledger and STOP/HOLD.
+- Important: this is a new standalone synthetic module. It is **not yet connected to live or existing prototype payment flows**, and has no persistence, server-side tenant enforcement, bank verification, or real transaction capability.
+- Release remains **HOLD**; no payment, refund, dispatch or settlement is performed.
