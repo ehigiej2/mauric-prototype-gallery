@@ -40,16 +40,31 @@ function makeVault({tenant,storage,webcrypto,iterations=250000}={}){
  let payload;try{payload=JSON.parse(decoder.decode(plain))}catch{throw Error('Invalid decrypted archive')}
  if(payload.format!==FORMAT||payload.tenant!==tenant)throw Error('Decrypted tenant mismatch');
  return Object.freeze(validRecords(payload.records).map(x=>Object.freeze({...x,status:'QUARANTINED_UNTRUSTED',sourceStatus:x.status,reason:'Encrypted archive restored for human reconciliation only; automatic replay prohibited'})))}
+ async function saveIfUnchanged(records,passphrase,expectedCiphertext){
+ if(typeof storage.compareAndSwap!=="function")throw Error('Atomic compare-and-swap storage required');
+ if(expectedCiphertext!==null&&typeof expectedCiphertext!=='string')throw Error('Invalid expected ciphertext');
+ const encrypted=await seal(records,passphrase);
+ const changed=await storage.compareAndSwap(keyName,expectedCiphertext,encrypted);
+ if(changed!==true)throw Error('Concurrent update conflict: review latest encrypted record before retry');
+ return Object.freeze({saved:true,encrypted:true,recordCount:records.length,release:'HOLD',atomic:true});
+ }
+ async function readEncrypted(){return (await storage.getItem(keyName))??null}
  async function save(records,passphrase){const encrypted=await seal(records,passphrase);await storage.setItem(keyName,encrypted);return Object.freeze({saved:true,encrypted:true,recordCount:records.length,release:'HOLD'})}
  async function restore(passphrase){const encrypted=await storage.getItem(keyName);if(encrypted==null)return Object.freeze({found:false,records:[]});return Object.freeze({found:true,records:await open(encrypted,passphrase),release:'HOLD'})}
  async function erase(){await storage.removeItem(keyName);return Object.freeze({erased:true})}
- return Object.freeze({seal,open,save,restore,erase,release:'HOLD'});
+ return Object.freeze({seal,open,save,saveIfUnchanged,readEncrypted,restore,erase,release:'HOLD'});
 }
 function indexedDBStorage({dbName='monarch-research-only-v1'}={}){
  if(typeof indexedDB==='undefined')throw Error('IndexedDB not supported');
  async function transact(mode,fn){const db=await new Promise((resolve,reject)=>{const r=indexedDB.open(dbName,1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains('encrypted'))r.result.createObjectStore('encrypted')};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)});
  try{return await new Promise((resolve,reject)=>{const tx=db.transaction('encrypted',mode),store=tx.objectStore('encrypted');let value,done=false;const request=fn(store);request.onsuccess=()=>{value=request.result};request.onerror=()=>{};tx.oncomplete=()=>{done=true;resolve(value)};tx.onerror=()=>reject(tx.error||Error('Storage transaction failed'));tx.onabort=()=>reject(tx.error||Error('Storage aborted'))})}finally{db.close()}}
- return Object.freeze({getItem:key=>transact('readonly',s=>s.get(key)),setItem:(key,value)=>transact('readwrite',s=>s.put(value,key)),removeItem:key=>transact('readwrite',s=>s.delete(key))});
+ async function compareAndSwap(key,expected,value){
+ const db=await new Promise((resolve,reject)=>{const r=indexedDB.open(dbName,1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains('encrypted'))r.result.createObjectStore('encrypted')};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)});
+ try{return await new Promise((resolve,reject)=>{const tx=db.transaction('encrypted','readwrite'),store=tx.objectStore('encrypted');let matched=false;const read=store.get(key);
+ read.onsuccess=()=>{const current=read.result??null;if(current===expected){matched=true;store.put(value,key)}};
+ tx.oncomplete=()=>resolve(matched);tx.onerror=()=>reject(tx.error||Error('Atomic compare-and-swap failed'));tx.onabort=()=>reject(tx.error||Error('Atomic compare-and-swap aborted'))})}finally{db.close()}
+ }
+ return Object.freeze({getItem:key=>transact('readonly',s=>s.get(key)),setItem:(key,value)=>transact('readwrite',s=>s.put(value,key)),removeItem:key=>transact('readwrite',s=>s.delete(key)),compareAndSwap});
 }
 root.MonarchEncryptedVault=Object.freeze({makeVault,indexedDBStorage});
 })(typeof window!=='undefined'?window:globalThis);
