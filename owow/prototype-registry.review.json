@@ -104,9 +104,13 @@
     },
     {
       "id": "knightpride",
-      "status": "BLOCKED_MISSING_SOURCE",
-      "expectedPath": "knightpride.html",
-      "runtime": "BLOCKED"
+      "status": "SOURCE_RECOVERED_BROWSER_SMOKE",
+      "runtime": "SMOKE_ONLY",
+      "path": "knightpride.html",
+      "alternates": [
+        "knightpride-latest.html",
+        "martins-executive.html"
+      ]
     },
     {
       "id": "tony-executive",
