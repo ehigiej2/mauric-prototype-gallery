@@ -1,0 +1,22 @@
+const assert=require('node:assert/strict');
+const {webcrypto}=require('node:crypto');
+const {create}=require('../shared/secure-research-memory.js');
+const {connect}=require('../shared/mauric-prototype-research-adapter.js');
+const map=new Map(),storage={getItem:k=>map.get(k)??null,setItem:(k,v)=>map.set(k,v),removeItem:k=>map.delete(k)};
+(async()=>{
+ const a=connect({tenant:'joeyvette',prototype:'homecare',storage,crypto:webcrypto});
+ const b=connect({tenant:'joeyvette',prototype:'waka',storage,crypto:webcrypto});
+ const c=connect({tenant:'knightpride',prototype:'waka',storage,crypto:webcrypto});
+ await a.memory.save({notes:'Synthetic home-care booking',questions:[]},'fictional-passphrase-123',{consent:true});
+ assert.equal(await b.memory.load('fictional-passphrase-123'),null);
+ assert.equal(await c.memory.load('fictional-passphrase-123'),null);
+ const packet=a.makeReference({id:'case_001',destination:'waka'});
+ assert.equal(b.acceptReference(packet).verified,false);
+ assert.throws(()=>c.acceptReference(packet),/Cross-tenant/);
+ assert.throws(()=>a.acceptReference(packet),/Cross-tenant/);
+ assert.throws(()=>b.acceptReference({...packet,notes:'private'}),/Unexpected handoff/);
+ assert.equal(JSON.stringify(packet).includes('Synthetic home-care'),false);
+ a.memory.clear();
+ assert.equal(a.memory.hasSaved(),false);
+ console.log('PASS: separate tenant/prototype stores, reference-only handoff, target validation, no private content, deletion');
+})().catch(e=>{console.error(e);process.exitCode=1});
