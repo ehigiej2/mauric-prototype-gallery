@@ -23,6 +23,23 @@ const options={tenant:'demo-tenant',prototype:'trade',storage,crypto:webcrypto,n
  assert.equal(expired.hasSaved(),false,'Expired ciphertext should be removed');
  assert.equal(records.size,0,'Expired record should be purged from local storage');
  await memory.save({notes:'Recreated fictional record',questions:[]},pass,{consent:true});
+ // Hold encryption mid-flight, delete, then release it: deletion must win.
+ let releaseEncryption, encryptionStarted;
+ const started=new Promise(resolve=>{encryptionStarted=resolve;});
+ const held=new Promise(resolve=>{releaseEncryption=resolve;});
+ const controlledCrypto={getRandomValues:arr=>webcrypto.getRandomValues(arr),subtle:{
+  importKey:(...args)=>webcrypto.subtle.importKey(...args),
+  deriveKey:(...args)=>webcrypto.subtle.deriveKey(...args),
+  encrypt:async(...args)=>{encryptionStarted();await held;return webcrypto.subtle.encrypt(...args);},
+  decrypt:(...args)=>webcrypto.subtle.decrypt(...args)
+ }};
+ const race=create({...options,crypto:controlledCrypto});
+ const pending=race.save({notes:'Must never reappear',questions:[]},pass,{consent:true});
+ await started;
+ race.clear();
+ releaseEncryption();
+ await assert.rejects(pending,/Save cancelled by deletion/);
+ assert.equal(race.hasSaved(),false,'Pending save resurrected deleted research');
  memory.clear();assert.equal(memory.hasSaved(),false);assert.equal(await memory.load(pass),null);
  console.log('PASS: consent, allowlist, ciphertext, recovery, wrong passphrase, tenant separation, tamper, expiry, deletion');
 })().catch(e=>{console.error(e);process.exitCode=1});
