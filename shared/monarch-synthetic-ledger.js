@@ -30,7 +30,7 @@ function makeLedger({tenant,clock=()=>new Date().toISOString()}={}){
  switch(action){
  case "PAYMENT_REQUEST":if(c.payment!=="NONE")throw Error("Payment already initiated");c.payment="PENDING_SIM";break;
  case "PAYMENT_CONFIRM":if(c.payment!=="PENDING_SIM")throw Error("Payment confirmation out of order");c.payment="PAID_SIM";break;
- case "REFUND_REQUEST":if(c.payment!=="PAID_SIM")throw Error("Refund not eligible");c.payment="REFUND_PENDING_SIM";break;
+ case "REFUND_REQUEST":if(c.payment!=="PAID_SIM"||c.fulfilment!=="NONE")throw Error("Refund not eligible after fulfilment starts or without simulated payment");c.payment="REFUND_PENDING_SIM";break;
  case "REFUND_CONFIRM":if(c.payment!=="REFUND_PENDING_SIM")throw Error("Refund confirmation out of order");c.payment="REFUNDED_SIM";break;
  case "FULFILMENT_START":if(c.payment!=="PAID_SIM"||c.fulfilment!=="NONE")throw Error("Fulfilment requires simulated payment and cannot be duplicated");c.fulfilment="STARTED_SIM";break;
  case "POD_RECORD":if(c.fulfilment!=="STARTED_SIM")throw Error("Proof of delivery requires simulated fulfilment");c.fulfilment="POD_SIM";break;
