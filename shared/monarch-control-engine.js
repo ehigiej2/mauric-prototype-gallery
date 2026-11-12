@@ -7,7 +7,7 @@ const REQUIRED=["supplier","provider","safety","consent","riderFairness"];
 const allowedTenant=/^[a-z0-9][a-z0-9_-]{1,63}$/;
 function makeEngine({tenant,prototype,clock=()=>new Date().toISOString()}={}){
  if(!allowedTenant.test(tenant||"")||!allowedTenant.test(prototype||""))throw Error("Explicit tenant and prototype IDs required");
- let seq=0;const cases=new Map();const events=[];
+ let seq=0;const cases=new Map();const events=[];const imports=new Map();
  function log(id,kind,detail){const entry=Object.freeze({sequence:++seq,time:clock(),caseId:id,kind,detail});events.push(entry);return entry}
  function create(id){if(!/^[a-zA-Z0-9_-]{2,80}$/.test(id||"")||cases.has(id))throw Error("Invalid or duplicate case ID");const c={id,tenant,prototype,status:"REQUEST",revision:1,checks:Object.fromEntries(REQUIRED.map(x=>[x,"UNKNOWN"])),approvedBy:null,reason:null};cases.set(id,c);log(id,"CREATE","Synthetic case created");return view(id)}
  function get(id){const c=cases.get(id);if(!c)throw Error("Case not found or not accessible in this tenant");return c}
@@ -28,9 +28,10 @@ function makeEngine({tenant,prototype,clock=()=>new Date().toISOString()}={}){
  log(id,"HANDOFF","Research-only reference prepared for "+destination);return packet}
  function receive(packet){if(!packet||packet.schema!==CHANNEL||packet.tenant!==tenant||packet.destination!==prototype||packet.kind!=="RESEARCH_REFERENCE_ONLY")throw Error("Rejected cross-tenant, cross-target or invalid handoff");
  if(!allowedTenant.test(packet.source||"")||!/^[a-zA-Z0-9_-]{2,80}$/.test(packet.sourceCaseId||"")||!Number.isSafeInteger(packet.sourceRevision)||packet.sourceRevision<1)throw Error("Malformed research reference");
+ const createdAt=Date.parse(packet.created),now=Date.parse(clock());if(!Number.isFinite(createdAt)||!Number.isFinite(now)||createdAt>now+120000||now-createdAt>900000)throw Error("Stale, future or malformed handoff");
  const id="IN_"+packet.source+"_"+packet.sourceCaseId;
- if(cases.has(id))return Object.freeze({duplicate:true,case:view(id)});
- const imported=create(id);log(id,"RECEIVE","Quarantined research reference from "+packet.source+"; re-verification required");return Object.freeze({duplicate:false,case:imported})}
+ const fingerprint=[packet.sourceRevision,packet.created].join("|");if(cases.has(id)){if(imports.get(id)!==fingerprint)throw Error("Conflicting handoff replay");return Object.freeze({duplicate:true,case:view(id)})}
+ const imported=create(id);imports.set(id,fingerprint);log(id,"RECEIVE","Quarantined research reference from "+packet.source+"; re-verification required");return Object.freeze({duplicate:false,case:imported})}
  // Accept only synthetic reference metadata from a host prototype. Never import raw customer, financial or identity fields.
  function captureReference({externalId,kind}={}){if(!/^[a-zA-Z0-9_-]{2,60}$/.test(externalId||""))throw Error("Synthetic external ID required");if(!["ORDER","DELIVERY","SOURCE","MONEY","TEAM","LAB"].includes(kind))throw Error("Unsupported synthetic record kind");
  const id="REF_"+kind+"_"+externalId;if(cases.has(id))return Object.freeze({duplicate:true,case:view(id)});
