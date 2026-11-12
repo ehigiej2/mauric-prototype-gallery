@@ -77,3 +77,14 @@
 - Coverage includes replay, key conflict, stale revision, ordered payment, duplicate fulfilment, POD order, refund after fulfilment, zero amount, missing case, invalid acknowledgement, tenant-local ledger and STOP/HOLD.
 - Important: this is a new standalone synthetic module. It is **not yet connected to live or existing prototype payment flows**, and has no persistence, server-side tenant enforcement, bank verification, or real transaction capability.
 - Release remains **HOLD**; no payment, refund, dispatch or settlement is performed.
+
+## Offline interruption and reconciliation — iteration 18
+- Added `shared/monarch-offline-reconciliation.js`, a tenant-scoped, in-memory research queue. It records only synthetic command metadata; no real payment, refund, dispatch or settlement.
+- Duplicate identical offline intent is idempotent; same key with changed payload conflicts.
+- Uncertain external outcomes enter `UNKNOWN_EXTERNAL_OUTCOME`; automatic replay is blocked. Cancellation is local only and explicitly does not prove an external action was cancelled.
+- High-risk confirmation/fulfilment/POD rehearsal requires an explicit human simulation reconciliation flag.
+- Exported archives are untrusted. Archive inspection validates schema/tenant, detects duplicate keys, and quarantines every item; it never auto-restores or replays.
+- Executed committed offline regression source against exact fetched offline module and synthetic ledger in isolated V8 harness: **PASS**.
+- Coverage: duplicate intent, conflict, synthetic rehearsal, idempotent replay, unknown outcome/no auto replay, local cancel, human gate, archive quarantine, cross-tenant archive rejection and permanent HOLD.
+- This queue is **not encrypted, durable, browser-integrated or safe as authoritative recovery storage**. It is not wired into prototype payment or delivery paths. It does not reconcile against bank/provider records. Device storage, concurrency, crash recovery, server idempotency and independent browser testing remain unverified.
+- Release: **HOLD**. No live actions.
