@@ -91,3 +91,12 @@ Prior Gate 027 Ed25519 evidence signing; Gate 032 persistent checkpoint pinning;
 - Critical limitation: adapters are injected assertions, not connected to real CAPREG/HAB/HIA/EXEC-CONS/OpsNudge services. A caller could lie; this bridge is not a security boundary until each adapter authenticates its source, verifies signatures and freshness server-side. Independent checkpoint adapter does not yet exist. No prototype is connected.
 - Source contracts inspected: HAB/HIA integration is validation only; CAPREG canonical Git persistence is personal/preproduction and does not claim distributed safety or EVIDENCE-ROOT status; EXEC-CONS is local/test. Preserve these limitations.
 - Browser, multi-device and original Python suite execution remain UNKNOWN. No deployment or live action. CROWN HOLD.
+
+## Iteration 24 — trust-root separation correction
+- Re-inspected actual CAPREG pointer/registry/envelope and HIA signer registry.
+- CAPREG current capability registry digest is `sha256:ab3aa80500d6dd516b8adde56c0953d5e350718939817b0deac96b221a7aee18`; HIA signer registry digest is `sha256:7f266a868fe578f207079be72c208acbd29a036ae73dd8d50924eb7a27b7672b`. These are distinct registries and must never share one digest field.
+- Updated `shared/monarch-reuse-bridge.js` to require separate `registryDigest` and `signerRegistryDigest`; HAB/HIA adapter must also assert policy validity, current verification receipt, active key and exact scope. This avoids incorrectly treating a CAPREG digest as HIA signer-registry proof.
+- Updated `tests/monarch-reuse-bridge.test.cjs` to challenge signer-registry substitution and invalid signer digest.
+- Re-fetched exact source and test from GitHub and executed in isolated V8 harness: **PASS**.
+- The bridge still receives injected assertions; no real service adapters or independent checkpoint are wired. CAPREG genesis pointer says execution_authority=false; HAB/HIA manifest says execution/deployment/production_authorised=false. Thus this is a tested contract refinement, not operational connection.
+- Browser and live source service tests remain UNKNOWN. Release HOLD.
