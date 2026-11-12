@@ -100,3 +100,12 @@ Prior Gate 027 Ed25519 evidence signing; Gate 032 persistent checkpoint pinning;
 - Re-fetched exact source and test from GitHub and executed in isolated V8 harness: **PASS**.
 - The bridge still receives injected assertions; no real service adapters or independent checkpoint are wired. CAPREG genesis pointer says execution_authority=false; HAB/HIA manifest says execution/deployment/production_authorised=false. Thus this is a tested contract refinement, not operational connection.
 - Browser and live source service tests remain UNKNOWN. Release HOLD.
+
+## Iteration 25 — CAPREG read-only source adapter
+- Inspected canonical `governance/capreg-001-r2/snapshot.py` and `persistence.py`. Canonical digest is SHA-256 over sorted-key compact JSON; envelope digest must match registry; recovery validates contiguous snapshot numbering, parent digest continuity, unique consumed request/decision digests, pointer-to-head equality, and hard-codes `execution_authority:false`.
+- Added `shared/monarch-capreg-readonly-adapter.js` and `tests/monarch-capreg-readonly-adapter.test.cjs`.
+- Adapter accepts the output of the unchanged canonical `recover_state()` implementation and requires a separate head attestor binding canonical-main commit to exact snapshot ID, registry digest and snapshot digest. It returns fail-closed invalid on source outage or mismatch and never returns execution authority.
+- Exact committed source/test were fetched from review branch and executed in isolated V8 harness: **PASS** for valid recovered head + attestation, registry mismatch, invalid main attestation, recovery outage, and missing attestor.
+- **Not connected to actual Python runtime:** local GitHub DNS resolution fails, so this session cannot clone the CROWN repository or execute its Python recovery implementation. Tests use controlled mock recovery/attestor fixtures. No claim that actual CAPREG service has been run.
+- Independent head attestor remains an injected trust dependency and has not been implemented or independently verified. Therefore bridge still cannot report real service connection or trusted rollback protection.
+- CAPREG pointer and HIA manifest both explicitly keep execution/deployment/production authority false. No writes, approvals, live action or deployment. CROWN HOLD.
