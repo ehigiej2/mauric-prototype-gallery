@@ -11,9 +11,14 @@ const options={tenant:'demo-tenant',prototype:'trade',storage,crypto:webcrypto,n
  assert.equal(records.size,1);assert.equal(records.values().next().value.includes('Fictional akara'),false);
  assert.deepEqual(await memory.load(pass),{notes:'Fictional akara',questions:['How send stock?']});
  await assert.rejects(memory.load('incorrect-passphrase'),/Unable to decrypt/);
+ assert.equal(memory.hasSaved(),true,'Wrong passphrase must not delete a valid record');
+ assert.deepEqual(await memory.load(pass),{notes:'Fictional akara',questions:['How send stock?']},'Wrong passphrase must not corrupt record');
  const other=create({...options,tenant:'other-tenant'});assert.equal(await other.load(pass),null);
  const key=records.keys().next().value,original=records.get(key);const obj=JSON.parse(original);obj.cipher='AAAA'+obj.cipher.slice(4);records.set(key,JSON.stringify(obj));
- await assert.rejects(memory.load(pass),/Unable to decrypt/);records.set(key,original);
+ await assert.rejects(memory.load(pass),/Unable to decrypt/);
+ assert.equal(memory.hasSaved(),true,'Tampered record must not be silently removed');
+ records.set(key,original);
+ assert.deepEqual(await memory.load(pass),{notes:'Fictional akara',questions:['How send stock?']},'Restored ciphertext must remain recoverable');
  const expired=create({...options,now:()=>100000000+8*86400000});await assert.rejects(expired.load(pass),/Unable to decrypt/);
  assert.equal(expired.hasSaved(),false,'Expired ciphertext should be removed');
  assert.equal(records.size,0,'Expired record should be purged from local storage');
