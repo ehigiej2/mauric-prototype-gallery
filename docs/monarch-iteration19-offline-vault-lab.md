@@ -26,3 +26,12 @@ The exact source and regression test were subsequently committed to this non-pub
 - Source was re-fetched after commit and inspected: atomic compare-and-swap path present; no browser execution evidence.
 - Important residual: the legacy `save()` method still performs an unconditional write. It must not be used by multi-tab or multi-device concurrent writers. CAS is same-origin IndexedDB concurrency control only, not distributed multi-device locking or rollback prevention.
 - The vault still lacks monotonic server-signed versions, cross-device coordination, crash/restart acceptance, and independent security review. Release remains **HOLD**.
+
+## Iteration 21 — rollback-resistant version verification boundary
+- Added `shared/monarch-evidence-version-gate.js` and `tests/monarch-evidence-version-gate.test.cjs`.
+- Gate compares encrypted archive digest and monotonically increasing version with a separately supplied tenant-scoped authority.
+- Detects older archive (ROLLBACK_DETECTED), uncommitted future version, same-version/different-ciphertext conflict, absent anchor and authority outage. Matching anchors remain quarantined; no archive is auto-executed.
+- `propose()` returns a proposal only; it does not write to the authority or storage. This client module does not implement or provide the trusted authority.
+- Test source committed. Execution was attempted in the available orchestration runtime but blocked because that runtime does not expose WebCrypto (`crypto is not defined`). Therefore the new test suite is **NOT EXECUTED** here; results remain UNKNOWN pending Node 22 or browser WebCrypto test execution.
+- The gate is not yet connected to vault save/restore. Without a real authenticated monotonic authority, it provides no actual rollback protection. Local attacker-controlled storage and client-supplied anchors are not trusted.
+- Release HOLD; no deployment or live action.
