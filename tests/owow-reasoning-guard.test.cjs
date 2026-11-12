@@ -1,0 +1,13 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
+const sandbox={};sandbox.globalThis=sandbox;
+vm.runInNewContext(fs.readFileSync(path.resolve(__dirname,'../shared/owow-reasoning-guard.js'),'utf8'),sandbox);
+const guard=sandbox.OWOWReasoningGuard;
+const a=guard.classify('Seller sold 3 items at 200 naira each and spent 150 naira on delivery');
+assert.equal(a.lane,'DETERMINISTIC');assert.equal(a.calculation.revenue,600);assert.equal(a.calculation.expense,150);assert.equal(a.calculation.difference,450);
+assert.equal(guard.classify('Send money to the rider').lane,'HUMAN_REVIEW');
+assert.equal(guard.classify('How I fit record sales in notebook?').lane,'LANGUAGE_DRAFT');
+assert.equal(guard.classify('Unverified investment prediction').lane,'RESEARCH_REVIEW');
+assert.equal(guard.classify('Doctor should diagnose patient').action,'BLOCKED');
+assert.equal(guard.classify('sold 1000000000000 items at 200 naira each and spent 150 naira on delivery').lane,'RESEARCH_REVIEW');
+console.log('OWOW reasoning guard: 9 synthetic checks PASS');

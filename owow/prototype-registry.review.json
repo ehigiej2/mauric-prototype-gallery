@@ -1,0 +1,128 @@
+{
+  "schema": "owow.prototype-registry.v1",
+  "asOf": "2026-11-12",
+  "release": "HOLD",
+  "sourceBranch": "review/owow-unified-approved-catalogue-20261112",
+  "approvalRule": "locked snapshots are not superseded by newer unaccepted branches",
+  "entries": [
+    {
+      "id": "mama-akara",
+      "status": "FOUNDER_APPROVED_SNAPSHOT",
+      "ref": "locked/mama-akara-nigeria-national-v1-2026-11-11",
+      "runtime": "UNKNOWN"
+    },
+    {
+      "id": "tailor-osayi",
+      "status": "FOUNDER_APPROVED_SNAPSHOT",
+      "ref": "locked/tailor-osayi-nigeria-v1-founder-approved",
+      "runtime": "UNKNOWN"
+    },
+    {
+      "id": "building-materials-osayi",
+      "status": "FOUNDER_APPROVED_SNAPSHOT",
+      "ref": "locked/building-materials-osayi-nigeria-v1-founder-approved",
+      "runtime": "UNKNOWN"
+    },
+    {
+      "id": "waka-q1-86",
+      "status": "REVIEW_CANDIDATE",
+      "ref": "review/monarch-waka-q1-86",
+      "path": "monarch-trade-waka-review.html",
+      "runtime": "NOT_ACCEPTED"
+    },
+    {
+      "id": "osayuki-repair",
+      "status": "REVIEW_CANDIDATE",
+      "ref": "review/osayuki-six-button-acceptance-fix",
+      "runtime": "UNKNOWN"
+    },
+    {
+      "id": "terry-trade",
+      "status": "SYNTHETIC_SOURCE",
+      "path": "terry-benin-waka-trade-community.html",
+      "runtime": "UNKNOWN"
+    },
+    {
+      "id": "terry-journey",
+      "status": "SYNTHETIC_SOURCE",
+      "path": "terry-working-journey.html",
+      "runtime": "UNKNOWN"
+    },
+    {
+      "id": "stephen-joeyvette",
+      "status": "SYNTHETIC_SOURCE",
+      "path": "stephen-preview.html",
+      "runtime": "UNKNOWN"
+    },
+    {
+      "id": "waka-five-trip",
+      "status": "SYNTHETIC_SOURCE",
+      "path": "waka-rider-requester-farmer.html",
+      "runtime": "UNKNOWN"
+    },
+    {
+      "id": "edo-hospital",
+      "status": "SYNTHETIC_SOURCE",
+      "path": "edo-hospital.html",
+      "runtime": "UNKNOWN"
+    },
+    {
+      "id": "amure-family",
+      "status": "SYNTHETIC_SOURCE",
+      "path": "family.html",
+      "runtime": "UNKNOWN"
+    },
+    {
+      "id": "kelvin-idon",
+      "status": "SYNTHETIC_SOURCE",
+      "path": "kelvin-idon.html",
+      "runtime": "UNKNOWN"
+    },
+    {
+      "id": "zaza",
+      "status": "SYNTHETIC_SOURCE",
+      "path": "zaza-trade.html",
+      "runtime": "UNKNOWN"
+    },
+    {
+      "id": "jp-marketplace",
+      "status": "SYNTHETIC_SOURCE",
+      "path": "jp-marketplace.html",
+      "runtime": "UNKNOWN"
+    },
+    {
+      "id": "obi-waka",
+      "status": "SYNTHETIC_SOURCE",
+      "path": "obi-waka.html",
+      "runtime": "UNKNOWN"
+    },
+    {
+      "id": "mauric-chat",
+      "status": "SYNTHETIC_SOURCE",
+      "path": "mauric-chat.html",
+      "runtime": "UNKNOWN"
+    },
+    {
+      "id": "knightpride",
+      "status": "SOURCE_RECOVERED_BROWSER_SMOKE",
+      "runtime": "SMOKE_ONLY",
+      "path": "knightpride.html",
+      "alternates": [
+        "knightpride-latest.html",
+        "martins-executive.html"
+      ]
+    },
+    {
+      "id": "tony-executive",
+      "status": "SEPARATE_REPOSITORY",
+      "repository": "ehigiej2/mauric-tony-executive",
+      "runtime": "UNKNOWN"
+    },
+    {
+      "id": "opsnudge",
+      "status": "SEPARATE_REPOSITORY",
+      "repository": "ehigiej2/opsnudge-platform",
+      "runtime": "UNKNOWN"
+    }
+  ]
+}

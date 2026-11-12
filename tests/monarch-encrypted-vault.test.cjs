@@ -1,0 +1,20 @@
+const assert=require('node:assert/strict');const crypto=require('node:crypto').webcrypto;const fs=require('node:fs'),vm=require('node:vm');
+const ctx={TextEncoder,TextDecoder,Buffer};vm.runInNewContext(fs.readFileSync(__dirname+'/../shared/monarch-encrypted-vault.js','utf8'),ctx);
+const api=ctx.MonarchEncryptedVault;
+(async()=>{
+const db=new Map(),storage={getItem:async k=>db.get(k),setItem:async(k,v)=>{db.set(k,v)},removeItem:async k=>{db.delete(k)}};
+const vault=api.makeVault({tenant:'benin_demo',storage,webcrypto:crypto,iterations:210000});
+const rows=[{command:{caseId:'CASE_001',key:'PAY-001',action:'PAYMENT_CONFIRM',expectedRevision:2,amountMinor:500000,currency:'NGN'},status:'UNKNOWN_EXTERNAL_OUTCOME'}];
+const secret='long research passphrase 123';await vault.save(rows,secret);
+assert.match(db.get('monarch-research-vault:benin_demo'),/ciphertext/);
+assert.equal(db.get('monarch-research-vault:benin_demo').includes('PAYMENT_CONFIRM'),false);
+const restored=await vault.restore(secret);assert.equal(restored.found,true);assert.equal(restored.records[0].status,'QUARANTINED_UNTRUSTED');assert.equal(restored.records[0].sourceStatus,'UNKNOWN_EXTERNAL_OUTCOME');
+await assert.rejects(()=>vault.restore('incorrect passphrase 123'),/Authentication failed/);
+const tampered=JSON.parse(db.get('monarch-research-vault:benin_demo'));tampered.ciphertext=(tampered.ciphertext[0]==='A'?'B':'A')+tampered.ciphertext.slice(1);
+await assert.rejects(()=>vault.open(JSON.stringify(tampered),secret),/Authentication failed/);
+const other=api.makeVault({tenant:'other_demo',storage,webcrypto:crypto,iterations:210000});await assert.rejects(()=>other.open(db.get('monarch-research-vault:benin_demo'),secret),/Wrong tenant/);
+await assert.rejects(()=>vault.seal([...rows,...rows],secret),/Duplicate record identity/);
+await assert.rejects(()=>vault.seal([{command:{...rows[0].command,amountMinor:-1},status:'QUEUED_UNVERIFIED'}],secret),/Invalid amount/);
+await vault.erase();assert.equal((await vault.restore(secret)).found,false);
+console.log('PASS encrypted vault: AES-GCM round-trip, quarantine, wrong passphrase, tamper, tenant isolation, duplicates, invalid amount, erase');
+})().catch(e=>{console.error(e);process.exitCode=1});
