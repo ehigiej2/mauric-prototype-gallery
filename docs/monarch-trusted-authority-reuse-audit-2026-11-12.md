@@ -81,3 +81,13 @@ Prior Gate 027 Ed25519 evidence signing; Gate 032 persistent checkpoint pinning;
 **Local test blocker:** this runtime cannot resolve the private GitHub hostname, and the registered remote `penguin` device remains offline. GitHub connector can inspect code, but there is no safe way shown yet to execute complete original Python test suites in the user's repository checkout. Therefore 21 CAPREG, 17 HIA and 46 HAB test-method counts refer to source inspection, not passing results in this turn.
 
 **Recommendation:** no new signer, bootstrap, generic ledger, or authority engine. Design a metadata-only boundary mapping `tenant, archive version, digest, current anchored head` into existing HAB/HIA-controlled checkpoint write, with separate independent custody and monotonicity; verify before implementing any write.
+
+## Iteration 23 — minimal reuse bridge connected (review only)
+- Added `shared/monarch-reuse-bridge.js` (Git blob `accb735ce5acfa4712298e5308bb81bf4781ec36`) and `tests/monarch-reuse-bridge.test.cjs` (Git blob `6c61583ee56ad4de3abdf2a8159bf00ec26f7fb8`).
+- The bridge accepts five injected read-only adapters: CAPREG, HAB/HIA, EXEC-CONS, OpsNudge audit and independent checkpoint.
+- It validates tenant/case binding, current registry digest, canonical CAPREG main commit, HIA Payload V1/current key/scope, replay and unknown-outcome state, organisation-scoped audit integrity, and independent monotonic checkpoint digest/version.
+- All results remain `release:HOLD` and `productionAuthority:false`, even when every assertion matches. The bridge performs no network calls, no storage writes, no approval, no transaction execution, and copies no customer/trader content.
+- Regression test was executed against exact source and test fetched back from the review branch in isolated V8 harness: **PASS**. Covered all five contract assertions, missing/mismatched checkpoint, wrong tenant, invalid version and constructor fail-closed.
+- Critical limitation: adapters are injected assertions, not connected to real CAPREG/HAB/HIA/EXEC-CONS/OpsNudge services. A caller could lie; this bridge is not a security boundary until each adapter authenticates its source, verifies signatures and freshness server-side. Independent checkpoint adapter does not yet exist. No prototype is connected.
+- Source contracts inspected: HAB/HIA integration is validation only; CAPREG canonical Git persistence is personal/preproduction and does not claim distributed safety or EVIDENCE-ROOT status; EXEC-CONS is local/test. Preserve these limitations.
+- Browser, multi-device and original Python suite execution remain UNKNOWN. No deployment or live action. CROWN HOLD.
