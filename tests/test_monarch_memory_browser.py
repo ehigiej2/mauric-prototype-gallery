@@ -40,6 +40,8 @@ def main():
             page.locator("#researchPass").fill("synthetic-research-passphrase-123")
             page.locator("#researchSave").click()
             assert "Not saved" in page.locator("#researchStatus").inner_text()
+            assert page.locator("#researchPass").input_value() == "", "Passphrase retained after consent rejection"
+            page.locator("#researchPass").fill("synthetic-research-passphrase-123")
             assert page.evaluate("() => localStorage.length") == 0, "Research stored without consent"
             page.locator("#researchConsent").check()
             page.locator("#researchSave").click()
@@ -58,6 +60,7 @@ def main():
             page.locator("#researchPass").fill("incorrect-passphrase-123")
             page.locator("#researchRecover").click()
             expect(page.locator("#researchStatus")).to_contain_text("Recovery failed", timeout=15000)
+            assert page.locator("#researchPass").input_value() == "", "Passphrase retained after failed recovery"
             assert page.locator("#researchNote").input_value() == "Fictional Benin supplier scenario", "Failed recovery unexpectedly changed note"
             page.locator("#back").click()
             assert page.locator("#researchMemory").count() == 0, "Research controls persist after exit"
@@ -69,6 +72,7 @@ def main():
             page.locator("#researchPass").fill("synthetic-research-passphrase-123")
             page.locator("#researchRecover").click()
             expect(page.locator("#researchStatus")).to_contain_text("No saved research", timeout=15000)
+            assert page.locator("#researchPass").input_value() == "", "Passphrase retained when no record exists"
             assert not requests, f"Unexpected outbound requests: {requests}"
             assert not errors, f"JavaScript errors: {errors}"
             context.close()
