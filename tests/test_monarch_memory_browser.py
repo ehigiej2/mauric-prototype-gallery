@@ -29,10 +29,13 @@ def main():
             assert page.locator(".tile").count() == 6
             page.locator('.tile[data-mode="osayi"]').click()
             assert page.locator("#researchMemory").is_visible()
+            assert page.locator("#researchConsent").is_checked() is False
+            assert page.evaluate("() => localStorage.length") == 0, "Unexpected storage before consent"
             page.locator("#researchNote").fill("Fictional Benin supplier scenario")
             page.locator("#researchPass").fill("synthetic-research-passphrase-123")
             page.locator("#researchSave").click()
             assert "Not saved" in page.locator("#researchStatus").inner_text()
+            assert page.evaluate("() => localStorage.length") == 0, "Research stored without consent"
             page.locator("#researchConsent").check()
             page.locator("#researchSave").click()
             assert "saved locally" in page.locator("#researchStatus").inner_text()
@@ -48,6 +51,7 @@ def main():
             page.locator("#researchPass").fill("incorrect-passphrase-123")
             page.locator("#researchRecover").click()
             assert "Recovery failed" in page.locator("#researchStatus").inner_text()
+            assert page.locator("#researchNote").input_value() == "Fictional Benin supplier scenario", "Failed recovery unexpectedly changed note"
             page.locator("#back").click()
             assert page.locator("#researchMemory").count() == 0, "Research controls persist after exit"
             page.locator('.tile[data-mode="osayi"]').click()
