@@ -21,7 +21,7 @@ assert.throws(()=>a.execute({...base,action:"FULFILMENT_START",key:"ful-2",expec
 const pod=a.execute({...base,action:"POD_RECORD",key:"pod-1",expectedRevision:4});
 assert.equal(pod.fulfilment,"POD_SIM");
 assert.throws(()=>a.execute({...base,action:"REFUND_REQUEST",key:"refund-1",expectedRevision:5,amountMinor:100000}),/Refund not eligible/);
-a.register("CASE_02");
+a.register("CASE_02");\na.register("CASE_ZERO");
 assert.throws(()=>a.execute({...base,action:"PAYMENT_REQUEST",key:"xx",expectedRevision:1,amountMinor:0}),/Positive amount/);
 assert.throws(()=>a.execute({...base,action:"PAYMENT_REQUEST",key:"xx",expectedRevision:1,amountMinor:10}),/Case not found/);
 assert.throws(()=>a.execute({...base,action:"PAYMENT_REQUEST",key:"xx",expectedRevision:1,amountMinor:10,simulationAcknowledgement:"owner"}),/Synthetic-only/);
