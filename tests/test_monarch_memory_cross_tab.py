@@ -24,8 +24,7 @@ def main():
             url=f"http://127.0.0.1:{server.server_port}/monarch-trade-waka-review.html"
             a.goto(url)
             b.goto(url)
-            for page in (a,b):
-                page.evaluate("""() => { localStorage.clear(); }""")
+            a.evaluate("() => localStorage.clear()")
             # Inject a controllable crypto facade, rather than attempting to
             # overwrite the browser's possibly read-only crypto.subtle.encrypt.
             a.evaluate("""() => {
