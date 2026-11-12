@@ -41,6 +41,7 @@ def main():
             expect(page.locator("#researchStatus")).to_contain_text("saved locally", timeout=15000)
             assert page.locator("#researchPass").input_value() == "", "Passphrase retained after save"
             assert page.evaluate("() => !JSON.stringify(localStorage).includes('Fictional Benin supplier scenario')")
+            assert page.evaluate("() => localStorage.length === 1"), "Unexpected research storage keys"
             page.reload()
             assert page.locator(".tile").count() == 6
             page.locator('.tile[data-mode="osayi"]').click()
@@ -48,6 +49,7 @@ def main():
             page.locator("#researchRecover").click()
             expect(page.locator("#researchNote")).to_have_value("Fictional Benin supplier scenario", timeout=15000)
             assert page.locator("#researchPass").input_value() == "", "Passphrase retained after recovery"
+            assert page.locator("#researchConsent").is_checked() is False, "Consent incorrectly persisted"
             page.locator("#researchPass").fill("incorrect-passphrase-123")
             page.locator("#researchRecover").click()
             expect(page.locator("#researchStatus")).to_contain_text("Recovery failed", timeout=15000)
