@@ -66,3 +66,18 @@ Prior Gate 027 Ed25519 evidence signing; Gate 032 persistent checkpoint pinning;
 1. Execute existing CAPREG 21 / HIA 17 / HAB 46 source-level tests in a permitted isolated runtime and record exact refs; no claim of pass until execution.
 2. Determine whether a separate, signed checkpoint/custody implementation exists elsewhere, including non-default review branches and user-held archives.
 3. Define only the missing adapter and out-of-band head custody; request separate approval before any production authority/storage activation.
+
+## Third-pass trust-root and integration discovery — 2026-11-12
+
+**FOUND: existing HAB × HIA trust-root integration, with explicit non-authority controls.**
+
+- `governance/hab-hia-int-001/INTEGRATION_CONTRACT.md` — SHA `1637825a81d3aafd4d764ad1ab52eb0c7736d844`. Requires HAB policy PASS AND HIA cryptographic attestation PASS, exact action/scope, fresh verified receipt bound to current registry digest and permission not expired/revoked/consumed. Does not itself execute a consequential action.
+- `governance/hab-hia-int-001/integration-manifest.json` — SHA `c325a1cf99456bb2dc24fd1c448ad39392deb2c1`. Confirms founder signer enrolled, bootstrap consumed, Payload V1 reconciliation; marks `execution_authorised=false`, `deployment_authorised=false`, `production_authorised=false`.
+- `governance/trust-bootstrap-001/validator.py` — SHA `d1deaf5bf32f027b75621cfd0ef0f37101842548`; `README.md` — SHA `9893a8d3b0542a67278252a240ff49cad8759344`. This is a permanently consumed bootstrap: intentionally not reusable for new permissions. Do not attempt to reactivate it.
+- Commit search also identifies `governance/trust-bootstrap-001/test_validator.py` and `governance/hab-hia-int-001` integration pinning. The detailed tests have not been executed in this inspection.
+
+**Reuse conclusion:** reuse HIA public-key verification + HAB policy + existing integration manifest for *identity and bounded authorisation*. Reuse CAPREG canonical history for monotonic snapshots within the repository. These are not substitutes for an *independently custodied, rollback-resistant* checkpoint of the archive version across device loss or a repository-history compromise.
+
+**Local test blocker:** this runtime cannot resolve the private GitHub hostname, and the registered remote `penguin` device remains offline. GitHub connector can inspect code, but there is no safe way shown yet to execute complete original Python test suites in the user's repository checkout. Therefore 21 CAPREG, 17 HIA and 46 HAB test-method counts refer to source inspection, not passing results in this turn.
+
+**Recommendation:** no new signer, bootstrap, generic ledger, or authority engine. Design a metadata-only boundary mapping `tenant, archive version, digest, current anchored head` into existing HAB/HIA-controlled checkpoint write, with separate independent custody and monotonicity; verify before implementing any write.
