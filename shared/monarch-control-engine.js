@@ -56,7 +56,7 @@ function attach({tenant,prototype,label="Decision controls"}={}){if(!global.docu
  advance.onclick=()=>{if(!current)return render("Create a case first");try{const s=engine.view(current).status;engine.transition(current,NEXT[s]||"OWNER_REVIEW");render("Moved forward")}catch(e){render("BLOCKED: "+e.message)}};
  stop.onclick=()=>{if(current){engine.transition(current,"STOPPED",{reason:"Manually stopped in review prototype"});render("Case stopped")}};
  button.onclick=()=>{panel.hidden=!panel.hidden;button.setAttribute("aria-expanded",String(!panel.hidden));if(!panel.hidden)render()};
- if(typeof global.addEventListener==="function")global.addEventListener("monarch:synthetic-record",event=>{try{const d=event.detail||{};if(d.tenant&&d.tenant!==tenant)return;if(d.prototype&&d.prototype!==prototype)return;const r=engine.captureReference(d);render(r.duplicate?"Duplicate synthetic reference ignored":"Synthetic reference captured; all gates UNKNOWN")}catch(e){render("BLOCKED synthetic reference: "+e.message)}});
+ if(typeof global.addEventListener==="function")global.addEventListener("monarch:synthetic-record",event=>{try{const d=event.detail||{};if(d.tenant!==tenant||d.prototype!==prototype){render("BLOCKED synthetic reference: explicit tenant and prototype must match");return;}const r=engine.captureReference(d);render(r.duplicate?"Duplicate synthetic reference ignored":"Synthetic reference captured; all gates UNKNOWN")}catch(e){render("BLOCKED synthetic reference: "+e.message)}});
  global.document.body.append(button,panel);return engine}
 global.MonarchControl=Object.freeze({makeEngine,attach,STATES,REQUIRED});
 })(typeof window!=="undefined"?window:globalThis);
