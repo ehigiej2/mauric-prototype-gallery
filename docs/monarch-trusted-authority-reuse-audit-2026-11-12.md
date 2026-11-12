@@ -30,3 +30,39 @@ Prior Gate 027 Ed25519 evidence signing; Gate 032 persistent checkpoint pinning;
 - No new generic implementation started.
 - Next: find exact Gate 027/032/39–41 source, inspect independent custody and test evidence; determine minimal adapter; run tests and negative security checks.
 - CROWN HOLD remains active.
+
+## Second-pass discovery — source verified
+
+### Gate 032: CAPREG Git-backed persistence — FOUND
+- `ehigiej2/crown-genesis-aion/governance/capreg-001-r2/persistence.py` Git blob SHA `5f04e406e30605fb19708d53bd368152fda68390`.
+- `governance/capreg-001-r2/PERSISTENCE_CONTRACT.md` SHA `2e6dd09866422bae5c30588324b4c5af4f0daf2e`.
+- `governance/capreg-001-r2/test_persistence.py` SHA `83881d09cce51863a41405ad3cba2edd60d903fb`; 21 test methods observed in source, not rerun during this audit.
+- Recovery enforces contiguous historical snapshots, unique terminal head, parent digest lineage, current-pointer match, and fail-closed rejection of ambiguity. Canonical physical changes require separately authorised changes on Git `main`.
+- `governance/capreg-001-r2/state/CURRENT_SNAPSHOT.json` exists at SHA `5a6f953fd3dd8974fc037f1e441593e888df71da`, pointing to genesis `CAPREG-SNAPSHOT-000001` with `execution_authority:false`. This is not evidence of permission to mutate.
+
+### Gate 039: post-genesis authority consumption — FOUND
+- Commit `41add440620cde279816cea6050c140d1e96667a` modifies CAPREG persistence, tests, HAB evaluator, and tests to enforce current state bindings and reject reused authority decision digests.
+- Current CAPREG persistence source/contract inspected. No live registry mutation authorised.
+
+### Ed25519/HIA signing — FOUND
+- `governance/hia-001/verifier.py` SHA `1ee4ddc4c900fb62a4b756fffaf5425c3158ae0d`.
+- `governance/hia-001/README.md` SHA `3c1c88087e96bd061ef775af27dd248d1addcb3b`.
+- `governance/hia-001/test_verifier.py` SHA `780412db68af786531553002b7e7f2ca869755d6`, 17 test methods observed; not rerun here.
+- Signed canonical record+attestation metadata; active key verification and revocation/expiry handling; OpenSSL Ed25519 detached signature verification. HIA is identity evidence, not standalone approval or deployment authority.
+
+### HAB human approval — FOUND
+- `governance/hab-001/evaluator.py` SHA `fcddffeaed4bbc7125d73d36d6b3da2c2a2c90ad`.
+- `governance/hab-001/test_evaluator.py` SHA `fbf4a31c27817778b27187b23ed1bf834660ca5e`; 46 test methods observed; not rerun here.
+- Explicitly bounded action classes, authority tiers, scope/digest lineage, signature integration and fail-closed replay handling.
+
+### Reuse decision
+**Re-use the existing source of truth; do not rebuild:** CAPREG recovery and canonical history; HAB authority checks; HIA cryptographic signer verification; EXEC-CONS execution replay ledger; OpsNudge organisation-scoped audit/outbox; MONARCH encrypted local vault. Integration should use a minimal contract and metadata-only digest references, not centralised client transaction data.
+
+**Unresolved:** CAPREG canonical Git pointer is checked against repo history but does not independently establish rollback detection if the canonical repository itself is replaced or rewritten by a fully privileged adversary. The currently observed genesis pointer has execution_authority=false. An independently held, authenticated and monotonic head/checkpoint (or equivalently trusted append-only transparency/custody) is still necessary for the stronger malicious rollback threat model. Do not label a Git commit SHA or client-provided pointer alone an independent anchor.
+
+**Gate 040/041:** no exact corresponding commit found from commit-message searches. Treat their source mapping as UNKNOWN, rather than infer from historical numbering.
+
+### Next acceptance
+1. Execute existing CAPREG 21 / HIA 17 / HAB 46 source-level tests in a permitted isolated runtime and record exact refs; no claim of pass until execution.
+2. Determine whether a separate, signed checkpoint/custody implementation exists elsewhere, including non-default review branches and user-held archives.
+3. Define only the missing adapter and out-of-band head custody; request separate approval before any production authority/storage activation.
