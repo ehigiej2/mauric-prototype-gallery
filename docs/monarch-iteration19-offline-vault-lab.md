@@ -19,3 +19,10 @@ The exact source and regression test were subsequently committed to this non-pub
 - Local test command: `node test-vault.cjs`, Node v22.16.0 — **PASS**.
 - After commit, both files were fetched from GitHub and their byte lengths matched the locally tested source/test. Full cryptographic hash comparison against fetched bytes was not executed in the repository runtime.
 - Browser IndexedDB, iPhone Safari, reload/power-loss, concurrent-tab and durable crash-recovery tests remain **UNKNOWN**.
+
+## Iteration 20 — browser gate and concurrency hardening
+- Attempted headless Chromium 144 with the system browser. Browser process launches, but navigation to the local HTTP test origin is blocked by the execution environment (`ERR_BLOCKED_BY_ADMINISTRATOR`). No browser IndexedDB test ran; Safari/browser persistence remains **UNKNOWN**.
+- Added optional IndexedDB `compareAndSwap` implemented in one read-write transaction. `saveIfUnchanged(records, passphrase, expectedCiphertext)` now rejects a conflicting update rather than silently overwriting a changed encrypted archive. Callers must read the current ciphertext, pass that exact expected value (or null for first write), and resolve conflicts by human review.
+- Source was re-fetched after commit and inspected: atomic compare-and-swap path present; no browser execution evidence.
+- Important residual: the legacy `save()` method still performs an unconditional write. It must not be used by multi-tab or multi-device concurrent writers. CAS is same-origin IndexedDB concurrency control only, not distributed multi-device locking or rollback prevention.
+- The vault still lacks monotonic server-signed versions, cross-device coordination, crash/restart acceptance, and independent security review. Release remains **HOLD**.
