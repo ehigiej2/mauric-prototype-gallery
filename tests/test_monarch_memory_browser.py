@@ -19,7 +19,9 @@ def main():
             engine = os.environ.get("WAKA_BROWSER", "chromium")
             assert engine in ("chromium", "webkit")
             browser = getattr(p, engine).launch(headless=True)
-            context = browser.new_context(viewport={"width": 390, "height": 844})
+            width = int(os.environ.get("WAKA_WIDTH", "390"))
+            height = int(os.environ.get("WAKA_HEIGHT", "844"))
+            context = browser.new_context(viewport={"width": width, "height": height})
             page = context.new_page()
             requests, errors = [], []
             page.on("request", lambda r: requests.append(r.url) if not r.url.startswith(f"http://127.0.0.1:{server.server_port}/") else None)
@@ -27,6 +29,9 @@ def main():
             url = f"http://127.0.0.1:{server.server_port}/monarch-trade-waka-review.html"
             page.goto(url)
             assert page.locator(".tile").count() == 6
+            for tile in page.locator(".tile").all():
+                box = tile.bounding_box()
+                assert box and box["x"] >= 0 and box["y"] >= 0 and box["x"] + box["width"] <= width and box["y"] + box["height"] <= height, f"Home tile outside viewport {width}x{height}: {box}"
             page.locator('.tile[data-mode="osayi"]').click()
             assert page.locator("#researchMemory").is_visible()
             assert page.locator("#researchConsent").is_checked() is False
@@ -68,7 +73,7 @@ def main():
             assert not errors, f"JavaScript errors: {errors}"
             context.close()
             browser.close()
-            print(f"PASS {engine}: consent, encrypted save, reload recovery, wrong passphrase, deletion, six buttons, localhost-only requests")
+            print(f"PASS {engine} {width}x{height}: consent, encrypted save, reload recovery, wrong passphrase, deletion, six buttons, localhost-only requests")
     finally:
         server.shutdown()
         server.server_close()
