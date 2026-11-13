@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MONARCH RISE — Offline Practice</title>
+<style>
+:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#15223b;background:#f4f7fb}*{box-sizing:border-box}body{margin:0}.wrap{max-width:760px;margin:auto;padding:18px}header{background:#13234b;color:white;padding:22px;border-radius:20px;margin-bottom:18px}h1{margin:0 0 5px;font-size:1.8rem}p{line-height:1.5}.muted{color:#526077}.panel{background:white;border:1px solid #dbe2ef;border-radius:18px;padding:18px;margin:14px 0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.tile{border:0;border-radius:14px;padding:16px 9px;color:white;font-weight:750;min-height:96px;font-size:1rem;cursor:pointer}.tile:focus-visible,button:focus-visible,input:focus-visible{outline:4px solid #f3c33e;outline-offset:3px}.tile[aria-pressed=true]{outline:4px solid #12284e;outline-offset:2px}.a{background:#146fae}.b{background:#7445ad}.c{background:#ba611d}.d{background:#087d71}.e{background:#b33b75}.f{background:#4058ae}button.action{border:0;border-radius:10px;background:#142f68;color:white;padding:12px 18px;font-weight:700;cursor:pointer}input{font:inherit;border:1px solid #7b879d;border-radius:8px;padding:10px;width:100%;max-width:240px}.feedback{border-left:5px solid #247e69;background:#edf8f4;padding:12px;margin-top:12px;min-height:45px}small{color:#526077}label{display:block;font-weight:650;margin:10px 0 5px}.hidden{display:none}.pill{display:inline-block;background:#e7edf8;padding:5px 10px;border-radius:20px;font-size:.85rem}@media(max-width:420px){.tile{font-size:.88rem;padding:10px 5px;min-height:88px}.wrap{padding:10px}}
+</style></head><body><main class="wrap">
+<header><h1>👑 MONARCH RISE</h1><strong>We Rise by Lifting Each Other Up</strong><p>Practise useful business skills. No internet, account or payment required.</p><span class="pill" style="color:#14223a">SIMULATION ONLY · NO REAL JOBS OR MONEY</span></header>
+<section class="panel"><h2>Wetin you wan practise?</h2><p class="muted">Choose one of the six buttons. All exercises use made-up information.</p>
+<div class="grid" id="menu">
+<button class="tile a" data-view="strengths" aria-pressed="false">💡<br>My Strengths</button>
+<button class="tile b" data-view="learn" aria-pressed="false">📚<br>Learn</button>
+<button class="tile c" data-view="practice" aria-pressed="false">🧮<br>Practise</button>
+<button class="tile d" data-view="opportunities" aria-pressed="false">🧰<br>Opportunities</button>
+<button class="tile e" data-view="progress" aria-pressed="false">⭐<br>My Progress</button>
+<button class="tile f" data-view="help" aria-pressed="false">🤝<br>Ask for Help</button>
+</div></section>
+<section class="panel" id="content" aria-live="polite"></section>
+<footer><small>Offline learning demonstration. Does not record names, criminal history or customer information. Progress stays in this page until closed or refreshed. Facility use requires NCoS approval.</small></footer>
+</main><script>
+"use strict";
+const content=document.getElementById("content");
+const scores={sale:false,stock:false,privacy:false};
+const pages={
+strengths:'<h2>My Strengths</h2><p>You may already know how to count goods, talk to customers, fix things, organise people or learn quickly.</p><p><strong>Exercise:</strong> Tell your tutor one task you have done well and one skill you want to learn. You do not need to share private history.</p>',
+learn:'<h2>Learn: Small Market Shop</h2><p>A fictional shop in Benin City sells bottled water. It starts with <strong>20 bottles</strong>, sells <strong>6 bottles</strong> at <strong>₦200 each</strong>, and receives <strong>4 new bottles</strong>.</p><p>Sales money = quantity sold × price. Remaining stock = opening stock − sold + received.</p><p>No real business or person is represented.</p>',
+practice:'<h2>Practise: Sales & Stock</h2><p>Use the fictional market-shop figures from Learn.</p><label for="sales">How much money from 6 bottles at ₦200 each?</label><input id="sales" type="number" min="0" inputmode="numeric"><button class="action" id="checkSale">Check sales</button><div id="saleFeedback" class="feedback" role="status">Enter an answer to practise.</div><label for="stock">How many bottles remain after selling 6 and receiving 4?</label><input id="stock" type="number" min="0" inputmode="numeric"><button class="action" id="checkStock">Check stock</button><div id="stockFeedback" class="feedback" role="status">Enter an answer to practise.</div>',
+opportunities:'<h2>Opportunities</h2><p>Skills from this exercise may help with supervised inventory counting, product listing, stock checks and customer-service training.</p><p><strong>No live vacancies are shown.</strong> Paid opportunities require real employer approval, suitability checks, fair terms and an authorised process.</p>',
+progress:'<h2>My Progress</h2><p id="progressText"></p><p>Progress is temporary and is not sent anywhere. A qualified tutor should assess actual competency, not only these answers.</p>',
+help:'<h2>Ask for Help</h2><p>Ask your authorised tutor for an explanation or a printed worksheet. You can stop, skip or repeat any exercise without penalty.</p><p>If you have a safeguarding or welfare concern, use the facility’s authorised confidential reporting process or another approved human support channel. This demonstration does not send messages.</p><button class="action" id="privacyCheck">I understand: never use real customer data here</button><div class="feedback" id="privacyFeedback" role="status">Privacy matters for every learner.</div>'
+};
+function show(view){document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.view===view)));content.innerHTML=pages[view];if(view==="practice"){document.getElementById("checkSale").addEventListener("click",()=>check("sale",1200));document.getElementById("checkStock").addEventListener("click",()=>check("stock",18));}if(view==="progress")document.getElementById("progressText").textContent=Object.values(scores).filter(Boolean).length+" of 3 practice checkpoints completed.";if(view==="help")document.getElementById("privacyCheck").addEventListener("click",()=>{scores.privacy=true;document.getElementById("privacyFeedback").textContent="Good. Use fictional or specifically approved training data only.";});}
+function check(kind,correct){const input=document.getElementById(kind==="sale"?"sales":"stock");const feedback=document.getElementById(kind==="sale"?"saleFeedback":"stockFeedback");if(input.value.trim()===""){feedback.textContent="Please enter a number.";return;}const ok=Number(input.value)===correct;scores[kind]=scores[kind]||ok;feedback.textContent=ok?"Correct! Well done.":"Try again. "+(kind==="sale"?"Multiply 6 × 200.":"Start with 20, subtract 6, then add 4.");}
+document.getElementById("menu").addEventListener("click",e=>{const button=e.target.closest("button[data-view]");if(button)show(button.dataset.view);});
+show("learn");
+</script></body></html>
