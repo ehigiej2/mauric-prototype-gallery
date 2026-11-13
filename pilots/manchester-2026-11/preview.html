@@ -1,41 +1,63 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>MONARCH | Manchester Pilot Preview</title>
-<style>:root{font-family:system-ui,-apple-system,sans-serif;color:#122840;background:#f1f5fa}*{box-sizing:border-box}body{margin:0}header{background:#122d4b;color:white;padding:24px 18px}main{max-width:680px;margin:auto;padding:20px}h1{font-size:clamp(25px,5vw,36px);margin:6px 0}.muted{color:#506377}.tag{font-size:12px;background:#f6dc9c;color:#40310c;padding:6px 9px;border-radius:8px;display:inline-block}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:20px 0}button{font:inherit;font-weight:700;min-height:84px;border:0;border-radius:18px;background:#176d88;color:white;padding:14px;cursor:pointer}button:focus-visible{outline:4px solid #f6bd55}section{background:white;padding:20px;border-radius:18px;box-shadow:0 2px 10px #10283a12}#result{white-space:pre-wrap;line-height:1.6}footer{padding:16px;text-align:center;font-size:12px;color:#506377}</style></head>
-<body><header><div class="tag">SYNTHETIC DEMO · NOT A LIVE BUSINESS SYSTEM</div><h1 id="brand">MONARCH Business Preview</h1><p id="sector"></p></header>
-<main><p class="muted">Try a business workflow without signing in, entering customer details or processing payments.</p><div class="grid" id="actions"></div><section aria-live="polite"><h2 id="panel-title">Choose a task</h2><div id="result">Tap a button to explore a sample workflow.</div></section></main>
-<footer>MONARCH research preview. No live orders, bookings, payments or customer data. Voice assistant not enabled in this preview.</footer>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0b182b"><title>MONARCH | Business Studio Preview</title>
+<style>
+:root{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f4f5f7;color:#172337}*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid #d9a646;outline-offset:2px}.wrap{max-width:920px;margin:auto;padding:0 20px}.hero{background:linear-gradient(135deg,#091728 0%,#173654 70%,#124b55 100%);color:#fff;padding:24px 0 32px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{font-size:12px;font-weight:900;letter-spacing:2px;color:#e9bf75}.status{font-size:11px;color:#f4d79f;border:1px solid #9b8053;border-radius:40px;padding:7px 10px}.eyebrow{margin:36px 0 8px;color:#c8d6e3;font-size:12px;text-transform:uppercase;letter-spacing:2px}.hero h1{font-size:clamp(30px,7vw,48px);line-height:1.08;letter-spacing:-1.3px;margin:0 0 12px}.hero p{color:#c7d7e3;max-width:550px;line-height:1.55;margin:0}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:25px}.metric{border:1px solid #ffffff25;background:#ffffff0b;border-radius:14px;padding:14px 10px}.metric strong{display:block;font-size:20px}.metric span{font-size:11px;color:#c8d4e0}.content{padding-top:26px;padding-bottom:40px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:10px}.section-head h2{margin:0 0 6px;font-size:21px;letter-spacing:-.4px}.section-head p{margin:0 0 16px;font-size:13px;color:#647287}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.tile{min-height:112px;text-align:left;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:12px;border:1px solid #e4e8ed;background:white;color:#192d41;padding:18px;border-radius:18px;box-shadow:0 5px 20px #14263b09;transition:transform .15s,border-color .15s}.tile:active{transform:scale(.985)}.tile[aria-pressed=true]{border:2px solid #bb904e;background:#fffaf0}.tile .glyph{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:#eaf1f5;color:#125b68;font-size:18px}.tile .name{font-size:15px;font-weight:750}.workspace{margin-top:18px;border-radius:22px;background:white;border:1px solid #e2e8ee;box-shadow:0 12px 30px #12283e10;overflow:hidden}.workspace-head{background:#f9fafb;border-bottom:1px solid #e7eaee;padding:20px 22px}.workspace-head small{color:#9a7542;font-weight:800;letter-spacing:1.5px}.workspace-head h2{margin:7px 0 5px;font-size:23px}.workspace-head p{margin:0;color:#66788a;font-size:13px;line-height:1.5}.workspace-body{padding:22px}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.field{display:block;margin:0 0 14px;font-size:13px;font-weight:700}.field select,.field input{display:block;width:100%;padding:14px;margin-top:7px;border:1px solid #ccd6df;border-radius:12px;background:#fff;color:#162a3d}.action{border:0;background:#0f6572;color:#fff;border-radius:12px;padding:13px 17px;min-height:48px;font-weight:750}.secondary{background:#edf2f5;color:#18364a}.line{padding:12px 0;border-bottom:1px solid #edf0f2;display:flex;justify-content:space-between;gap:12px;font-size:14px}.line:last-child{border-bottom:0}.note{background:#f4f7fa;border-radius:12px;padding:14px;color:#52677b;font-size:13px;line-height:1.55;margin-top:14px}.pill{background:#eaf5ef;color:#236a4c;border-radius:30px;padding:5px 10px;font-size:12px;font-weight:700}.foot{font-size:12px;color:#66788a;text-align:center;padding:0 20px 35px;line-height:1.6}.empty{color:#657689;font-size:14px}.result{font-weight:750;color:#126b54;margin-top:12px} @media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr)}.hero{padding:32px 0 42px}.tile{min-height:135px}}@media(max-width:380px){.wrap{padding:0 14px}.tile{padding:13px;min-height:105px}.status{font-size:9px}.brand{font-size:10px}}
+</style></head><body>
+<header class="hero"><div class="wrap"><div class="top"><div class="brand">✦ MONARCH / BUSINESS STUDIO</div><div class="status">PRIVATE RESEARCH PREVIEW</div></div><div class="eyebrow" id="sector">Business operations</div><h1 id="brand">Your business.<br>Your command centre.</h1><p>Experience how everyday work could feel with fewer steps and a clearer view of your business.</p><div class="metrics"><div class="metric"><strong>06</strong><span>Business tools</span></div><div class="metric"><strong>01</strong><span>Connected workspace</span></div><div class="metric"><strong>£0</strong><span>Demo cost</span></div></div></div></header>
+<main class="wrap content"><div class="section-head"><div><h2>What would you like to do?</h2><p>Choose a tool. Every action uses fictional demonstration data.</p></div></div><div class="grid" id="actions"></div><section class="workspace" aria-label="Business workspace"><div class="workspace-head"><small>LIVE INTERACTIVE EXAMPLE</small><h2 id="panel-title">Choose a tool above</h2><p id="panel-sub">Try a realistic sample task, then see the result instantly.</p></div><div class="workspace-body" id="workspace"><p class="empty">Your demonstration workspace is ready.</p></div></section></main><footer class="foot">MONARCH · Independent business research preview<br>No real bookings, payments, messages, stock changes or customer data. Prices and products shown are illustrative, not this business's actual offering. Voice assistant is not enabled.</footer>
 <script>
 "use strict";
 const profiles={
-"exclusive-kutz":{name:"Exclusive Kutz",sector:"Barber & grooming",tasks:["Walk-in service","Appointment request","Services & prices","Daily summary","Repeat visits","Feedback"]},
-"meat-me-here":{name:"Meat Me Here",sector:"Restaurant & takeaway",tasks:["Explore menu","Sample order","Kitchen queue","Ingredient usage","Collection status","Daily summary"]},
-"sami-african-foods":{name:"Sami African Foods",sector:"Specialist grocery",tasks:["Find products","Sample basket","Stock overview","Repeat shopping","Reorder reminder","Daily summary"]},
-"gorton-superstore":{name:"Gorton Superstore",sector:"Retail & delivery",tasks:["Product lookup","Sample order","Picking list","Delivery zones","Stock update","Daily summary"]},
-"moston-superstore":{name:"Moston Superstore",sector:"Grocery & bulk orders",tasks:["Find products","Bulk order","Stock overview","Price lookup","Reorder reminder","Daily summary"]},
-"next-level-lounge":{name:"Next Level Lounge",sector:"Restaurant & bar",tasks:["Explore menu","Sample order","Kitchen queue","Table enquiry","Ingredient usage","Daily summary"]},
-"roots-restaurant":{name:"Roots Restaurant & Lounge",sector:"Hospitality",tasks:["Table enquiry","Sample booking","Menu preview","Staff handoff","Service requests","Daily summary"]},
-"bakery-reserve":{name:"Bakery pilot candidate",sector:"Bakery",tasks:["Morning orders","Production queue","Stock overview","Waste log","Pickup status","Daily summary"]},
-"grocery-reserve":{name:"Grocery pilot candidate",sector:"Grocery",tasks:["Find products","Sample basket","Stock overview","Repeat shopping","Reorder reminder","Daily summary"]},
-"barber-reserve":{name:"Barber pilot candidate",sector:"Grooming",tasks:["Walk-in service","Appointment request","Services & prices","Daily summary","Repeat visits","Feedback"]}
-};
-const key=new URLSearchParams(location.search).get("business")||"exclusive-kutz";const p=profiles[key]||profiles["exclusive-kutz"];document.getElementById("brand").textContent=p.name+" × MONARCH";document.getElementById("sector").textContent=p.sector+" · Interactive research preview";
-const actions=document.getElementById("actions"),result=document.getElementById("result"),title=document.getElementById("panel-title");
-const demo={orders:[],stock:{"Sample product":12,"Sample ingredient":8},bookings:[],sequence:0};
-function show(task){
- title.textContent=task;result.replaceChildren();
- const intro=document.createElement("p");intro.textContent="Synthetic business data only. Nothing leaves this page.";result.appendChild(intro);
- const lower=task.toLowerCase();
- const orderMode=/order|basket|walk-in|appointment|booking|table enquiry|morning|queue|collection|service request/i.test(task);
- const stockMode=/stock|ingredient|reorder|product|catalogue|find|price|waste/i.test(task);
- const summaryMode=/summary|earning|report|daily/i.test(task);
- const status=document.createElement("p");status.setAttribute("role","status");result.appendChild(status);
- function render(){status.textContent="Sample orders: "+demo.orders.length+" | Sample bookings: "+demo.bookings.length+" | Product stock: "+demo.stock["Sample product"]+" | Ingredient stock: "+demo.stock["Sample ingredient"];}
- function control(label,callback){const btn=document.createElement("button");btn.type="button";btn.style.minHeight="48px";btn.style.margin="5px";btn.textContent=label;btn.addEventListener("click",()=>{callback();render()});result.appendChild(btn);}
- if(orderMode){const booking=/booking|appointment|table enquiry/i.test(task);control("Add sample "+(booking?"booking":"order"),()=>{const id="DEMO-"+(++demo.sequence);if(booking)demo.bookings.push(id);else demo.orders.push(id);});control("Undo last sample",()=>{if(booking){if(demo.bookings.length)demo.bookings.pop()}else{if(demo.orders.length)demo.orders.pop()}});}
- if(stockMode){control("Record sample sale (−1)",()=>{if(demo.stock["Sample product"]>0)demo.stock["Sample product"]--});control("Restock sample (+5)",()=>{demo.stock["Sample product"]+=5});}
- if(summaryMode){control("Reset synthetic session",()=>{demo.orders=[];demo.bookings=[];demo.stock={"Sample product":12,"Sample ingredient":8};demo.sequence=0});}
- if(!orderMode&&!stockMode&&!summaryMode){control("Record sample task",()=>demo.orders.push("DEMO-"+(++demo.sequence)));}
- render();
+"exclusive-kutz":{name:"Exclusive Kutz",type:"barber",sector:"Barber & grooming"},
+"meat-me-here":{name:"Meat Me Here",type:"food",sector:"Restaurant & takeaway"},
+"sami-african-foods":{name:"Sami African Foods",type:"grocery",sector:"Specialist grocery"},
+"gorton-superstore":{name:"Gorton Superstore",type:"grocery",sector:"Retail & delivery"},
+"moston-superstore":{name:"Moston Superstore",type:"grocery",sector:"Grocery & bulk orders"},
+"next-level-lounge":{name:"Next Level Lounge",type:"food",sector:"Restaurant & lounge"},
+"roots-restaurant":{name:"Roots Restaurant & Lounge",type:"food",sector:"Hospitality & dining"},
+"bakery-reserve":{name:"Bakery pilot candidate",type:"bakery",sector:"Bakery operations"},
+"grocery-reserve":{name:"Grocery pilot candidate",type:"grocery",sector:"Grocery operations"},
+"barber-reserve":{name:"Barber pilot candidate",type:"barber",sector:"Barber & grooming"}};
+const catalogs={
+barber:[["Standard cut",18],["Beard trim",9],["Cut & beard",25],["Shape-up",12]],
+food:[["Sample main meal",14],["Sample side",5],["Sample drink",3],["Meal combo",19]],
+grocery:[["Sample staple",4],["Sample fresh item",3],["Sample pantry item",6],["Sample bulk pack",18]],
+bakery:[["Breakfast roll",4],["Sample pastry",3],["Coffee",3],["Lunch sandwich",6]]};
+const menus={
+barber:[["✂","Walk-in service","sale"],["◷","Appointments","booking"],["£","Services & prices","catalog"],["▤","Today's takings","summary"],["↻","Repeat visits","repeat"],["★","Customer feedback","feedback"]],
+food:[["▣","Menu & prices","catalog"],["＋","Take an order","sale"],["≡","Kitchen queue","queue"],["◷","Table enquiry","booking"],["▥","Ingredient stock","stock"],["▤","Daily overview","summary"]],
+grocery:[["⌕","Find a product","catalog"],["＋","Record a sale","sale"],["▥","Stock levels","stock"],["↻","Reorder list","reorder"],["▣","Customer basket","basket"],["▤","Daily overview","summary"]],
+bakery:[["▣","Today's menu","catalog"],["＋","Take an order","sale"],["≡","Preparation queue","queue"],["▥","Ingredient stock","stock"],["↻","Waste tracker","waste"],["▤","Daily overview","summary"]]};
+const slug=new URLSearchParams(location.search).get("business")||"exclusive-kutz";
+const profile=profiles[slug]||profiles["exclusive-kutz"];
+const state={orders:[],bookings:[],feedback:[],stock:Object.fromEntries(catalogs[profile.type].map(x=>[x[0],12])),waste:0,seq:0};
+const $=id=>document.getElementById(id);
+$("brand").textContent=profile.name+" × MONARCH";$("sector").textContent=profile.sector+" / interactive preview";
+const money=n=>"£"+n.toFixed(2);
+function element(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e}
+function add(parent,tag,text,cls){const e=element(tag,text,cls);parent.appendChild(e);return e}
+function action(parent,label,fn,secondary=false){const b=add(parent,"button",label,"action"+(secondary?" secondary":""));b.type="button";b.addEventListener("click",fn);return b}
+function field(parent,label,values){const l=add(parent,"label",label,"field");const s=add(l,"select");values.forEach(([name,value])=>{const o=add(s,"option",name);o.value=value??name});return s}
+function message(parent,text){const m=add(parent,"div",text,"result");m.setAttribute("role","status");return m}
+function line(parent,left,right){const r=add(parent,"div",undefined,"line");add(r,"span",left);add(r,"strong",right);return r}
+function render(kind,label){
+$("panel-title").textContent=label;$("panel-sub").textContent="Sample values only · no external actions";
+const w=$("workspace");w.replaceChildren();
+const items=catalogs[profile.type];
+if(kind==="catalog"){add(w,"p","Illustrative service and product catalogue — not verified business prices.","empty");items.forEach(([n,p])=>line(w,n,money(p)));return}
+if(kind==="sale"||kind==="basket"){
+ const select=field(w,profile.type==="barber"?"Select sample service":"Select sample product",items.map(([n,p])=>[n,n]));
+ const qty=field(w,"Quantity",[["1",1],["2",2],["3",3]]);
+ const status=add(w,"div");
+ action(w,kind==="basket"?"Add to sample basket":"Record sample sale",()=>{const item=items.find(x=>x[0]===select.value);const count=Number(qty.value);if(state.stock[item[0]]<count){status.textContent="Insufficient sample stock.";return}state.stock[item[0]]-=count;state.orders.push({id:++state.seq,item:item[0],qty:count,total:item[1]*count,stage:"New"});status.textContent="✓ Sample "+(kind==="basket"?"basket item":"sale")+" recorded: "+item[0]+" · "+money(item[1]*count);});
+ add(w,"p","This updates the sample daily overview and stock view within this session.","note");return
 }
-p.tasks.forEach(task=>{const b=document.createElement("button");b.type="button";b.textContent=task;b.addEventListener("click",()=>show(task));actions.appendChild(b)});
+if(kind==="booking"){const s=field(w,"Select a sample time",[["10:00","10:00"],["11:30","11:30"],["14:00","14:00"],["16:30","16:30"]]);const status=add(w,"div");action(w,"Create sample enquiry",()=>{state.bookings.push({id:++state.seq,time:s.value});status.textContent="✓ Sample enquiry added for "+s.value});add(w,"p","No calendar invitation or customer message is sent.","note");return}
+if(kind==="stock"||kind==="reorder"){add(w,"p","Illustrative quantities. Each recorded sale adjusts this in-memory stock.","empty");items.forEach(([name])=>{const r=add(w,"div",undefined,"line");add(r,"span",name);const n=add(r,"strong",String(state.stock[name]));const b=action(w,kind==="reorder"?"Add +5":"Restock +5",()=>{state.stock[name]+=5;n.textContent=String(state.stock[name])});b.style.minHeight="38px";b.style.padding="7px 10px"});return}
+if(kind==="queue"){if(!state.orders.length)add(w,"p","No sample orders yet. Try Take an order first.","empty");state.orders.forEach(o=>{const r=add(w,"div",undefined,"line");add(r,"span","#"+o.id+" · "+o.item+" · "+o.stage);action(r,"Mark ready",()=>{o.stage="Ready";render(kind,label)},true)});return}
+if(kind==="summary"){line(w,"Recorded sample sales",String(state.orders.length));line(w,"Sample takings",money(state.orders.reduce((a,o)=>a+o.total,0)));line(w,"Sample booking enquiries",String(state.bookings.length));line(w,"Sample feedback entries",String(state.feedback.length));line(w,"Sample waste units",String(state.waste));action(w,"Reset demo session",()=>{state.orders=[];state.bookings=[];state.feedback=[];state.waste=0;state.stock=Object.fromEntries(items.map(x=>[x[0],12]));render(kind,label)},true);return}
+if(kind==="repeat"){add(w,"p","Repeat visits can be supported with consent-based customer records in a real deployment. This preview stores no personal information.","note");line(w,"Sample completed visits",String(state.orders.length));action(w,"Record fictional repeat visit",()=>{state.orders.push({id:++state.seq,item:"Repeat visit",qty:1,total:0,stage:"Complete"});render(kind,label)});return}
+if(kind==="feedback"){const s=field(w,"How was the fictional visit?",[["Excellent","Excellent"],["Good","Good"],["Needs improvement","Needs improvement"]]);const status=add(w,"div");action(w,"Save sample feedback",()=>{state.feedback.push(s.value);status.textContent="✓ Sample feedback recorded: "+s.value});return}
+if(kind==="waste"){line(w,"Recorded sample waste units",String(state.waste));action(w,"Record one sample waste unit",()=>{state.waste++;render(kind,label)});return}
+}
+menus[profile.type].forEach(([glyph,name,kind],i)=>{const b=add($("actions"),"button",undefined,"tile");b.type="button";b.setAttribute("aria-pressed","false");add(b,"span",glyph,"glyph");add(b,"span",name,"name");b.addEventListener("click",()=>{document.querySelectorAll(".tile").forEach(t=>t.setAttribute("aria-pressed","false"));b.setAttribute("aria-pressed","true");render(kind,name);$("workspace").scrollIntoView({behavior:"smooth",block:"nearest"})});if(i===0){b.setAttribute("aria-pressed","true");render(kind,name)}});
 </script></body></html>
