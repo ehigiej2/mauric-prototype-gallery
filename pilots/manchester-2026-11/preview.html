@@ -20,5 +20,22 @@ const profiles={
 };
 const key=new URLSearchParams(location.search).get("business")||"exclusive-kutz";const p=profiles[key]||profiles["exclusive-kutz"];document.getElementById("brand").textContent=p.name+" × MONARCH";document.getElementById("sector").textContent=p.sector+" · Interactive research preview";
 const actions=document.getElementById("actions"),result=document.getElementById("result"),title=document.getElementById("panel-title");
-p.tasks.forEach((task,i)=>{const b=document.createElement("button");b.type="button";b.textContent=task;b.onclick=()=>{title.textContent=task;result.textContent=["Step 1: Open a sample "+task.toLowerCase()+" workflow.","Step 2: Review example information for "+p.sector.toLowerCase()+".","Step 3: See how the owner could track the result in one place.","","Illustrative only: nothing has been submitted or saved."][0]+"\n"+["Step 1: Open a sample "+task.toLowerCase()+" workflow.","Step 2: Review example information for "+p.sector.toLowerCase()+".","Step 3: See how the owner could track the result in one place.","","Illustrative only: nothing has been submitted or saved."].slice(1).join("\n")};actions.appendChild(b)});
+const demo={orders:[],stock:{"Sample product":12,"Sample ingredient":8},bookings:[],sequence:0};
+function show(task){
+ title.textContent=task;result.replaceChildren();
+ const intro=document.createElement("p");intro.textContent="Synthetic business data only. Nothing leaves this page.";result.appendChild(intro);
+ const lower=task.toLowerCase();
+ const orderMode=/order|basket|walk-in|appointment|booking|table enquiry|morning|queue|collection|service request/i.test(task);
+ const stockMode=/stock|ingredient|reorder|product|catalogue|find|price|waste/i.test(task);
+ const summaryMode=/summary|earning|report|daily/i.test(task);
+ const status=document.createElement("p");status.setAttribute("role","status");result.appendChild(status);
+ function render(){status.textContent="Sample orders: "+demo.orders.length+" | Sample bookings: "+demo.bookings.length+" | Product stock: "+demo.stock["Sample product"]+" | Ingredient stock: "+demo.stock["Sample ingredient"];}
+ function control(label,callback){const btn=document.createElement("button");btn.type="button";btn.style.minHeight="48px";btn.style.margin="5px";btn.textContent=label;btn.addEventListener("click",()=>{callback();render()});result.appendChild(btn);}
+ if(orderMode){control("Add sample "+(/booking|appointment|table enquiry/i.test(task)?"booking":"order"),()=>{const booking=/booking|appointment|table enquiry/i.test(task);const id="DEMO-"+(++demo.sequence);if(booking)demo.bookings.push(id);else demo.orders.push(id);});control("Undo last sample",()=>{if(demo.orders.length)demo.orders.pop();else demo.bookings.pop();});}
+ if(stockMode){control("Record sample sale (−1)",()=>{if(demo.stock["Sample product"]>0)demo.stock["Sample product"]--});control("Restock sample (+5)",()=>{demo.stock["Sample product"]+=5});}
+ if(summaryMode){control("Reset synthetic session",()=>{demo.orders=[];demo.bookings=[];demo.stock={"Sample product":12,"Sample ingredient":8};demo.sequence=0});}
+ if(!orderMode&&!stockMode&&!summaryMode){control("Record sample task",()=>demo.orders.push("DEMO-"+(++demo.sequence)));}
+ render();
+}
+p.tasks.forEach(task=>{const b=document.createElement("button");b.type="button";b.textContent=task;b.addEventListener("click",()=>show(task));actions.appendChild(b)});
 </script></body></html>
