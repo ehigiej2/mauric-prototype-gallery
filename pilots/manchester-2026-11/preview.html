@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>MONARCH | Manchester Pilot Preview</title>
+<style>:root{font-family:system-ui,-apple-system,sans-serif;color:#122840;background:#f1f5fa}*{box-sizing:border-box}body{margin:0}header{background:#122d4b;color:white;padding:24px 18px}main{max-width:680px;margin:auto;padding:20px}h1{font-size:clamp(25px,5vw,36px);margin:6px 0}.muted{color:#506377}.tag{font-size:12px;background:#f6dc9c;color:#40310c;padding:6px 9px;border-radius:8px;display:inline-block}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:20px 0}button{font:inherit;font-weight:700;min-height:84px;border:0;border-radius:18px;background:#176d88;color:white;padding:14px;cursor:pointer}button:focus-visible{outline:4px solid #f6bd55}section{background:white;padding:20px;border-radius:18px;box-shadow:0 2px 10px #10283a12}#result{white-space:pre-wrap;line-height:1.6}footer{padding:16px;text-align:center;font-size:12px;color:#506377}</style></head>
+<body><header><div class="tag">SYNTHETIC DEMO · NOT A LIVE BUSINESS SYSTEM</div><h1 id="brand">MONARCH Business Preview</h1><p id="sector"></p></header>
+<main><p class="muted">Try a business workflow without signing in, entering customer details or processing payments.</p><div class="grid" id="actions"></div><section aria-live="polite"><h2 id="panel-title">Choose a task</h2><div id="result">Tap a button to explore a sample workflow.</div></section></main>
+<footer>MONARCH research preview. No live orders, bookings, payments or customer data. Voice assistant not enabled in this preview.</footer>
+<script>
+"use strict";
+const profiles={
+"exclusive-kutz":{name:"Exclusive Kutz",sector:"Barber & grooming",tasks:["Walk-in service","Appointment request","Services & prices","Daily summary","Repeat visits","Feedback"]},
+"meat-me-here":{name:"Meat Me Here",sector:"Restaurant & takeaway",tasks:["Explore menu","Sample order","Kitchen queue","Ingredient usage","Collection status","Daily summary"]},
+"sami-african-foods":{name:"Sami African Foods",sector:"Specialist grocery",tasks:["Find products","Sample basket","Stock overview","Repeat shopping","Reorder reminder","Daily summary"]},
+"gorton-superstore":{name:"Gorton Superstore",sector:"Retail & delivery",tasks:["Product lookup","Sample order","Picking list","Delivery zones","Stock update","Daily summary"]},
+"moston-superstore":{name:"Moston Superstore",sector:"Grocery & bulk orders",tasks:["Find products","Bulk order","Stock overview","Price lookup","Reorder reminder","Daily summary"]},
+"next-level-lounge":{name:"Next Level Lounge",sector:"Restaurant & bar",tasks:["Explore menu","Sample order","Kitchen queue","Table enquiry","Ingredient usage","Daily summary"]},
+"roots-restaurant":{name:"Roots Restaurant & Lounge",sector:"Hospitality",tasks:["Table enquiry","Sample booking","Menu preview","Staff handoff","Service requests","Daily summary"]},
+"bakery-reserve":{name:"Bakery pilot candidate",sector:"Bakery",tasks:["Morning orders","Production queue","Stock overview","Waste log","Pickup status","Daily summary"]},
+"grocery-reserve":{name:"Grocery pilot candidate",sector:"Grocery",tasks:["Find products","Sample basket","Stock overview","Repeat shopping","Reorder reminder","Daily summary"]},
+"barber-reserve":{name:"Barber pilot candidate",sector:"Grooming",tasks:["Walk-in service","Appointment request","Services & prices","Daily summary","Repeat visits","Feedback"]}
+};
+const key=new URLSearchParams(location.search).get("business")||"exclusive-kutz";const p=profiles[key]||profiles["exclusive-kutz"];document.getElementById("brand").textContent=p.name+" × MONARCH";document.getElementById("sector").textContent=p.sector+" · Interactive research preview";
+const actions=document.getElementById("actions"),result=document.getElementById("result"),title=document.getElementById("panel-title");
+const demo={orders:[],stock:{"Sample product":12,"Sample ingredient":8},bookings:[],sequence:0};
+function show(task){
+ title.textContent=task;result.replaceChildren();
+ const intro=document.createElement("p");intro.textContent="Synthetic business data only. Nothing leaves this page.";result.appendChild(intro);
+ const lower=task.toLowerCase();
+ const orderMode=/order|basket|walk-in|appointment|booking|table enquiry|morning|queue|collection|service request/i.test(task);
+ const stockMode=/stock|ingredient|reorder|product|catalogue|find|price|waste/i.test(task);
+ const summaryMode=/summary|earning|report|daily/i.test(task);
+ const status=document.createElement("p");status.setAttribute("role","status");result.appendChild(status);
+ function render(){status.textContent="Sample orders: "+demo.orders.length+" | Sample bookings: "+demo.bookings.length+" | Product stock: "+demo.stock["Sample product"]+" | Ingredient stock: "+demo.stock["Sample ingredient"];}
+ function control(label,callback){const btn=document.createElement("button");btn.type="button";btn.style.minHeight="48px";btn.style.margin="5px";btn.textContent=label;btn.addEventListener("click",()=>{callback();render()});result.appendChild(btn);}
+ if(orderMode){const booking=/booking|appointment|table enquiry/i.test(task);control("Add sample "+(booking?"booking":"order"),()=>{const id="DEMO-"+(++demo.sequence);if(booking)demo.bookings.push(id);else demo.orders.push(id);});control("Undo last sample",()=>{if(booking){if(demo.bookings.length)demo.bookings.pop()}else{if(demo.orders.length)demo.orders.pop()}});}
+ if(stockMode){control("Record sample sale (−1)",()=>{if(demo.stock["Sample product"]>0)demo.stock["Sample product"]--});control("Restock sample (+5)",()=>{demo.stock["Sample product"]+=5});}
+ if(summaryMode){control("Reset synthetic session",()=>{demo.orders=[];demo.bookings=[];demo.stock={"Sample product":12,"Sample ingredient":8};demo.sequence=0});}
+ if(!orderMode&&!stockMode&&!summaryMode){control("Record sample task",()=>demo.orders.push("DEMO-"+(++demo.sequence)));}
+ render();
+}
+p.tasks.forEach(task=>{const b=document.createElement("button");b.type="button";b.textContent=task;b.addEventListener("click",()=>show(task));actions.appendChild(b)});
+</script></body></html>
