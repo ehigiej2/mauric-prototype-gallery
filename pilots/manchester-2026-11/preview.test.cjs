@@ -22,7 +22,7 @@ function open(business){
  const buttons=nodes.get('actions').children;
  const press=(label)=>{const b=buttons.find(x=>x.textContent===label);assert.ok(b,'missing action '+label);b.click();return nodes.get('result').children};
  const act=(label)=>{const b=nodes.get('result').children.find(x=>x.textContent===label);assert.ok(b,'missing control '+label);b.click()};
- const status=()=>nodes.get('result').children.find(x=>x.listeners===undefined||x.listeners.click===undefined)?.textContent||nodes.get('result').children[1].textContent;
+ const status=()=>nodes.get('result').children[1].textContent;
  return {buttons,press,act,status,brand:nodes.get('brand').textContent};
 }
 const profiles=['exclusive-kutz','meat-me-here','sami-african-foods','gorton-superstore','moston-superstore','next-level-lounge','roots-restaurant','bakery-reserve','grocery-reserve','barber-reserve'];
