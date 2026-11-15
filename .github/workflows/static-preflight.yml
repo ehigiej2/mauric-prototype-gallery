@@ -1,0 +1,45 @@
+name: MONARCH gallery static preflight
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  static-preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check required pages and local navigation
+        shell: python
+        run: |
+          from pathlib import Path
+          from html.parser import HTMLParser
+          import sys
+          root=Path('.')
+          required=['index.html','tim-firebird/index.html','tim-firebird/onboarding.html','tim-firebird/partnership.html','tim-firebird/canada.html','tim-firebird/engineering.html']
+          errors=[]
+          class Links(HTMLParser):
+              def __init__(self): super().__init__();self.links=[]
+              def handle_starttag(self,tag,attrs):
+                  if tag=='a':
+                      href=dict(attrs).get('href','')
+                      if href:self.links.append(href)
+          for name in required:
+              p=root/name
+              if not p.is_file():
+                  errors.append(f'Missing {name}');continue
+              body=p.read_text(encoding='utf-8')
+              if '<html' not in body.lower() or '</html>' not in body.lower():errors.append(f'Invalid HTML envelope {name}')
+              parser=Links();parser.feed(body)
+              for href in parser.links:
+                  if href.startswith(('#','http:','https:','mailto:','tel:','javascript:','data:','//')):continue
+                  target=(p.parent/href.split('#')[0].split('?')[0])
+                  if not target.exists():errors.append(f'Broken local link {name}: {href}')
+              print(f'CHECKED {name}: {len(body)} chars, {len(parser.links)} links')
+          onboarding=(root/'tim-firebird/onboarding.html').read_text(encoding='utf-8') if (root/'tim-firebird/onboarding.html').exists() else ''
+          for token in ['BUSINESS_CREATED','ORDER_RECEIVED','LOCAL_ASSERTIONS','EXPORT JSON','CROSS-TENANT']:
+              if token not in onboarding.upper():errors.append(f'Missing onboarding marker: {token}')
+          if errors:
+              print('\n'.join('FAIL '+e for e in errors));sys.exit(1)
+          print('PASS: all required static pages, navigation, and onboarding markers')
