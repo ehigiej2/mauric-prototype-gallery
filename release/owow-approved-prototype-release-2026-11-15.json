@@ -1,0 +1,29 @@
+{
+  "schema": "OWOW-ADRIFT-001",
+  "date": "2026-11-15",
+  "scope": "all existing synthetic MONARCH prototype previews",
+  "founder_approval": "public demonstration publication approved in chat",
+  "restrictions": [
+    "no payments",
+    "no real registrations",
+    "no personal or clinical data",
+    "no live business integration",
+    "no overwriting existing prototypes without checks"
+  ],
+  "required_checks": [
+    "source inspection",
+    "mobile navigation and all interactive buttons",
+    "fifty Amos journeys functional",
+    "earnings assumptions disclosed",
+    "CAC links advisory only",
+    "verified HTTPS and iPhone Safari",
+    "WhatsApp opening test"
+  ],
+  "priority": [
+    "amos_railos_v11_50_journeys.html",
+    "existing gallery previews"
+  ],
+  "release_state": "APPROVED_IN_PRINCIPLE_NOT_VERIFIED_LIVE",
+  "evidence_status": "PENDING",
+  "do_not_claim_live": true
+}
