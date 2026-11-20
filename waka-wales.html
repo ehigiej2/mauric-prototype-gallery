@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Waka Wales · Kingsley Ewere</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f6f2e8;color:#172e28;font:17px/1.55 system-ui}main{max-width:850px;margin:auto;padding:clamp(14px,4vw,36px)}header,section{border-radius:24px;padding:clamp(19px,5vw,40px);margin-bottom:16px}header{background:#132e28;color:white}header small{color:#f5d481}h1{font-size:clamp(37px,7vw,66px);line-height:1.03;margin:.28em 0}nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:16px}button{background:#146357;color:white;border:0;border-radius:14px;padding:14px;font:inherit;font-weight:750;cursor:pointer}nav button{min-height:96px}nav button:nth-child(2){background:#52437b}nav button:nth-child(3){background:#774716}nav button:nth-child(4){background:#285175}nav button:nth-child(5){background:#8d364e}nav button:nth-child(6){background:#435329}button[aria-pressed=true]{text-decoration:underline;outline:3px solid #172e28;outline-offset:2px}section{background:white;border:1px solid #d8dbcf}label{display:block;margin:10px 0}input,select,textarea{display:block;width:100%;padding:10px;border:1px solid #75827a;border-radius:9px;font:inherit}textarea{min-height:76px;resize:vertical}summary{cursor:pointer;font-weight:750}button:focus-visible,a:focus-visible{outline:3px solid #b46319;outline-offset:3px}
+.family{background:white;padding:18px;border-radius:16px;margin-bottom:16px}
+#shareNote{display:inline-block;margin:8px;padding:10px;color:#13554a;font-weight:750}
+#startChoices button,#roles button{min-height:100px;font-size:clamp(1.05rem,4vw,1.4rem);line-height:1.2;padding:14px}
+#startChoices button:nth-child(1){background:#146357}
+#startChoices button:nth-child(2){background:#52437b}
+#startChoices button:nth-child(3){background:#285175}
+#startChoices button:nth-child(4){background:#774716}
+#backToChoices{background:#e5eee7;color:#172e28;margin-bottom:12px}
+[hidden]{display:none!important}
+#actionPlan{background:#edf3eb;border:0}#stepList input{display:inline-block;width:1.15em;height:1.15em;margin-right:8px}
+header{padding:18px 20px;margin-bottom:12px}
+header h1{font-size:clamp(27px,6vw,47px);margin:.2em 0}
+header p{margin:.4em 0 0}
+#startChoices button,#roles button{min-height:112px;border-radius:19px}
+main>section[aria-labelledby="osayiTitle"]{padding:14px 14px;background:#e1f6ee;border:3px solid #126a5d;border-radius:26px;box-shadow:0 7px 20px #143a3222;margin:10px 0}
+#osayiTitle{font-size:clamp(1.5rem,5vw,2rem);margin:0;color:#123c35}#osayiIntro{font-size:1.08rem;font-weight:650}.preview-note{padding:12px;border-radius:12px;background:#fff5d8;color:#533c16}
+#osayiLanguage{display:inline-block;width:auto;max-width:100%}
+#osayiStatus:empty{display:none}
+.previewChoices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.previewChoices details{border-radius:16px;overflow:hidden;background:#edf3eb}
+.previewChoices summary{min-height:96px;padding:14px;background:#146357;color:white}
+.previewChoices details:nth-child(2) summary{background:#52437b}
+.previewChoices details:nth-child(3) summary{background:#285175}
+.previewChoices details:nth-child(4) summary{background:#774716}
+.previewChoices p{padding:0 12px}
+#startChoices button,.previewChoices summary{min-height:clamp(112px,32vw,145px);display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:10px;text-align:left;padding:16px;font-weight:800;font-size:clamp(1.05rem,4.8vw,1.55rem);line-height:1.15}
+#startChoices button::before,.previewChoices summary::before{font-size:1.45em;line-height:1}
+#startChoices button:nth-child(1)::before,.previewChoices details:nth-child(1) summary::before{content:"🧰"}
+#startChoices button:nth-child(2)::before,.previewChoices details:nth-child(2) summary::before{content:"💼"}
+#startChoices button:nth-child(3)::before,.previewChoices details:nth-child(3) summary::before{content:"🏪"}
+#startChoices button:nth-child(4)::before,.previewChoices details:nth-child(4) summary::before{content:"💬"}
+#previewFallback{padding:0;border:0;background:transparent}
+#previewTitle{font-size:1.05rem;margin:0}
+#previewFallback>p{font-size:.9rem;margin:4px 0 10px}
+.previewChoices details[open]{box-shadow:inset 0 0 0 1px #cedad2}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.previewChoices{align-items:start}.previewChoices p{font-size:.92rem;line-height:1.3}
+#osayiHome textarea{min-height:72px!important;height:76px;max-height:140px}
+#osayiHome .osayi-chat{gap:8px!important}
+#osayiHome button{min-height:56px}
+#osayiHome .tech{background:#f4f7f5;border-radius:14px;padding:10px 12px;margin:3px 0;font-size:14px}
+#osayiHome .tech summary{font-size:14px}
+#osayiHome .voiceActions{display:flex;gap:8px;margin-top:8px}
+#osayiHome .voiceActions button{flex:1;font-size:15px;padding:10px}
+#osayiHome #osayiConversation{max-height:140px!important;font-size:16px;padding:10px!important}
+#osayiHome #osayiIntro{margin:5px 0}
+#osayiHome #osayiPreviewNote{font-size:13px;padding:8px;margin:7px 0}
+#osayiHome label{margin:4px 0}
+#osayiHome #osayiLanguage{padding:6px;font-size:15px}
+@media(max-width:480px){main{padding:10px}header{padding:14px 16px}#osayiHome{border-width:2px}#osayiHome button{font-size:16px}}
+</style>
+<main>
+<header><small>MONARCH · WAKA WALES · PRIVATE DEMO</small><h1 id="welcomeTitle">Waka Wales</h1><p id="welcomeText">Hi, Kingsley.</p></header>
+
+<section aria-labelledby="osayiTitle" id="osayiHome">
+<h2 id="osayiTitle">👑 Talk to Osayi</h2><p id="osayiIntro">Wetin you wan do today? Pick one big button, or ask me.</p><p id="osayiPreviewNote" class="preview-note">📱 In iPhone file preview, tap the coloured activity cards below. Live chat and microphone require a browser that runs scripts.</p>
+<label>🌍 Choose language <select id="osayiLanguage"><option value="en-GB">English</option><option value="cy-GB">Cymraeg</option><option value="pcm-NG">Naija Pidgin</option></select></label>
+<p id="osayiPrompt" role="status"></p>
+<div id="osayiReplies" aria-label="Reply to Osayi"></div>
+<div class="osayi-chat" style="display:grid;gap:10px;margin:12px 0"><div id="osayiConversation" role="log" aria-live="polite" style="max-height:260px;overflow:auto;padding:12px;background:#eef8f5;border-radius:16px">👑 Osayi: Welcome! Wetin you wan do for Wales today?</div><label for="osayiQuestion">💬 What can Osayi help you with?</label><textarea id="osayiQuestion" rows="2" placeholder="E.g. I need delivery work in Cardiff…" style="width:100%;box-sizing:border-box;border-radius:14px;padding:12px;font-size:18px"></textarea><div style="display:grid;grid-template-columns:1fr 1fr;gap:9px"><button id="osayiListen" type="button" style="background:#067c70;color:white;min-height:66px">🎤 Talk to Osayi</button><button id="osayiAsk" type="button" style="background:#633caa;color:white;min-height:66px">💬 Ask Osayi</button></div><details class="tech"><summary>🧪 Diagnostics</summary><button id="osayiRunChecks" type="button" style="background:#183b59;color:white;min-height:52px">Run checks</button><output id="osayiCheckResults" role="status" style="display:block;white-space:pre-wrap;font-size:14px"></output></details><details class="tech"><summary>⚙️ Voice engineering settings</summary><p style="font-size:14px">Optional HTTPS voice endpoint that accepts POST JSON {text, language} and returns audio/mpeg or audio/wav. No browser voice is passed off as Osayi. Only use an endpoint you control and trust.</p><input id="osayiVoiceEndpoint" type="url" placeholder="https://your-voice-service.example/speak" style="width:100%;box-sizing:border-box;padding:12px"><button id="osayiSaveVoice" type="button">Use this voice service</button><p id="osayiVoiceConfigStatus" role="status">Sovereign speech engine not connected; text replies are available.</p></details></div><div class="voiceActions"><button id="osayiSpeak" type="button">🔊 Hear Osayi</button><button id="osayiStop" type="button">⏹ Stop</button></div>
+<p id="osayiStatus" role="status"></p>
+</section>
+<section id="previewFallback" aria-labelledby="previewTitle">
+<h2 id="previewTitle" class="sr-only">Choose an activity</h2>
+
+<div class="previewChoices">
+<details><summary>Find local work</summary><p><a href="https://careerswales.gov.wales/job-search">Search local vacancies</a></p></details>
+<details><summary>Find a job</summary><p><a href="https://careerswales.gov.wales/job-search">Search Wales jobs</a> · <a href="https://www.jobs.nhs.uk/candidate/search">NHS UK vacancies</a></p></details>
+<details><summary>Business help</summary><p><a href="https://businesswales.gov.wales/business-wales-service">Open Business Wales</a></p></details>
+<details><summary>Tell a friend</summary><p><a href="https://wa.me/?text=Try%20Waka%20Wales.%20I%27ll%20attach%20the%20file%20so%20you%20can%20pick%20what%20fits%20you.">Open WhatsApp</a></p></details>
+</div>
+<p>Live listings open on the source site. Voice and interactive chat need a full browser; the iPhone file preview may not run scripts.</p>
+</section>
+<nav aria-label="Choose what you want to do" id="startChoices" hidden>
+<button type="button" data-group="local">Find local work</button>
+<button type="button" data-group="jobs">Find a job</button>
+<button type="button" data-group="business">Business help</button>
+<button type="button" data-group="friend">Tell a friend</button>
+</nav>
+
+<div id="roleChoices" hidden>
+<button type="button" id="backToChoices">← All choices</button>
+<nav aria-label="Choose the work that fits you" id="roles"></nav>
+</div>
+<section id="work" hidden>
+<h2 id="title" tabindex="-1"></h2>
+<p id="intro"></p>
+<form id="form">
+<label id="areaLabel"><span id="areaText"></span><input id="area" maxlength="80" required></label>
+<label><span id="detailText"></span><input id="detail" maxlength="120" required></label>
+<fieldset id="businessInputs" hidden>
+<legend>Tell us what your business needs</legend>
+<label>Help needed <select id="businessNeed"><option>Local deliveries</option><option>Help with repairs</option><option>Remote professional support</option></select></label>
+<label>What needs doing and by when? <textarea id="businessScope" maxlength="400"></textarea></label>
+<label>Maximum budget (£) <input id="businessBudget" type="number" min="1" max="1000000" step="0.01"></label>
+</fieldset>
+<label id="hoursLabel">Time you can set aside each week <input id="hours" type="number" min="1" max="60" required></label>
+<fieldset id="studentInputs" hidden>
+<legend>Fit work around your master’s</legend>
+<label>Type of work <select id="studentWork"><option>Part-time work during term</option><option>Paid project related to my degree</option><option>Graduate role after my course</option></select></label>
+<label>Days or times you can work <input id="studentSchedule" maxlength="120"></label>
+<label>Can you take this type of work? <select id="studentPermission"><option value="">Still to confirm</option><option value="yes">I have confirmed I can</option></select></label>
+</fieldset>
+<label id="rateLabel">Minimum hourly rate (£) <input id="rate" type="number" min="1" max="1000" step="0.01"></label>
+<label id="marketLabel">Where you want to look <select id="market"><option>Any employer market</option><option>US companies</option><option>Canadian companies</option><option>Multinationals in Nigeria</option></select></label>
+<fieldset id="matchingInputs" hidden>
+<legend>Screen remote opportunities for me</legend>
+<label>Where you’re based and eligible to work
+<select id="workRegion"><option value="">Choose one</option><option value="ukeu">UK or EU</option><option value="other">Elsewhere</option></select></label>
+<label>Professional background
+<select id="workSpecialism"><option value="">Choose one</option><option value="ai">Senior AI specialist with substantial UK or EU professional experience</option><option value="migration">Experienced systems migration or integration specialist</option><option value="other">Another specialism</option></select></label>
+<label>Minimum rate for euro-denominated offers (€/hour) <input id="euroMinimum" type="number" min="1" step="0.01"></label>
+</fieldset>
+<details id="evidencePanel" hidden>
+<summary>Check a job you found</summary>
+<label>Link to the job advert <input id="vacancyLink" type="url" maxlength="350"></label>
+<label>Closing date shown in the advert <input id="vacancyClose" type="date"></label>
+<label id="eligibilityLine"><span id="eligibilityPrompt"></span>
+<select id="vacancyEligibility"><option value="">Still to check</option><option value="yes">Yes, stated in posting or confirmed by employer</option><option value="no">No, employer rules it out</option></select></label>
+<label>Do the pay and hours work for you?
+<select id="vacancyTerms"><option value="">Still to check</option><option value="yes">Yes</option><option value="no">No</option></select></label>
+</details>
+<button>Make my note</button>
+<button type="button" id="tryExample">Try an example</button>
+</form>
+<p id="result" role="status"></p>
+<div id="agentReview" hidden><h3>What to check next</h3><ul id="agentChecks"></ul><p><small>These checks run inside this demo. A person reviews the draft before taking any next step.</small></p></div>
+<div id="output" hidden>
+<section id="actionPlan" aria-labelledby="actionTitle">
+<h3 id="actionTitle">Your next steps</h3>
+<p id="nextStep" role="status"></p>
+<div id="stepList"></div>
+<button type="button" id="hearNext">Ask Osayi what’s next</button>
+</section>
+<label>Your note <textarea id="draft" readonly></textarea></label>
+<button id="copy">Copy my note</button>
+<button id="saveNote" type="button">Save my note</button>
+<a id="shareNote" target="_blank" rel="noopener noreferrer">Open note in WhatsApp</a>
+<p><small>Read your note before sharing. Leave out private addresses, identity documents and bank details. WhatsApp lets you pick who receives it.</small></p>
+<div id="practicalNext"></div><p id="copyStatus" role="status"></p>
+</div>
+<section id="leads" hidden aria-labelledby="matchesTitle">
+<h3 id="matchesTitle">Opportunities that fit</h3>
+<div id="matches" role="status"></div>
+<p><small>Matches use a small researched catalogue and the details you provide. Check the original advert before applying.</small></p>
+</section>
+<details id="sponsorLinks" hidden>
+<summary>Find and verify UK sponsorship vacancies</summary>
+<ul>
+<li><a href="https://www.jobs.nhs.uk/candidate/search">Search NHS Jobs</a> and <a href="https://www.jobs.wales.nhs.uk/">NHS Wales vacancies</a>.</li>
+<li><a href="https://findajob.dwp.gov.uk/">Search Find a Job</a> using your job title and “visa sponsorship”.</li>
+<li><a href="https://www.gov.uk/government/publications/register-of-licensed-sponsors-workers">Check the employer’s legal name on the UK sponsor register</a>.</li>
+<li><a href="https://www.gov.uk/skilled-worker-visa/your-job">Check the occupation code and salary rules</a>.</li>
+</ul>
+<p>Ask whether the employer sponsors this specific vacancy. The employer assigns the Certificate of Sponsorship for an eligible job offer. Waka helps you prepare and shortlist.</p>
+</details>
+</section>
+<details class="family">
+<summary>Share with family or friends</summary>
+<label>Forwardable introduction <textarea id="familyInvite" readonly>Hi! Kingsley is passing on Waka Wales for anyone in Wales to try. Do you run a business, deliver, drive people, fix cars or do repairs around the home? Are you looking for work from home, work around your master’s course or a UK job sponsor?
+
+Open Waka and tap the button that fits you. Answer a few short questions. You’ll get a note you can keep or share. It’s a demo, so it won’t book work or apply for jobs for you.</textarea></label>
+<button id="copyFamilyInvite" type="button">Copy introduction</button>
+<p id="familyCopyStatus" role="status"></p>
+</details>
+<footer>Demo · No bookings or applications. Speech recognition may use a browser provider. No authenticated Sovereign voice service is bundled; text remains available offline.</footer>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const roles = [
+ ['I deliver','Delivery job brief','Choose where you can collect and what you can carry.','Welsh town or service area','Vehicle and typical loads','Check stops, shopping time, waiting, mileage and total pay before accepting.'],
+ ['I drive people','Ride pilot feedback','Tell Kingsley where you drive and what you need to assess a sample route.','Welsh town or service area','Vehicle and types of trips you take','Review pickup, destination, timing, accessibility and upfront earnings. Verify operator arrangements before any bookings.'],
+ ['I fix vehicles','Mechanic quote brief','Turn your experience into a clear offer for diagnostics, servicing or repairs.','Service area','Specialisms or repairs you cover','Ask for vehicle details, symptoms and photos; quote labour, parts, travel and diagnostic time separately.'],
+ ['I fix things around the home','Handyperson quote brief','Show what work you take and what you need before pricing it.','Service area','Jobs you can take','Ask for photos, dimensions and access; separate labour, materials, travel and exclusions.'],
+ ['I want to work from home','Remote skills brief','Set the conditions a second job needs to meet before you spend time applying.','Country you will work from','Expertise or a result you can deliver','Check country eligibility, time-zone overlap, hours, rate and deliverables. Prefer part-time projects if you want extra work around your main job.'],
+ ['I need a UK job sponsor','UK sponsorship search brief','Prepare a shortlist for jobs where the employer may sponsor this specific role.','Current country and preferred UK location','Target job title and relevant qualifications','Check the vacancy explicitly considers sponsorship, verify the employer on the sponsor register, and confirm the occupation code, salary and closing date.'],
+ ['I want to tell a friend','Forwardable introduction','Give Kingsley a short note to share with someone who might benefit.','Town or region','The kind of specialist you know','Invite them to choose the route that fits: local or remote work, master’s student in Wales, or UK sponsorship if needed. Share their details only if they agree.'],
+ ['I’m studying for a master’s','Student work shortlist brief','Build a profile around your course and the time you can actually work.','Welsh town or university area','Degree subject and relevant work experience','Check the job fits your timetable and confirm you can take that type of work before applying.'],
+ ['I run a business','Business job brief','Tell us what help your business needs.','Town or service area','What your business does','Agree the scope, budget and deadline before offering the job.']
+];
+const ukWorkflows = [
+ ['Delivery','Confirm load, pickup access, full journey time and rider offer.'],
+ ['Passenger rides','Confirm the local operator arrangements before offering a real ride.'],
+ ['Vehicle services','Gather the vehicle details and agree diagnostic scope and price.'],
+ ['Property services','Confirm access, materials and scope before quoting.'],
+ ['Remote work','Check that the employer accepts your work location and available hours.'],
+ ['UK sponsorship','Confirm sponsor status and sponsorship for the specific vacancy.'],
+ ['Introductions','Ask for consent before passing anyone’s details onwards.'],
+ ['Student work','Match the course, experience, availability and confirmed work conditions before showing a role.'],
+ ['Business','Check the job scope, deadline, budget and who will sign off the work.']
+];
+const screenedRoles = [
+ {skill:'ai', floor:81, title:'10x Team · Freelance AI specialist (€81–€118/hour)', url:'https://jobs.ashbyhq.com/10xteam/3c053f18-838a-4e58-8b06-46228c57dc54'},
+ {skill:'migration', floor:114, title:'10x Team · Freelance migration consultant (€114–€225/hour)', url:'https://jobs.ashbyhq.com/10xteam/e7b67cb2-dbee-48d1-a029-f12fb04b513e'}
+];
+let selected = 0;
+let osayiStage = 'welcome';
+const welshRoles = ['Rwy’n dosbarthu','Rwy’n gyrru pobl','Rwy’n trwsio cerbydau','Rwy’n gwneud gwaith trwsio yn y cartref','Rwy eisiau gweithio gartref','Mae angen noddwr swydd yn y DU arnaf','Rwy eisiau dweud wrth ffrind','Rwy’n astudio am radd meistr','Rwy’n rhedeg busnes'];
+function updateOsayi(speak = false) {
+ const language = $('osayiLanguage').value;
+ const welsh = language === 'cy-GB';
+ $('welcomeTitle').textContent = welsh ? 'Waka Cymru' : 'Waka Wales';
+ $('welcomeText').textContent = welsh
+  ? 'Helo, Kingsley.'
+  : 'Hi, Kingsley.';
+ const englishChoices = ['Find local work','Find a job','Business help','Tell a friend'];
+ const welshChoices = ['Dod o hyd i waith lleol','Dod o hyd i swydd','Help i fy musnes','Dweud wrth ffrind'];
+ [...$('startChoices').children].forEach((button,index) => {
+  button.textContent = (welsh ? welshChoices : englishChoices)[index];
+ });
+ [...$('roles').children].forEach((button,index) => {
+  button.textContent = welsh ? welshRoles[index] : roles[index][0];
+ });
+ const lines = welsh ? {
+  local:'Pa fath o waith lleol wyt ti’n ei wneud? Dewisa un botwm.',
+  jobs:'Dewisa waith gartref, help i ddod o hyd i noddwr, neu waith wrth astudio.',
+  welcome:'Helo, Osayi ydw i. Wyt ti eisiau gwaith, help i fusnes, neu rannu gyda ffrind? Dewisa dy ateb.',
+  details:'Rwyt ti wedi dewis: ' + welshRoles[selected] + '. Ateba’r cwestiynau isod, wedyn gwna dy nodyn.',
+  next:nextWelshStep(),
+  done:'Mae dy nodyn yn barod. Darllena’r nodyn cyn ei rannu.'
+ } : {
+  local:'What kind of local work do you do? Pick one button.',
+  jobs:'Pick work from home, help finding a job sponsor, or work while you study.',
+  welcome:'Hi, I’m Osayi. Are you looking for work, help for your business, or something to share with a friend? Tap your answer above.',
+  details:'You chose: ' + roles[selected][0] + '. ' + roles[selected][2] + ' Answer the questions, then make your note.',
+  next:$('nextStep').textContent,
+  done:'Your note is ready. Read it before deciding whether to share it.'
+ };
+ const prompt = $('osayiPrompt');
+ prompt.lang = language;
+ prompt.textContent = lines[osayiStage];
+ const replies = $('osayiReplies');
+ replies.replaceChildren();
+ if (osayiStage === 'details' || osayiStage === 'done' || osayiStage === 'next') {
+  const reply = document.createElement('button');
+  reply.type = 'button';
+  const showExample = osayiStage === 'details';
+  reply.textContent = showExample
+   ? (welsh ? 'Dangos enghraifft' : 'Show me an example')
+   : (welsh ? 'Beth nesaf?' : 'What’s next?');
+  reply.onclick = () => $(showExample ? 'tryExample' : 'hearNext').click();
+  replies.append(reply);
+ }
+ 
+ $('osayiSpeak').textContent = welsh ? 'Gwrando ar Osayi' : 'Hear Osayi';
+ $('osayiStop').textContent = welsh ? 'Stopio’r llais' : 'Stop voice';
+ $('osayiStatus').textContent = '';
+ if (speak) speakOsayi(prompt.textContent, language);
+}
+let osayiAudio = new Audio();
+let osayiController = null;
+let osayiEndpoint = '';
+let osayiRecognition = null;
+let osayiAudioURL = null;
+let osayiRequestId = 0;
+let osayiConversationTurns = 0;
+function stopOsayi() {
+ osayiRequestId++;
+ if (osayiController) osayiController.abort();
+ osayiController = null;
+ osayiAudio.pause();
+ osayiAudio.currentTime = 0;
+ if (osayiAudioURL) { URL.revokeObjectURL(osayiAudioURL); osayiAudioURL = null; osayiAudio.removeAttribute('src'); }
+ if (osayiRecognition) try { osayiRecognition.stop(); } catch (_) {}
+ window.speechSynthesis?.cancel();
+ $('osayiStatus').textContent = 'Voice stopped.';
+}
+async function speakOsayi(text, language) {
+ stopOsayi();
+ const requestId = osayiRequestId;
+ if (!osayiEndpoint) {
+  $('osayiStatus').textContent = 'Sovereign voice not connected. Osayi can reply in text; no generic computer voice will be used.';
+  return;
+ }
+ osayiController = new AbortController();
+ try {
+  $('osayiStatus').textContent = 'Connecting to Sovereign voice…';
+  const response = await fetch(osayiEndpoint, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,language}),signal:osayiController.signal});
+  if (!response.ok) throw Error('Voice service HTTP '+response.status);
+  const type = response.headers.get('content-type') || '';
+  if (!/^audio\/(mpeg|mp3|wav|x-wav|ogg|mp4)/i.test(type)) throw Error('Voice service did not return playable audio');
+  const blob = await response.blob();
+  if (!blob.size || blob.size > 15000000) throw Error('Empty or oversized voice response');
+  if (requestId !== osayiRequestId) return;
+  const url = URL.createObjectURL(blob);
+  osayiAudioURL = url;
+  osayiAudio.src = url;
+  osayiAudio.onended = () => { if (osayiAudioURL === url) { URL.revokeObjectURL(url); osayiAudioURL=null; } $('osayiStatus').textContent='Osayi finished speaking.'; };
+  await osayiAudio.play();
+  if (requestId === osayiRequestId) $('osayiStatus').textContent='Playing connected voice (identity requires independent verification).';
+ } catch(e) {
+  if(e.name !== 'AbortError') $('osayiStatus').textContent='Voice unavailable: '+e.message+'. Text remains available.';
+ }
+}
+function osayiReply(message) {
+ const m = message.toLowerCase();
+ const lang = $('osayiLanguage').value;
+ const pidgin = lang === 'pcm-NG';
+ const welsh = lang === 'cy-GB';
+ let reply;
+ if (/delivery|deliver|courier|rider|parcel|dispatch|drop off/.test(m)) reply=pidgin?'You wan do delivery? Oya, tap Find local work, choose delivery, tell us your area and available hours. No confirmed job until person verify am.':'For delivery work, choose Find local work, then delivery. Add your area and available hours. We will help you prepare a shortlist; no job is confirmed.';
+ else if (/sponsor|visa|skilled worker|immigration/.test(m)) reply=pidgin?'For sponsorship, we go first check official UK sponsor register and the particular vacancy. No promise of visa or job.':'For sponsorship, check the official UK sponsor register and verify the specific vacancy. We cannot promise a visa or job.';
+ else if (/business|customer|shop|trader|sell|market/.test(m)) reply=pidgin?'You get business? Tap Business help. Tell me wetin you sell, your town and wetin you need.':'Choose Business help. Tell me what you offer, your town and what kind of customer or support you need.';
+ else if (/friend|share|pass it|whatsapp/.test(m)) reply=pidgin?'You fit pass Waka Wales give your people. Ask their permission before you share their details.':'You can share Waka Wales with a friend. Ask permission before sharing anyone’s personal details.';
+ else if (/job|work|employment|remote|home|earn|salary/.test(m)) reply=pidgin?'You dey find work? Tap Find a job, tell me your skills, town and when you fit work. We go show you next step.':'Choose Find a job. Tell me your skills, location and available hours so we can guide your next step.';
+ else if (/cardiff|swansea|newport|wrexham|wales|cymru/.test(m)) reply=pidgin?'I hear you. Which work you wan do for that area? Delivery, driving, repair, business or remote job?':'Which kind of work are you looking for there: delivery, driving, repairs, business or remote work?';
+ else reply=pidgin?'I dey hear you. Abeg tell me small more: you wan find work, grow business, or help person?':'I’m listening. Are you looking for work, growing a business or helping someone? Tell me a little more.';
+ if(welsh) {
+  if (/delivery|deliver|courier|rider|parcel|dispatch|drop off/.test(m)) reply='Ar gyfer gwaith dosbarthu, dewiswch Dod o hyd i waith lleol. Nodwch eich ardal a’ch oriau. Nid oes swydd wedi’i chadarnhau.';
+  else if (/sponsor|visa|skilled worker|immigration/.test(m)) reply='Gwiriwch gofrestr swyddogol noddwyr y DU a manylion y swydd benodol. Ni allwn addo swydd na fisa.';
+  else if (/business|customer|shop|trader|sell|market/.test(m)) reply='Dewiswch Help i fy musnes. Dywedwch beth rydych yn ei gynnig, eich tref, a pha help sydd ei angen.';
+  else if (/friend|share|pass it|whatsapp/.test(m)) reply='Gallwch rannu Waka Wales gyda ffrind. Gofynnwch am ganiatâd cyn rhannu manylion unrhyw un.';
+  else if (/job|work|employment|remote|home|earn|salary/.test(m)) reply='Dewiswch Dod o hyd i swydd. Dywedwch eich sgiliau, eich ardal a’ch oriau sydd ar gael.';
+  else if (/cardiff|swansea|newport|wrexham|wales|cymru|caerdydd|abertawe|casnewydd/.test(m)) reply='Pa fath o waith rydych chi’n chwilio amdano yn yr ardal honno: dosbarthu, gyrru, atgyweirio, busnes neu waith o bell?';
+  else reply='Rwy’n gwrando. Ydych chi’n chwilio am waith, yn tyfu busnes, neu’n helpu rhywun?';
+ }
+ return reply;
+}
+function runOsayiChecks() {
+ const old=$('osayiLanguage').value;
+ const checks=[];
+ const test=(name,ok)=>checks.push({name,ok:!!ok});
+ try {
+  for(const lang of ['en-GB','pcm-NG','cy-GB']) {
+   $('osayiLanguage').value=lang;
+   for(const topic of ['delivery work','job sponsorship','business help','share with friend','find a job','Cardiff']) {
+    const reply=osayiReply(topic);
+    test(lang+' / '+topic, typeof reply==='string' && reply.length>20);
+   }
+  }
+  test('No configured voice falsely identified',!osayiEndpoint || osayiEndpoint.startsWith('https://'));
+  test('Text chat is available',!!$('osayiQuestion') && !!$('osayiAsk'));
+  test('Stop voice is available',!!$('osayiStop'));
+  test('Microphone fallback is available',!!$('osayiQuestion'));
+ } finally {$('osayiLanguage').value=old;}
+ const pass=checks.filter(x=>x.ok).length;
+ $('osayiCheckResults').textContent=pass+'/'+checks.length+' local logic checks passed. '+(pass===checks.length?'PASS':'FAIL')+'\nNot tested: authentic voice identity, remote service, live jobs, physical iPhone playback.';
+ return {pass,total:checks.length,checks};
+}
+$('osayiRunChecks').onclick=runOsayiChecks;
+window.runOsayiChecks=runOsayiChecks;
+function appendOsayi(who, msg) {
+ const log=$('osayiConversation');
+ const line=document.createElement('p');
+ line.style.margin='8px 0';line.style.padding='10px';line.style.borderRadius='12px';
+ line.style.background=who==='You'?'#e8e6fa':'#d9f3e6';
+ line.textContent=who+': '+msg;
+ log.append(line);log.scrollTop=log.scrollHeight;
+}
+function askOsayi() {
+ const input=$('osayiQuestion');
+ const message=input.value.trim().slice(0,1200);
+ if(!message){$('osayiStatus').textContent='Tell Osayi what you need first.';return;}
+ if (/\b(password|passcode|one.time password|otp|sort code|account number|card number|passport number)\b/i.test(message)) { $('osayiStatus').textContent='Please do not share passwords, bank or identity details. Ask a general question instead.'; return; }
+ appendOsayi('You',message);
+ osayiConversationTurns++;
+ input.value='';
+ const reply=osayiReply(message);
+ appendOsayi('Osayi',reply);
+ $('osayiPrompt').textContent=reply;
+ speakOsayi(reply,$('osayiLanguage').value);
+}
+$('osayiLanguage').onchange=()=>{stopOsayi();updateOsayi(false);};
+$('osayiSpeak').onclick=()=>speakOsayi($('osayiPrompt').textContent,$('osayiLanguage').value);
+$('osayiStop').onclick=stopOsayi;
+$('osayiAsk').onclick=askOsayi;
+$('osayiQuestion').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();askOsayi();}});
+$('osayiSaveVoice').onclick=()=>{
+ const value=$('osayiVoiceEndpoint').value.trim();
+ if(value && (!value.startsWith('https://') || /\s/.test(value))) { $('osayiVoiceConfigStatus').textContent='Use a valid HTTPS voice endpoint.';return; }
+ osayiEndpoint=value;
+ stopOsayi();
+ $('osayiVoiceConfigStatus').textContent=value?'Voice endpoint configured; audio and identity still require a playback test.':'No voice service connected.';
+};
+$('osayiListen').onclick=()=>{
+ const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SpeechRecognition){$('osayiStatus').textContent='Voice input unavailable in this browser. Type your request instead.';return;}
+ osayiRecognition=new SpeechRecognition();
+ osayiRecognition.lang=$('osayiLanguage').value==='pcm-NG'?'en-NG':$('osayiLanguage').value;
+ osayiRecognition.interimResults=false;
+ osayiRecognition.continuous=false;
+ osayiRecognition.onresult=e=>{$('osayiQuestion').value=e.results[0][0].transcript;askOsayi();};
+ osayiRecognition.onerror=e=>{$('osayiStatus').textContent='Microphone: '+e.error+'. You can type instead.';};
+ try {osayiRecognition.start();$('osayiStatus').textContent='Listening… Browser recognition may use an external service; do not speak private details.';} catch(e){$('osayiStatus').textContent='Microphone unavailable: '+e.message;}
+};
+
+function showMatches(hours) {
+ if (selected === 7) {
+  $('matches').textContent = $('studentPermission').value === 'yes'
+   ? 'We haven’t found a checked student job that fits yet.'
+   : 'Confirm you can take this type of work before screening roles.';
+  $('leads').hidden = false;
+  return;
+ }
+ if (selected !== 4 && selected !== 5) return;
+ const minimum = $('euroMinimum').value;
+ const canCompare = selected === 4 && $('workRegion').value === 'ukeu' &&
+  $('market').value === 'Any employer market' && minimum && !$('rate').value && Number(hours) >= 8;
+ const matches = canCompare ? screenedRoles.filter(role =>
+  role.skill === $('workSpecialism').value && Number(minimum) <= role.floor
+ ) : [];
+ $('matches').replaceChildren();
+ for (const role of matches) {
+  const item = document.createElement('p');
+  const link = document.createElement('a');
+  link.href = role.url;
+  link.textContent = role.title;
+  item.append(link, ' · UK/EU · Advertised 8–20 hours a week. Check hours and availability before applying.');
+  $('matches').append(item);
+ }
+ if (!matches.length) $('matches').textContent = selected === 5
+  ? 'We haven’t found a checked job with UK sponsorship yet.'
+  : 'No match in this catalogue for the details supplied. Euro roles require a euro minimum and no separate pound minimum.';
+ $('leads').hidden = false;
+}
+function reviewOpportunity() {
+ if (selected !== 4 && selected !== 5) return [];
+ const link = $('vacancyLink').value.trim();
+ const deadline = $('vacancyClose').value;
+ const today = new Intl.DateTimeFormat('en-CA', {
+  timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit'
+ });
+ const dateParts = Object.fromEntries(today.formatToParts().map(({type,value}) => [type,value]));
+ const localDate = dateParts.year + '-' + dateParts.month + '-' + dateParts.day;
+ const eligibility = $('vacancyEligibility').value;
+ const terms = $('vacancyTerms').value;
+ const source = /^https?:\/\//i.test(link);
+ const expired = deadline && deadline < localDate;
+ const result = expired || eligibility === 'no' || terms === 'no'
+  ? 'This job does not fit the details you entered.'
+  : source && deadline && eligibility === 'yes' && terms === 'yes'
+   ? 'Looks worth a closer look. Check the original advert.'
+   : 'Some details are missing. Check the job advert first.';
+ return [
+  'Opportunity review · ' + result,
+  'Vacancy source · ' + (source ? link : 'Original posting needed.'),
+  'Closing date · ' + (deadline || 'Confirm with the employer.'),
+  (selected === 5 ? 'Sponsorship for this vacancy' : 'Your work location accepted') + ' · ' + (eligibility || 'Unknown'),
+  'Pay and hours fit · ' + (terms || 'Unknown')
+ ];
+}
+function renderAgentReview(rate, opportunity) {
+ const [route, action] = ukWorkflows[selected];
+ const checks = [
+  'Intake · Area and role supplied.',
+  route + ' · Next check: ' + action,
+  selected === 8 ? 'Budget · Review the total before offering the work.' : selected < 5 ? (rate ? 'Pricing · Minimum rate supplied for matching.' : 'Pricing · Set a minimum rate before comparing offers.') : 'Review · Keep the draft with the person making the decision.'
+ ];
+ $('agentChecks').replaceChildren(...[...checks,...opportunity].map(check => {
+  const item = document.createElement('li');
+  item.textContent = check;
+  return item;
+ }));
+ $('agentReview').hidden = false;
+}
+const actionSteps = [
+ ['Check the collection point, load and drop-offs.','Agree the whole trip time and pay.'],
+ ['Check the route and who will run the ride.','Agree the pickup time and fare before travelling.'],
+ ['Ask for the vehicle details and symptoms.','Send a quote for labour, parts and travel.'],
+ ['Ask for photos, measurements and access details.','Send a quote for labour and materials.'],
+ ['Check the original advert accepts your work location, hours and rate.','Decide whether to apply on the employer’s site.'],
+ ['Check the employer and ask whether this job offers sponsorship.','Check the job code, salary and closing date before applying.'],
+ ['Choose a friend who might find this useful.','Send the invitation if you want to.'],
+ ['Check the work fits your course timetable and work conditions.','Look for roles that fit or ask Working Wales for help.'],
+ ['Check the work, deadline and maximum budget in your note.','Share your note with a provider you know and ask for a quote.']
+];
+const welshActionSteps = [
+ ['Gwna’n siŵr ble i gasglu, beth i’w gludo a ble i’w ddanfon.','Cytuna ar hyd y daith gyfan a’r tâl.'],
+ ['Gwna’n siŵr beth yw’r llwybr a phwy fydd yn rhedeg y gwasanaeth.','Cytuna ar yr amser casglu a’r pris cyn teithio.'],
+ ['Gofynna am fanylion y cerbyd a beth sy’n mynd o’i le.','Anfona bris am y gwaith, y rhannau a’r daith.'],
+ ['Gofynna am luniau, mesuriadau a manylion mynediad.','Anfona bris am y gwaith a’r deunyddiau.'],
+ ['Gwna’n siŵr bod lleoliad, oriau a thâl y swydd yn addas i ti.','Penderfyna a wyt ti am wneud cais ar wefan y cyflogwr.'],
+ ['Gwna’n siŵr pwy yw’r cyflogwr a gofyn a yw’n noddi pobl ar gyfer y swydd hon.','Gwna’n siŵr beth yw cod y swydd, y cyflog a’r dyddiad cau cyn gwneud cais.'],
+ ['Dewisa ffrind a allai gael budd o hyn.','Anfona’r gwahoddiad os wyt ti eisiau.'],
+ ['Gwna’n siŵr bod y gwaith yn cyd-fynd â dy amserlen a dy amodau gwaith.','Chwilia am swyddi addas neu gofynna i Cymru’n Gweithio am help.'],
+ ['Darllena’r nodyn a gwna’n siŵr bod y gwaith, y dyddiad cau a’r gyllideb yn gywir.','Rhanna dy nodyn â rhywun rwyt ti’n ei adnabod a gofynna am bris.']
+];
+function nextWelshStep() {
+ const boxes = [...$('stepList').querySelectorAll('input')];
+ const next = boxes.findIndex(box => !box.checked);
+ return next < 0 ? 'Rwyt ti wedi cwblhau’r ddau gam.' : 'Nesaf: ' + welshActionSteps[selected][next];
+}
+updateOsayi();
+function makeActionPlan() {
+ const steps = actionSteps[selected];
+ const checkboxes = [];
+ const update = () => {
+  const next = checkboxes.findIndex(box => !box.checked);
+  $('nextStep').textContent = next < 0 ? 'You’ve ticked off both steps.' : 'Next: ' + steps[next];
+ };
+ $('stepList').replaceChildren(...steps.map(step => {
+  const label = document.createElement('label');
+  const box = document.createElement('input');
+  box.type = 'checkbox';
+  box.onchange = update;
+  checkboxes.push(box);
+  label.append(box, step);
+  return label;
+ }));
+ update();
+}
+$('hearNext').onclick = () => {
+ osayiStage = 'next';
+ updateOsayi(true);
+};
+function clearDraft() {
+ $('output').hidden=true;
+ $('leads').hidden=true;
+ $('agentReview').hidden=true;
+ $('result').textContent='';
+ $('copyStatus').textContent='';
+}
+roles.forEach(([label,title,intro,area,detail],index)=>{
+ const button=document.createElement('button');
+ button.type='button'; button.textContent=label; button.setAttribute('aria-pressed','false');
+ button.onclick=()=>{
+  selected=index;
+  for(const sibling of $('roles').children) sibling.setAttribute('aria-pressed', String(sibling===button));
+  $('form').reset(); clearDraft();
+  $('title').textContent=title; $('intro').textContent=intro;
+  $('areaText').textContent=area; $('detailText').textContent=detail;
+  $('rateLabel').hidden=index===5 || index===6 || index===8;
+  $('businessInputs').hidden=index!==8;
+  $('hoursLabel').hidden=index===8;
+  $('hours').required=index!==8;
+  $('businessScope').required=index===8;
+  $('businessBudget').required=index===8;
+  $('studentInputs').hidden=index!==7;
+  $('sponsorLinks').hidden=index!==5;
+  $('evidencePanel').hidden=index!==4 && index!==5;
+  $('eligibilityPrompt').textContent=index===5 ? 'Employer considers sponsorship for this vacancy' : 'Employer accepts your work location';
+  $('marketLabel').hidden=index!==4; $('matchingInputs').hidden=index!==4;
+  osayiStage = 'details';
+  updateOsayi(true);
+  $('work').hidden=false; $('title').focus(); $('work').scrollIntoView({block:'start'});
+ };
+ $('roles').append(button);
+});
+const roleGroups = {local:[0,1,2,3], jobs:[4,5,7], business:[8], friend:[6]};
+function openChoice(group) {
+ const indices = roleGroups[group];
+ if (!indices) return;
+ $('startChoices').hidden = true;
+ $('roleChoices').hidden = false;
+ $('work').hidden = true;
+ clearDraft();
+ [...$('roles').children].forEach((button,index) => {
+  button.hidden = !indices.includes(index) || indices.length === 1;
+  button.setAttribute('aria-pressed','false');
+ });
+ if (indices.length === 1) {
+  $('roles').children[indices[0]].click();
+ } else {
+  osayiStage = group === 'local' ? 'local' : 'jobs';
+  updateOsayi(true);
+  $('roles').children[indices[0]].focus();
+ }
+}
+$('startChoices').onclick = event => {
+ const button = event.target.closest('button[data-group]');
+ if (button) openChoice(button.dataset.group);
+};
+$('backToChoices').onclick = () => {
+ $('roleChoices').hidden = true;
+ $('work').hidden = true;
+ $('startChoices').hidden = false;
+ $('form').reset();
+ clearDraft();
+ osayiStage = 'welcome';
+ updateOsayi();
+ $('startChoices').querySelector('button').focus();
+};
+let tryingExample = false;
+const examples = [
+ ['Cardiff','Local grocery deliveries by bicycle'],
+ ['Newport','Short local trips with space for luggage'],
+ ['Swansea','Vehicle diagnostics and servicing'],
+ ['Wrexham','Shelves, flat-pack furniture and small repairs'],
+ ['UK','Technical documentation for small teams'],
+ ['UK','Software tester with three years of experience'],
+ ['Cardiff','local deliveries or home repairs'],
+ ['Bangor','Master’s in computing; basic spreadsheet and data skills'],
+ ['Cardiff','Independent grocery shop']
+];
+$('tryExample').onclick = () => {
+ const form = $('form');
+ form.reset();
+ const [area, detail] = examples[selected];
+ $('area').value = area;
+ $('detail').value = detail;
+ $('hours').value = '8';
+ if (selected === 8) {
+  $('businessScope').value = 'Collect three paid orders on Friday afternoon and deliver them locally.';
+  $('businessBudget').value = '30';
+ }
+ if (selected === 7) $('studentSchedule').value = 'Saturday mornings';
+ tryingExample = true;
+ try { form.requestSubmit(); } finally { tryingExample = false; }
+};
+$('form').oninput=clearDraft;
+$('form').onsubmit=event=>{
+ event.preventDefault();
+ const area=$('area').value.trim(), detail=$('detail').value.trim();
+ if(!area || !detail) { $('result').textContent='Enter your area and a short description.'; return; }
+ const [,title,,,,next]=roles[selected];
+ const hours=$('hours').value, rate=$('rate').value;
+ const opportunity = reviewOpportunity();
+ const scope = $('businessScope').value.trim();
+ if (selected===8 && !scope) { $('result').textContent='Tell us what needs doing.'; return; }
+ $('draft').value=selected===8
+  ? [title,'Area: '+area,'Business: '+detail,'Help needed: '+$('businessNeed').value,
+    'Work and deadline: '+scope,'Maximum budget: £'+Number($('businessBudget').value).toFixed(2),
+    'Before offering: '+next,'Demo brief. No work has been booked.'].join('\n\n')
+  : selected===6
+  ? 'Hi, Kingsley is exploring Waka Wales and Skills Trade. If you work in '+detail+' around '+area+', try the role that fits you. There are separate routes for local work, remote work, master’s students in Wales and people who need UK sponsorship. You can decide whether to share it. This is a prototype and an invitation to give feedback.'
+  : [title,'Area: '+area,'Skills or service: '+detail,'Weekly availability: '+hours+' hours',selected===5?'Sponsorship: employer confirmation required':rate?'Minimum hourly rate: £'+Number(rate).toFixed(2):'Rate: to discuss',...(selected===4?['Target clients: '+$('market').value]:[]),...(selected===7?['Work sought: '+$('studentWork').value,'Available times: '+($('studentSchedule').value.trim() || 'To confirm'),'Work conditions: '+($('studentPermission').value==='yes'?'Self-confirmed':'Still to confirm')]:[]),'Before accepting: '+next,...opportunity,'Draft for discussion. No work or payment has been agreed.'].join('\n\n');
+ renderAgentReview(rate, opportunity);
+ showMatches(hours);
+ osayiStage = 'done';
+ updateOsayi(true);
+ if (tryingExample) $('draft').value = 'EXAMPLE ONLY\n\n' + $('draft').value;
+ $('shareNote').href = 'https://wa.me/?text=' + encodeURIComponent($('draft').value);
+ const nextSteps = selected === 8
+  ? ['Get advice for your business','https://businesswales.gov.wales/business-wales-service','Use your note to explain what help you need and what you can spend.']
+  : selected === 4 || selected === 7
+   ? ['Get help finding work in Wales','https://workingwales.gov.wales/how-we-can-help/work-advice','Use your note to explain what work fits your skills and timetable.']
+   : null;
+ $('practicalNext').replaceChildren();
+ if (nextSteps) {
+  const [label, url, description] = nextSteps;
+  const link = document.createElement('a');
+  link.href = url;
+  link.textContent = label;
+  $('practicalNext').append(link, ' · ' + description);
+ }
+ makeActionPlan();
+ $('output').hidden=false;
+ $('result').textContent='Your note is ready to review.';
+};
+$('saveNote').onclick = () => {
+ const text = $('draft').value;
+ if (!text) return;
+ const url = URL.createObjectURL(new Blob([text], {type:'text/plain;charset=utf-8'}));
+ const link = document.createElement('a');
+ link.href = url;
+ link.download = 'waka-wales-note.txt';
+ document.body.append(link);
+ link.click();
+ link.remove();
+ setTimeout(() => URL.revokeObjectURL(url), 30000);
+ $('copyStatus').textContent = 'Download requested. Check your Downloads or Files.';
+};
+$('copy').onclick=async()=>{
+ try {await navigator.clipboard.writeText($('draft').value); $('copyStatus').textContent='Copied.';}
+ catch { $('draft').focus(); $('draft').select(); $('copyStatus').textContent='Text selected. Use your device’s Copy command.'; }
+};
+$('copyFamilyInvite').onclick = async () => {
+ const invitation = $('familyInvite');
+ try {
+  await navigator.clipboard.writeText(invitation.value);
+  $('familyCopyStatus').textContent = 'Introduction copied. Attach the prototype when you forward it.';
+ } catch {
+  invitation.focus();
+  invitation.select();
+  $('familyCopyStatus').textContent = 'Introduction selected. Use your device’s Copy command.';
+ }
+};
+$('previewFallback').hidden = true;
+$('osayiPreviewNote').hidden = true;
+$('startChoices').hidden = false;
+$('osayiTitle').parentElement.hidden = false;
+</script>
