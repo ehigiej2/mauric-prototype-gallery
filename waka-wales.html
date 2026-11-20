@@ -41,7 +41,17 @@ main>section[aria-labelledby="osayiTitle"]{padding:14px 14px;background:#e1f6ee;
 #previewFallback>p{font-size:.9rem;margin:4px 0 10px}
 .previewChoices details[open]{box-shadow:inset 0 0 0 1px #cedad2}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.previewChoices{align-items:start}.previewChoices p{font-size:.92rem;line-height:1.3}
-#osayiHome textarea{min-height:72px!important;height:76px;max-height:140px}
+#osayiHome textarea{min-height:64px!important;height:66px;max-height:140px}
+.osayiQuick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}
+.osayiQuick button{border-radius:20px;min-height:116px!important;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;text-align:left;gap:5px;font-size:29px!important;padding:15px!important;line-height:1.2;box-shadow:0 3px 0 #0002}
+.osayiQuick button strong{font-size:clamp(17px,4.5vw,23px)}
+.osayiQuick button:nth-child(1){background:#087c70}
+.osayiQuick button:nth-child(2){background:#5e4295}
+.osayiQuick button:nth-child(3){background:#235e93}
+.osayiQuick button:nth-child(4){background:#92531c}
+#osayiHome #osayiConversation{max-height:125px!important}
+#osayiHome .tech{margin:6px 0}
+
 #osayiHome .osayi-chat{gap:8px!important}
 #osayiHome button{min-height:56px}
 #osayiHome .tech{background:#f4f7f5;border-radius:14px;padding:10px 12px;margin:3px 0;font-size:14px}
@@ -59,11 +69,17 @@ main>section[aria-labelledby="osayiTitle"]{padding:14px 14px;background:#e1f6ee;
 <header><small>MONARCH · WAKA WALES · PRIVATE DEMO</small><h1 id="welcomeTitle">Waka Wales</h1><p id="welcomeText">Hi, Kingsley.</p></header>
 
 <section aria-labelledby="osayiTitle" id="osayiHome">
-<h2 id="osayiTitle">👑 Talk to Osayi</h2><p id="osayiIntro">Wetin you wan do today? Pick one big button, or ask me.</p><p id="osayiPreviewNote" class="preview-note">📱 In iPhone file preview, tap the coloured activity cards below. Live chat and microphone require a browser that runs scripts.</p>
+<h2 id="osayiTitle">👑 Talk to Osayi</h2><p id="osayiIntro">Wetin you wan do today? Choose one big button. Osayi go guide you.</p>
+<div class="osayiQuick" aria-label="Ask Osayi about a topic">
+<button type="button" data-osayi-quick="I need delivery work in Cardiff">🚚<strong>Delivery work</strong></button>
+<button type="button" data-osayi-quick="Help me find a job in Wales">💼<strong>Find a job</strong></button>
+<button type="button" data-osayi-quick="I want to grow my business in Wales">🏪<strong>My business</strong></button>
+<button type="button" data-osayi-quick="How can I help a friend in Wales?">🤝<strong>Help a friend</strong></button>
+</div><p id="osayiPreviewNote" class="preview-note">📱 In iPhone file preview, tap the coloured activity cards below. Live chat and microphone require a browser that runs scripts.</p>
 <label>🌍 Choose language <select id="osayiLanguage"><option value="en-GB">English</option><option value="cy-GB">Cymraeg</option><option value="pcm-NG">Naija Pidgin</option></select></label>
 <p id="osayiPrompt" role="status"></p>
 <div id="osayiReplies" aria-label="Reply to Osayi"></div>
-<div class="osayi-chat" style="display:grid;gap:10px;margin:12px 0"><div id="osayiConversation" role="log" aria-live="polite" style="max-height:260px;overflow:auto;padding:12px;background:#eef8f5;border-radius:16px">👑 Osayi: Welcome! Wetin you wan do for Wales today?</div><label for="osayiQuestion">💬 What can Osayi help you with?</label><textarea id="osayiQuestion" rows="2" placeholder="E.g. I need delivery work in Cardiff…" style="width:100%;box-sizing:border-box;border-radius:14px;padding:12px;font-size:18px"></textarea><div style="display:grid;grid-template-columns:1fr 1fr;gap:9px"><button id="osayiListen" type="button" style="background:#067c70;color:white;min-height:66px">🎤 Talk to Osayi</button><button id="osayiAsk" type="button" style="background:#633caa;color:white;min-height:66px">💬 Ask Osayi</button></div><details class="tech"><summary>🧪 Diagnostics</summary><button id="osayiRunChecks" type="button" style="background:#183b59;color:white;min-height:52px">Run checks</button><output id="osayiCheckResults" role="status" style="display:block;white-space:pre-wrap;font-size:14px"></output></details><details class="tech"><summary>⚙️ Voice engineering settings</summary><p style="font-size:14px">Optional HTTPS voice endpoint that accepts POST JSON {text, language} and returns audio/mpeg or audio/wav. No browser voice is passed off as Osayi. Only use an endpoint you control and trust.</p><input id="osayiVoiceEndpoint" type="url" placeholder="https://your-voice-service.example/speak" style="width:100%;box-sizing:border-box;padding:12px"><button id="osayiSaveVoice" type="button">Use this voice service</button><p id="osayiVoiceConfigStatus" role="status">Sovereign speech engine not connected; text replies are available.</p></details></div><div class="voiceActions"><button id="osayiSpeak" type="button">🔊 Hear Osayi</button><button id="osayiStop" type="button">⏹ Stop</button></div>
+<div class="osayi-chat" style="display:grid;gap:8px;margin:8px 0"><div id="osayiConversation" role="log" aria-live="polite" style="max-height:260px;overflow:auto;padding:12px;background:#eef8f5;border-radius:16px">👑 Osayi: Welcome! Wetin you wan do for Wales today?</div><label for="osayiQuestion">💬 Or tell Osayi what you need</label><textarea id="osayiQuestion" rows="2" placeholder="E.g. I need delivery work in Cardiff…" style="width:100%;box-sizing:border-box;border-radius:14px;padding:12px;font-size:18px"></textarea><div style="display:grid;grid-template-columns:1fr 1fr;gap:9px"><button id="osayiListen" type="button" style="background:#067c70;color:white;min-height:66px">🎤 Talk to Osayi</button><button id="osayiAsk" type="button" style="background:#633caa;color:white;min-height:66px">💬 Ask Osayi</button></div><details class="tech"><summary>🧪 Diagnostics</summary><button id="osayiRunChecks" type="button" style="background:#183b59;color:white;min-height:52px">Run checks</button><output id="osayiCheckResults" role="status" style="display:block;white-space:pre-wrap;font-size:14px"></output></details><details class="tech"><summary>⚙️ Voice engineering settings</summary><p style="font-size:14px">Optional HTTPS voice endpoint that accepts POST JSON {text, language} and returns audio/mpeg or audio/wav. No browser voice is passed off as Osayi. Only use an endpoint you control and trust.</p><input id="osayiVoiceEndpoint" type="url" placeholder="https://your-voice-service.example/speak" style="width:100%;box-sizing:border-box;padding:12px"><button id="osayiSaveVoice" type="button">Use this voice service</button><p id="osayiVoiceConfigStatus" role="status">Sovereign speech engine not connected; text replies are available.</p></details></div><details class="tech"><summary>🔊 Voice playback controls</summary><div class="voiceActions"><button id="osayiSpeak" type="button">🔊 Hear Osayi</button><button id="osayiStop" type="button">⏹ Stop</button></div><p style="font-size:13px">Sovereign voice playback requires a verified connected service.</p></details>
 <p id="osayiStatus" role="status"></p>
 </section>
 <section id="previewFallback" aria-labelledby="previewTitle">
@@ -370,6 +386,13 @@ $('osayiLanguage').onchange=()=>{stopOsayi();updateOsayi(false);};
 $('osayiSpeak').onclick=()=>speakOsayi($('osayiPrompt').textContent,$('osayiLanguage').value);
 $('osayiStop').onclick=stopOsayi;
 $('osayiAsk').onclick=askOsayi;
+document.querySelectorAll('[data-osayi-quick]').forEach(button=>{
+ button.addEventListener('click',()=>{
+  $('osayiQuestion').value=button.dataset.osayiQuick;
+  askOsayi();
+  $('osayiConversation').scrollIntoView({behavior:'smooth',block:'nearest'});
+ });
+});
 $('osayiQuestion').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();askOsayi();}});
 $('osayiSaveVoice').onclick=()=>{
  const value=$('osayiVoiceEndpoint').value.trim();
