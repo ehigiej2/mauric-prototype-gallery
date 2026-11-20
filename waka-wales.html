@@ -68,9 +68,22 @@ main>section[aria-labelledby="osayiTitle"]{padding:14px 14px;background:#e1f6ee;
 #osayiHome label{margin:4px 0}
 #osayiHome #osayiLanguage{padding:6px;font-size:15px}
 @media(max-width:480px){main{padding:10px}header{padding:14px 16px}#osayiHome{border-width:2px}#osayiHome button{font-size:16px}}
+/* Share-ready mode: simple large choices, voice features reserved for later */
+#osayiHome{display:none!important}
+#startChoices{display:grid!important}
+#previewFallback{display:none!important}
+#startChoices button{min-height:145px;font-size:clamp(19px,5vw,26px);border-radius:22px}
+#startChoices button:nth-child(1){background:#087c70}
+#startChoices button:nth-child(2){background:#5e4295}
+#startChoices button:nth-child(3){background:#235e93}
+#startChoices button:nth-child(4){background:#92531c}
+#startChoices button:nth-child(5){background:#8a365c}
+#startChoices button:nth-child(6){background:#216a87}
+#startChoices button:nth-child(7){background:#7352a3}
+#startChoices button:nth-child(8){background:#835319}
 </style>
 <main>
-<header><small>MONARCH · WAKA WALES · PRIVATE DEMO</small><h1 id="welcomeTitle">Waka Wales</h1><p id="welcomeText">Hi, Kingsley.</p></header>
+<header><small>MONARCH · WAKA WALES · PRIVATE DEMO</small><h1 id="welcomeTitle">Waka Wales</h1><p id="welcomeText">Hi, Kingsley. Choose what you want to do.</p></header>
 
 <section aria-labelledby="osayiTitle" id="osayiHome">
 <h2 id="osayiTitle">👑 Talk to Osayi</h2><p id="osayiIntro">Wetin you wan do today? Choose one big button. Osayi go guide you.</p>
@@ -106,6 +119,10 @@ main>section[aria-labelledby="osayiTitle"]{padding:14px 14px;background:#e1f6ee;
 <button type="button" data-group="jobs">Find a job</button>
 <button type="button" data-group="business">Business help</button>
 <button type="button" data-group="friend">Tell a friend</button>
+<button type="button" data-group="local" data-role-preset="skills">🛠️ My professional skills</button>
+<button type="button" data-group="local" data-role-preset="delivery">🚚 Deliver in spare time</button>
+<button type="button" data-group="business" data-role-preset="swap">🔄 Trade skills</button>
+<button type="button" data-group="business" data-role-preset="goods">🚙 Trade cars & goods</button>
 </nav>
 
 <div id="roleChoices" hidden>
