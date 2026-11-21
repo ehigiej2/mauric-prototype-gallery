@@ -1,0 +1,42 @@
+{
+  "id": "MAURIC-MOBILITY-001",
+  "version": "1.0.0",
+  "status": "proposed-operating-standard",
+  "scope": "global",
+  "services": [
+    "vehicle dealership",
+    "vehicle rental",
+    "fleet management",
+    "repairs",
+    "diagnostics",
+    "spare parts",
+    "vehicle home delivery",
+    "corporate air travel",
+    "executive aviation"
+  ],
+  "preferredSuppliers": {
+    "corporateRental": "Enterprise Rent-A-Car",
+    "corporateAir": "British Airways"
+  },
+  "founderPersonalPreferences": {
+    "commercial": "British Airways First where available",
+    "private": "Luxury charter fleet, licensed operator, independently verified safety",
+    "status": "aspirational"
+  },
+  "controls": [
+    "local licensing",
+    "vehicle safety",
+    "insurance",
+    "operator authorisation",
+    "total cost comparison",
+    "personal and company expense separation",
+    "affordability",
+    "human approval"
+  ],
+  "authority": {
+    "purchase": false,
+    "booking": false,
+    "contract": false,
+    "payment": false
+  }
+}
