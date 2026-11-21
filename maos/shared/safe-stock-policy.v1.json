@@ -1,0 +1,30 @@
+{
+  "id": "MAURIC-SAFE-STOCK-001",
+  "version": "1.0.0",
+  "status": "mandatory-design-control",
+  "scope": "All categories, suppliers, stock and applicable jurisdictions",
+  "gates": [
+    "applicable_law",
+    "product_safety",
+    "authenticity",
+    "traceability",
+    "required_certification",
+    "recall_status",
+    "storage_transport_suitability"
+  ],
+  "rules": {
+    "unknownEligible": false,
+    "failedEligible": false,
+    "selfAttestationSufficient": false,
+    "priceOverride": false,
+    "founderOverrideOfLaw": false,
+    "recallQuarantine": true,
+    "independentEvidenceReview": true,
+    "releaseRequiresSeparateAuthorization": true
+  },
+  "authority": {
+    "purchase": false,
+    "payment": false,
+    "dispatch": false
+  }
+}
