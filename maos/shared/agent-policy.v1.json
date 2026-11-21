@@ -1,0 +1,52 @@
+{
+  "version": "0.1.0",
+  "status": "proposed-policy-not-authorisation",
+  "minimumAge": 18,
+  "requirements": [
+    "identity verification",
+    "commercial eligibility",
+    "ethical conduct",
+    "relevant skills or training",
+    "communication",
+    "data protection",
+    "sector credentials where applicable"
+  ],
+  "fees": {
+    "commercial": {
+      "GBP": 500,
+      "EUR": 500,
+      "CAD": 500,
+      "USD": 500,
+      "NGN": null
+    },
+    "workforce": 0,
+    "basicUser": 0,
+    "assessment": 0,
+    "personalInvitation": "founder-approved waiver"
+  },
+  "authority": {
+    "spend": false,
+    "signContracts": false,
+    "collectPayments": false,
+    "automaticApproval": false
+  },
+  "progression": [
+    "candidate",
+    "trainee",
+    "approved agent",
+    "senior agent",
+    "regional ambassador",
+    "strategic partner"
+  ],
+  "academy": {
+    "questions": 6,
+    "pass": 6,
+    "humanReview": true
+  },
+  "controls": {
+    "noRecruitmentRewards": true,
+    "noJobseekerFees": true,
+    "noGuaranteedEarnings": true,
+    "commercialClearanceRequired": true
+  }
+}
