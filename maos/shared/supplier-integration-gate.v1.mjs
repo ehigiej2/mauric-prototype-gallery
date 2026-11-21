@@ -1,0 +1,2 @@
+export function prepareRequest(provider,operation,input){const allowed={dhl:["quote","track"],enterprise:["quote","availability"],ba:["quote","availability"]};if(!Object.hasOwn(allowed,provider)||!allowed[provider].includes(operation)||!input||typeof input!=="object"||Array.isArray(input))return {status:"BLOCKED",network:false,release:false};return {provider,operation,status:"AWAITING_APPROVED_CREDENTIALS",network:false,release:false};}
+export const dhlTest={base:"https://express.api.dhl.com/mydhlapi/test",documentedDailyQuota:500,productionEnabled:false};
