@@ -1,0 +1,11 @@
+{
+  "name": "MONARCH \u2014 Agent Mark Nottingham",
+  "short_name": "Agent Mark",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f5f8ff",
+  "theme_color": "#102e67",
+  "lang": "en-GB"
+}
+
+[executed on device: penguin (3a8d8503-8e13-4f59-b886-22fc98c42e1d)]
